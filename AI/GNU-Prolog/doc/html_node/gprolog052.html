@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Sockets input/output</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog051.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog053.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec286">8.28&#XA0;&#XA0;Sockets input/output</h3>
+<ul>
+<li><a href="gprolog052.html#sec287">Introduction</a>
+</li><li><a href="gprolog052.html#sec288"><span class="c003">socket/2</span></a>
+</li><li><a href="gprolog052.html#sec289"><span class="c003">socket_close/1</span></a>
+</li><li><a href="gprolog052.html#sec290"><span class="c003">socket_bind/2</span></a>
+</li><li><a href="gprolog052.html#socket-connect%2F4"><span class="c003">socket_connect/4</span></a>
+</li><li><a href="gprolog052.html#sec292"><span class="c003">socket_listen/2</span></a>
+</li><li><a href="gprolog052.html#sec293"><span class="c003">socket_accept/4</span>,
+<span class="c003">socket_accept/3</span></a>
+</li><li><a href="gprolog052.html#sec294"><span class="c003">hostname_address/2</span></a>
+</li></ul>
+<p>
+<a id="Sockets-input/output"></a></p>
+<h4 class="subsubsection" id="sec287">8.28.1&#XA0;&#XA0;Introduction</h4>
+<p>
+<a id="Introduction:(Sockets-input/output)"></a>
+This set of predicates provides a way to manipulate sockets. The predicates
+are straightforward interfaces to the corresponding BSD-type socket
+functions. This facility is available if the sockets part of GNU Prolog has
+been installed. A reader familiar with BSD sockets will understand them
+immediately otherwise a study of sockets is needed.</p><p>The domain is either the atom <span class="c003">&#X2019;AF_INET&#X2019;</span> or <span class="c003">&#X2019;AF_UNIX&#X2019;</span>
+corresponding to the same domains in BSD-type sockets.</p><p>An address is either of the form <span class="c003">&#X2019;AF_INET&#X2019;(HostName, Port)</span> or
+<span class="c003">&#X2019;AF_UNIX&#X2019;(SocketName)</span>. <span class="c003">HostName</span> is an atom denoting a
+machine name, <span class="c003">Port</span> is a port number and <span class="c003">SocketName</span> is an
+atom denoting a socket.</p><p>By default, streams associated with sockets are <span class="c003">block</span> buffered. The
+predicate <a id="hevea_default905"></a><span class="c003">set_stream_buffering/2</span> (section&#XA0;<a href="gprolog034.html#set-stream-buffering%2F2">8.10.27</a>)
+can be used to change this mode. They are also text streams by default. Use
+<a id="hevea_default906"></a><span class="c003">set_stream_type/2</span> (section&#XA0;<a href="gprolog034.html#set-stream-type%2F2">8.10.25</a>) to change the type
+if binary streams are needed.</p>
+<h4 class="subsubsection" id="sec288">8.28.2&#XA0;&#XA0;<a id="hevea_default907"></a><span class="c003">socket/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+socket(+socket_domain, -integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">socket(Domain, Socket)</span> creates a socket whose domain is
+<span class="c003">Domain</span> (section&#XA0;<a href="#Sockets-input%2Foutput">8.28</a>) and unifies <span class="c003">Socket</span>
+with the descriptor identifying the socket. This predicate is an interface
+to the C Unix function <span class="c003">socket(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Domain</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Domain</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Domain)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Domain</span> is an atom but not a valid socket domain</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(socket_domain, Domain)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Socket)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec289">8.28.3&#XA0;&#XA0;<a id="hevea_default908"></a><span class="c003">socket_close/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+socket_close(+integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">socket_close(Socket)</span> closes the socket whose descriptor is
+<span class="c003">Socket</span>. This predicate should not be used if <span class="c003">Socket</span> has
+given rise to a stream, e.g. by <a id="hevea_default909"></a><span class="c003">socket_connect/4</span>
+(section&#XA0;<a href="#socket-connect%2F4">8.28.5</a>). In that case simply use <a id="hevea_default910"></a><span class="c003">close/2</span>
+(section&#XA0;<a href="gprolog034.html#close%2F2">8.10.7</a>) on the associated stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Socket)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec290">8.28.4&#XA0;&#XA0;<a id="hevea_default911"></a><span class="c003">socket_bind/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+socket_bind(+integer, +socket_address)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">socket_bind(Socket, Address)</span> binds the socket whose descriptor is
+<span class="c003">Socket</span> to the address specified by <span class="c003">Address</span>
+(section&#XA0;<a href="#Sockets-input%2Foutput">8.28</a>). If <span class="c003">Address</span> if of the form
+<span class="c003">&#X2019;AF_INET&#X2019;(HostName, Port)</span> and if <span class="c003">HostName</span> is
+uninstantiated then it is unified with the current machine name. If
+<span class="c003">Port</span> is uninstantiated, it is unified to a port number picked by
+the operating system. This predicate is an interface to the C Unix function
+<span class="c003">bind(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Socket)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> is neither a variable nor a valid address</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(socket_address, Address)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_UNIX&#X2019;(E)</span> and <span class="c003">E</span> is a
+variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_UNIX&#X2019;(E)</span> or <span class="c003">&#X2019;AF_INET&#X2019;(E,
+_)</span> and <span class="c003">E</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_UNIX&#X2019;(E)</span> and <span class="c003">E</span> is an atom
+but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_INET&#X2019;(_, E)</span> and <span class="c003">E</span> is
+neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="socket-connect/4">8.28.5&#XA0;&#XA0;<a id="hevea_default912"></a><span class="c003">socket_connect/4</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+socket_connect(+integer, +socket_address, -stream, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">socket_connect(Socket, Address, StreamIn, StreamOut)</span> connects the
+socket whose descriptor is <span class="c003">Socket</span> to the address specified by
+<span class="c003">Address</span> (section&#XA0;<a href="#Sockets-input%2Foutput">8.28</a>). <span class="c003">StreamIn</span> is
+unified with a stream-term associated with the input of the connection (it is
+an input stream). Reading from this stream gets data from the socket.
+<span class="c003">StreamOut</span> is unified with a stream-term associated with the output of
+the connection (it is an output stream). Writing to this stream sends data
+to the socket. The use of <a id="hevea_default913"></a><span class="c003">select/5</span> can be useful
+(section&#XA0;<a href="gprolog051.html#select%2F5">8.27.29</a>). This predicate is an interface to the C Unix function
+<span class="c003">connect(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Socket)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> is neither a variable nor a valid address</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(socket_address, Address)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_UNIX&#X2019;(E)</span> or <span class="c003">&#X2019;AF_INET&#X2019;(E,
+_)</span> or <span class="c003">Address</span> = <span class="c003">&#X2019;AF_INET&#X2019;(_, E)</span> and <span class="c003">E</span> is a
+variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_UNIX&#X2019;(E)</span> or <span class="c003">&#X2019;AF_INET&#X2019;(E,
+_)</span> and <span class="c003">E</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_UNIX&#X2019;(E)</span> and <span class="c003">E</span> is an atom
+but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> = <span class="c003">&#X2019;AF_INET&#X2019;(_, E)</span> and <span class="c003">E</span> is
+neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamIn</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamIn)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamOut</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamOut)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec292">8.28.6&#XA0;&#XA0;<a id="hevea_default914"></a><span class="c003">socket_listen/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+socket_listen(+integer, +integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">socket_listen(Socket, Length)</span> defines the socket whose descriptor
+is <span class="c003">Socket</span> to have a maximum backlog queue of <span class="c003">Length</span>
+pending connections. This predicate is an interface to the C Unix function
+<span class="c003">listen(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Socket)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Length)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec293">8.28.7&#XA0;&#XA0;<a id="hevea_default915"></a><span class="c003">socket_accept/4</span>,
+<a id="hevea_default916"></a><span class="c003">socket_accept/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+socket_accept(+integer, -atom, -stream, -stream)<br>
+socket_accept(+integer, -stream, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">socket_accept(Socket, Client, StreamIn, StreamOut)</span> extracts the
+first connection to the socket whose descriptor is <span class="c003">Socket</span>. If the
+domain is <span class="c003">&#X2019;AF_INET&#X2019;</span>, <span class="c003">Client</span> is unified with an atom whose
+name is the Internet host address in numbers-and-dots notation of the
+connecting machine. <span class="c003">StreamIn</span> is unified with a stream-term
+associated with the input of the connection (it is an input stream). Reading
+from this stream gets data from the socket. <span class="c003">StreamOut</span> is unified
+with a stream-term associated with the output of the connection (it is an
+output stream). Writing to this stream sends data to the socket. The use of
+<a id="hevea_default917"></a><span class="c003">select/5</span> can be useful (section&#XA0;<a href="gprolog051.html#select%2F5">8.27.29</a>). This predicate is an
+interface to the C Unix function <span class="c003">accept(2)</span>.</p><p><span class="c003">socket_accept(Socket, StreamIn, StreamOut)</span> is equivalent to
+<span class="c003">socket_accept(Socket, _,<br>
+ StreamIn, StreamOut)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Socket</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Socket)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Client</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Client)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamIn</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamIn)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamOut</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamOut)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec294">8.28.8&#XA0;&#XA0;<a id="hevea_default918"></a><span class="c003">hostname_address/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+hostname_address(+atom, ?atom)<br>
+hostname_address(?atom, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">hostname_address(HostName, HostAddress)</span> succeeds if the Internet
+host address in numbers-and-dots notation of <span class="c003">HostName</span> is
+<span class="c003">HostAddress</span>. <span class="c003">Hostname</span> can be given as a fully qualified
+name, or an unqualified name or an alias of the machine. The predicate will
+fail if the machine name or address cannot be resolved.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">HostName</span> and <span class="c003">HostAddress</span> are variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">HostName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, HostName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">HostAddress</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, HostAddress)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Address</span> is neither a variable nor a valid address</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(socket_address, Address)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog051.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog053.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

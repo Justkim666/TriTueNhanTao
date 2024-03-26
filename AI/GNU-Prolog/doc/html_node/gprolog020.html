@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Errors</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog019.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog017.html"><img src="contents_motif.svg" alt="Up"></a>
+<hr>
+<h3 class="subsection" id="sec35">6.3&#XA0;&#XA0;Errors</h3>
+<ul>
+<li><a href="gprolog020.html#sec36">General format and error context</a>
+</li><li><a href="gprolog020.html#sec37">Instantiation error</a>
+</li><li><a href="gprolog020.html#sec38">Uninstantiation error</a>
+</li><li><a href="gprolog020.html#sec39">Type error</a>
+</li><li><a href="gprolog020.html#sec40">Domain error</a>
+</li><li><a href="gprolog020.html#sec41">Existence error</a>
+</li><li><a href="gprolog020.html#sec42">Permission error</a>
+</li><li><a href="gprolog020.html#sec43">Representation error</a>
+</li><li><a href="gprolog020.html#sec44">Evaluation error</a>
+</li><li><a href="gprolog020.html#sec45">Resource error</a>
+</li><li><a href="gprolog020.html#sec46">Syntax error</a>
+</li><li><a href="gprolog020.html#sec47">System error</a>
+</li></ul>
+<p>
+<a id="Errors"></a></p>
+<h4 class="subsubsection" id="sec36">6.3.1&#XA0;&#XA0;General format and error context</h4>
+<p>
+<a id="General-format-and-error-context"></a>
+When an error occurs an exception of the form:
+<span class="c003">error(<span class="c008">ErrorTerm</span>, <span class="c008">Caller</span>)</span> is raised.
+<span class="c004">ErrorTerm</span> is a term specifying the error (detailed in next
+sections) and <span class="c004">Caller</span> is a term specifying the context of
+the error. The context is either the predicate indicator of the last invoked
+built-in predicate or an atom giving general context information.</p><p>Using exceptions allows the user both to recover an error using
+<a id="hevea_default185"></a><span class="c003">catch/3</span> (section&#XA0;<a href="gprolog023.html#catch%2F3">7.2.4</a>) and to raise an error using
+<a id="hevea_default186"></a><span class="c003">throw/1</span> (section&#XA0;<a href="gprolog023.html#catch%2F3">7.2.4</a>).</p><p>To illustrate how to write error cases, let us write a predicate
+<span class="c003">my_pred(X)</span> where <span class="c003">X</span> must be an integer:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">my_pred(X) :-
+        (   nonvar(X) -&gt;
+            true
+        ;   throw(error(instantiation_error, my_pred/1)),
+        ),
+        (   integer(X) -&gt;
+            true
+        ;   throw(error(type_error(integer, X), my_pred/1))
+        ),
+        ...
+</pre>
+</dd></dl><p>To help the user to write these error cases, a set of system predicates is
+provided to raise errors. These predicates are of the form
+<span class="c003">&#X2019;$pl_err_...&#X2019;</span> and they all refer to the implicit error context.
+The predicates <a id="hevea_default187"></a><span class="c003">set_bip_name/2</span> (section&#XA0;<a href="gprolog046.html#set-bip-name%2F2">8.22.3</a>) and
+<a id="hevea_default188"></a><span class="c003">current_bip_name/2</span> (section&#XA0;<a href="gprolog046.html#current-bip-name%2F2">8.22.4</a>) are provided to
+set and recover the name and the arity associated with this context (an arity
+&lt; 0 means that only the atom corresponding to the functor is significant).
+Using these system predicates the user could define the above predicate as
+follow:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">my_pred(X) :-
+        set_bip_name(my_pred,1),
+        (   nonvar(X) -&gt;
+            true
+        ;   '$pl_err_instantiation'
+        ),
+        (   integer(X) -&gt;
+            true
+        ;   '$pl_err_type'(integer, X)
+        ),
+        ...
+</pre>
+</dd></dl><p>The following sections detail each kind of errors (and associated system
+predicates).</p>
+<h4 class="subsubsection" id="sec37">6.3.2&#XA0;&#XA0;Instantiation error</h4>
+<p>
+<a id="Instantiation-error"></a>
+An instantiation error occurs when an argument or one of its components is
+variable while an instantiated argument was expected.
+<span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">instantiation_error</span>.</p><p>The system predicate <span class="c003">&#X2019;$pl_err_instantiation&#X2019;</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec38">6.3.3&#XA0;&#XA0;Uninstantiation error</h4>
+<p>
+<a id="Uninstantiation-error"></a>
+An uninstantiation Error when an argument or one of its components is not a
+variable, and a variable or a component as variable is required.
+<span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">uninstantiation_error(<span class="c008">Culprit</span>)</span> where <span class="c004">Culprit</span> is the argument or one
+of its components which caused the error.</p><p>The system predicate <span class="c003">&#X2019;$pl_err_uninstantiation&#X2019;(Culprit)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec39">6.3.4&#XA0;&#XA0;Type error</h4>
+<p>
+<a id="Type-error"></a>
+A type error occurs when the type of an argument or one of its components is
+not the expected type (but not a variable). <span class="c004">ErrorTerm</span> has
+the following form: <span class="c003">type_error(<span class="c008">Type</span>, <span class="c008">Culprit</span>)</span> where
+<span class="c004">Type</span> is the expected type and <span class="c004">Culprit</span>
+the argument which caused the error. <span class="c004">Type</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">atom</span></li><li class="li-itemize"><span class="c003">atomic</span></li><li class="li-itemize"><span class="c003">boolean</span></li><li class="li-itemize"><span class="c003">byte</span></li><li class="li-itemize"><span class="c003">callable</span></li><li class="li-itemize"><span class="c003">character</span></li><li class="li-itemize"><span class="c003">compound</span></li><li class="li-itemize"><span class="c003">evaluable</span></li><li class="li-itemize"><span class="c003">fd_bool_evaluable</span></li><li class="li-itemize"><span class="c003">fd_evaluable</span></li><li class="li-itemize"><span class="c003">fd_variable</span></li><li class="li-itemize"><span class="c003">float</span></li><li class="li-itemize"><span class="c003">in_byte</span></li><li class="li-itemize"><span class="c003">in_character</span></li><li class="li-itemize"><span class="c003">integer</span></li><li class="li-itemize"><span class="c003">list</span></li><li class="li-itemize"><span class="c003">number</span></li><li class="li-itemize"><span class="c003">pair</span></li><li class="li-itemize"><span class="c003">predicate_indicator</span></li></ul><p>The system predicate <span class="c003">&#X2019;$pl_err_type&#X2019;(Type, Culprit)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec40">6.3.5&#XA0;&#XA0;Domain error</h4>
+<p>
+<a id="Domain-error"></a>
+A domain error occurs when the type of an argument is correct but its value
+is outside the expected domain. <span class="c004">ErrorTerm</span> has the
+following form: <span class="c003">domain_error(<span class="c008">Domain</span>, <span class="c008">Culprit</span>)</span>
+where <span class="c004">Domain</span> is the expected domain and
+<span class="c004">Culprit</span> the argument which caused the error.
+<span class="c004">Domain</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">atom_property</span></li><li class="li-itemize"><span class="c003">buffering_mode</span></li><li class="li-itemize"><span class="c003">character_code_list</span></li><li class="li-itemize"><span class="c003">close_option</span></li><li class="li-itemize"><span class="c003">date_time</span></li><li class="li-itemize"><span class="c003">eof_action</span></li><li class="li-itemize"><span class="c003">fd_labeling_option</span></li><li class="li-itemize"><span class="c003">flag_value</span></li><li class="li-itemize"><span class="c003">format_control_sequence</span></li><li class="li-itemize"><span class="c003">g_array_index</span></li><li class="li-itemize"><span class="c003">io_mode</span></li><li class="li-itemize"><span class="c003">non_empty_list</span></li><li class="li-itemize"><span class="c003">not_less_than_zero</span></li><li class="li-itemize"><span class="c003">operator_priority</span></li><li class="li-itemize"><span class="c003">operator_specifier</span></li><li class="li-itemize"><span class="c003">order</span></li><li class="li-itemize"><span class="c003">os_file_permission</span></li><li class="li-itemize"><span class="c003">os_file_property</span></li><li class="li-itemize"><span class="c003">os_path</span></li><li class="li-itemize"><span class="c003">predicate_property</span></li><li class="li-itemize"><span class="c003">prolog_flag</span></li><li class="li-itemize"><span class="c003">read_option</span></li><li class="li-itemize"><span class="c003">selectable_item</span></li><li class="li-itemize"><span class="c003">socket_address</span></li><li class="li-itemize"><span class="c003">socket_domain</span></li><li class="li-itemize"><span class="c003">source_sink</span></li><li class="li-itemize"><span class="c003">statistics_key</span></li><li class="li-itemize"><span class="c003">statistics_value</span></li><li class="li-itemize"><span class="c003">stream</span></li><li class="li-itemize"><span class="c003">stream_option</span></li><li class="li-itemize"><span class="c003">stream_or_alias</span></li><li class="li-itemize"><span class="c003">stream_position</span></li><li class="li-itemize"><span class="c003">stream_property</span></li><li class="li-itemize"><span class="c003">stream_seek_method</span></li><li class="li-itemize"><span class="c003">stream_type</span></li><li class="li-itemize"><span class="c003">term_stream_or_alias</span></li><li class="li-itemize"><span class="c003">var_binding_option</span></li><li class="li-itemize"><span class="c003">write_option</span></li></ul><p>The system predicate <span class="c003">&#X2019;$pl_err_domain&#X2019;(Domain, Culprit)</span> raises
+this error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec41">6.3.6&#XA0;&#XA0;Existence error</h4>
+<p>
+<a id="Existence-error"></a>
+an existence error occurs when an object on which an operation is to be
+performed does not exist. <span class="c004">ErrorTerm</span> has the following
+form: <span class="c003">existence_error(<span class="c008">Object</span>, <span class="c008">Culprit</span>)</span> where
+<span class="c004">Object</span> is the type of the object and
+<span class="c004">Culprit</span> the argument which caused the error.
+<span class="c004">Object</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">procedure</span></li><li class="li-itemize"><span class="c003">source_sink</span></li><li class="li-itemize"><span class="c003">stream</span></li></ul><p>The system predicate <span class="c003">&#X2019;$pl_err_existence&#X2019;(Object, Culprit)</span> raises
+this error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec42">6.3.7&#XA0;&#XA0;Permission error</h4>
+<p>
+<a id="Permission-error"></a>
+A permission error occurs when an attempt to perform a prohibited operation
+is made. <span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">permission_error(<span class="c008">Operation</span>, <span class="c008">Permission</span>,
+<span class="c008">Culprit</span>)</span> where <span class="c004">Operation</span> is the operation which
+caused the error, <span class="c004">Permission</span> the type of the tried
+permission and <span class="c004">Culprit</span> the argument which caused the
+error. <span class="c004">Operation</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">access</span></li><li class="li-itemize"><span class="c003">add_alias</span></li><li class="li-itemize"><span class="c003">close</span></li><li class="li-itemize"><span class="c003">create</span></li><li class="li-itemize"><span class="c003">input</span></li><li class="li-itemize"><span class="c003">modify</span></li><li class="li-itemize"><span class="c003">open</span></li><li class="li-itemize"><span class="c003">output</span></li><li class="li-itemize"><span class="c003">reposition</span></li></ul><p>and <span class="c004">Permission</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">binary_stream</span></li><li class="li-itemize"><span class="c003">flag</span></li><li class="li-itemize"><span class="c003">operator</span></li><li class="li-itemize"><span class="c003">past_end_of_stream</span></li><li class="li-itemize"><span class="c003">private_procedure</span></li><li class="li-itemize"><span class="c003">source_sink</span></li><li class="li-itemize"><span class="c003">static_procedure</span></li><li class="li-itemize"><span class="c003">stream</span></li><li class="li-itemize"><span class="c003">text_stream</span></li></ul><p>The system predicate <span class="c003">&#X2019;$pl_err_permission&#X2019;(Operation, Permission,
+Culprit)</span> raises this error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec43">6.3.8&#XA0;&#XA0;Representation error</h4>
+<p>
+<a id="Representation-error"></a>
+A representation error occurs when an implementation limit has been
+breached. <span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">representation_error(<span class="c008">Limit</span>)</span> where <span class="c004">Limit</span>
+is the name of the reached limit. <span class="c004">Limit</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">character</span></li><li class="li-itemize"><span class="c003">character_code</span></li><li class="li-itemize"><span class="c003">in_character_code</span></li><li class="li-itemize"><span class="c003">max_arity</span></li><li class="li-itemize"><span class="c003">max_integer</span></li><li class="li-itemize"><span class="c003">min_integer</span></li><li class="li-itemize"><span class="c003">integer_32bits</span></li><li class="li-itemize"><span class="c003">too_many_variables</span></li></ul><p>The errors <span class="c003">max_integer</span> and <span class="c003">min_integer</span> are not currently
+implemented.</p><p>The system predicate <span class="c003">&#X2019;$pl_err_representation&#X2019;(Limit)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec44">6.3.9&#XA0;&#XA0;Evaluation error</h4>
+<p>
+<a id="Evaluation-error"></a>
+An evaluation error occurs when an arithmetic expression gives rise to
+an exceptional value. <span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">evaluation_error(<span class="c008">Error</span>)</span> where <span class="c004">Error</span> is
+the name of the error. <span class="c004">Error</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">float_overflow</span></li><li class="li-itemize"><span class="c003">int_overflow</span></li><li class="li-itemize"><span class="c003">undefined</span></li><li class="li-itemize"><span class="c003">underflow</span></li><li class="li-itemize"><span class="c003">zero_divisor</span></li></ul><p>The errors <span class="c003">float_overflow</span>, <span class="c003">int_overflow</span>,
+<span class="c003">undefined</span> and <span class="c003">underflow</span> are not currently
+implemented.</p><p>The system predicate <span class="c003">&#X2019;$pl_err_evaluation&#X2019;(Error)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec45">6.3.10&#XA0;&#XA0;Resource error</h4>
+<p>
+<a id="Resource-error"></a>
+A resource error occurs when GNU Prolog does not have enough resources.
+<span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">resource_error(<span class="c008">Resource</span>)</span> where <span class="c004">Resource</span> is the
+name of the resource. <span class="c004">Resource</span> is one of:</p><ul class="itemize"><li class="li-itemize"><span class="c003">print_object_not_linked</span></li><li class="li-itemize"><span class="c003">too_big_fd_constraint</span></li></ul><p>The system predicate <span class="c003">&#X2019;$pl_err_resource&#X2019;(Resource)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec46">6.3.11&#XA0;&#XA0;Syntax error</h4>
+<p>
+<a id="Syntax-error"></a>
+A syntax error occurs when a sequence of character does not conform to the
+syntax of terms. <span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">syntax_error(<span class="c008">Error</span>)</span> where <span class="c004">Error</span> is an
+atom explaining the error.</p><p>The system predicate <span class="c003">&#X2019;$pl_err_syntax&#X2019;(Error)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<h4 class="subsubsection" id="sec47">6.3.12&#XA0;&#XA0;System error</h4>
+<p>
+A system error can occur at any stage. A system error is generally
+associated with an external component (e.g. operating system).
+<span class="c004">ErrorTerm</span> has the following form:
+<span class="c003">system_error(<span class="c008">Error</span>)</span> where <span class="c004">Error</span> is an
+atom explaining the error. This is an extension to ISO which only defines
+<span class="c003">system_error</span> without arguments.</p><p>The system predicate <span class="c003">&#X2019;$pl_err_system&#X2019;(Error)</span> raises this
+error in the current error context (section&#XA0;<a href="#General-format-and-error-context">6.3.1</a>).</p>
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog019.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog017.html"><img src="contents_motif.svg" alt="Up"></a>
+</body>
+</html>

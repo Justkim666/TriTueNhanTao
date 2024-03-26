@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Operating system interface</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog050.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog052.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec256">8.27&#XA0;&#XA0;Operating system interface</h3>
+<ul>
+<li><a href="gprolog051.html#argument-counter%2F1"><span class="c003">argument_counter/1</span></a>
+</li><li><a href="gprolog051.html#argument-value%2F2"><span class="c003">argument_value/2</span></a>
+</li><li><a href="gprolog051.html#argument-list%2F1"><span class="c003">argument_list/1</span></a>
+</li><li><a href="gprolog051.html#sec260"><span class="c003">environ/2</span></a>
+</li><li><a href="gprolog051.html#sec261"><span class="c003">make_directory/1</span>,
+<span class="c003">delete_directory/1</span>,
+<span class="c003">change_directory/1</span></a>
+</li><li><a href="gprolog051.html#sec262"><span class="c003">working_directory/1</span></a>
+</li><li><a href="gprolog051.html#sec263"><span class="c003">directory_files/2</span></a>
+</li><li><a href="gprolog051.html#sec264"><span class="c003">rename_file/2</span></a>
+</li><li><a href="gprolog051.html#sec265"><span class="c003">delete_file/1</span>,
+<span class="c003">unlink/1</span></a>
+</li><li><a href="gprolog051.html#file-permission%2F2"><span class="c003">file_permission/2</span>,
+<span class="c003">file_exists/1</span></a>
+</li><li><a href="gprolog051.html#file-property%2F2"><span class="c003">file_property/2</span></a>
+</li><li><a href="gprolog051.html#sec268"><span class="c003">temporary_name/2</span></a>
+</li><li><a href="gprolog051.html#sec269"><span class="c003">temporary_file/3</span></a>
+</li><li><a href="gprolog051.html#date-time%2F1"><span class="c003">date_time/1</span></a>
+</li><li><a href="gprolog051.html#sec271"><span class="c003">host_name/1</span></a>
+</li><li><a href="gprolog051.html#sec272"><span class="c003">os_version/1</span></a>
+</li><li><a href="gprolog051.html#sec273"><span class="c003">architecture/1</span></a>
+</li><li><a href="gprolog051.html#sec274"><span class="c003">shell/2</span>,
+<span class="c003">shell/1</span>,
+<span class="c003">shell/0</span></a>
+</li><li><a href="gprolog051.html#sec275"><span class="c003">system/2</span>,
+<span class="c003">system/1</span></a>
+</li><li><a href="gprolog051.html#sec276"><span class="c003">spawn/3</span>,
+<span class="c003">spawn/2</span></a>
+</li><li><a href="gprolog051.html#popen%2F3"><span class="c003">popen/3</span></a>
+</li><li><a href="gprolog051.html#sec278"><span class="c003">exec/5</span>,
+<span class="c003">exec/4</span></a>
+</li><li><a href="gprolog051.html#sec279"><span class="c003">fork_prolog/1</span></a>
+</li><li><a href="gprolog051.html#sec280"><span class="c003">create_pipe/2</span></a>
+</li><li><a href="gprolog051.html#wait%2F2"><span class="c003">wait/2</span></a>
+</li><li><a href="gprolog051.html#sec282"><span class="c003">prolog_pid/1</span></a>
+</li><li><a href="gprolog051.html#sec283"><span class="c003">send_signal/2</span></a>
+</li><li><a href="gprolog051.html#sec284"><span class="c003">sleep/1</span></a>
+</li><li><a href="gprolog051.html#select%2F5"><span class="c003">select/5</span></a>
+</li></ul>
+<h4 class="subsubsection" id="argument-counter/1">8.27.1&#XA0;&#XA0;<a id="hevea_default839"></a><span class="c003">argument_counter/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+argument_counter(?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">argument_counter(Counter)</span> succeeds if <span class="c003">Counter</span> is the
+number of arguments of the command-line. Since the first argument is always
+the name of the running program, <span class="c003">Counter</span> is always &#X2265; 1. See
+(section&#XA0;<a href="gprolog007.html#The-GNU-Prolog-interactive-interpreter">4.2</a>) for more information about
+command-line arguments retrieved under the top_level.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Counter</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Counter)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="argument-value/2">8.27.2&#XA0;&#XA0;<a id="hevea_default840"></a><span class="c003">argument_value/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+argument_value(+integer, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">argument_value(N, Arg)</span> succeeds if the <span class="c003">N</span><em>th</em>
+argument on the command-line unifies with <span class="c003">Arg</span>. The first argument
+is always the name of the running program and its number is 0. The number of
+arguments on the command-line can be obtained using
+<span class="c003">argument_counter/1</span> (section&#XA0;<a href="#argument-counter%2F1">8.27.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arg</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Arg)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="argument-list/1">8.27.3&#XA0;&#XA0;<a id="hevea_default841"></a><span class="c003">argument_list/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+argument_list(?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">argument_list(Args)</span> succeeds if <span class="c003">Args</span> unifies with the
+list of atoms associated with each argument on the command-line other than the
+first argument (the name of the running program).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Args</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Args)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec260">8.27.4&#XA0;&#XA0;<a id="hevea_default842"></a><span class="c003">environ/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+environ(?atom, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">environ(Name, Value)</span> succeeds if <span class="c003">Name</span> is the name of an
+environment variable whose value is <span class="c003">Value</span>. This predicate is
+re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Name</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Name)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Value</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Value)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec261">8.27.5&#XA0;&#XA0;<a id="hevea_default843"></a><span class="c003">make_directory/1</span>,
+<a id="hevea_default844"></a><span class="c003">delete_directory/1</span>,
+<a id="hevea_default845"></a><span class="c003">change_directory/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+make_directory(+atom)<br>
+delete_directory(+atom)<br>
+change_directory(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">make_directory(PathName)</span> creates the directory whose pathname is
+<span class="c003">PathName</span>.</p><p><span class="c003">delete_directory(PathName)</span> removes the directory whose pathname is
+<span class="c003">PathName</span>.</p><p><span class="c003">change_directory(PathName)</span> sets the current directory to the
+directory whose pathname is <span class="c003">PathName</span>.</p><p>See <a id="hevea_default846"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">PathName</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec262">8.27.6&#XA0;&#XA0;<a id="hevea_default847"></a><span class="c003">working_directory/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+working_directory(?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">working_directory(PathName)</span> succeeds if <span class="c003">PathName</span> is the
+pathname of the current directory.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec263">8.27.7&#XA0;&#XA0;<a id="hevea_default848"></a><span class="c003">directory_files/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+directory_files(+atom, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">directory_files(PathName, Files)</span> succeeds if <span class="c003">Files</span> is the
+list of all entries (files, sub-directories,&#X2026;) in the directory whose
+pathname is <span class="c003">PathName</span>. See <a id="hevea_default849"></a><span class="c003">absolute_file_name/2</span> for
+information about the syntax of <span class="c003">PathName</span>
+(section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Files</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Files)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec264">8.27.8&#XA0;&#XA0;<a id="hevea_default850"></a><span class="c003">rename_file/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+rename_file(+atom, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">rename_file(PathName1, PathName2)</span> renames the file or directory
+whose pathname is <span class="c003">PathName1</span> to <span class="c003">PathName2</span>. See
+<a id="hevea_default851"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">PathName1</span> and <span class="c003">PathName2</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName1</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName1</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName1)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName1</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName1)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName2</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName2</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName2)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName2</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName2)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec265">8.27.9&#XA0;&#XA0;<a id="hevea_default852"></a><span class="c003">delete_file/1</span>,
+<a id="hevea_default853"></a><span class="c003">unlink/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+delete_file(PathName)<br>
+unlink(PathName)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">delete_file(PathName)</span> removes the existing file whose pathname is
+<span class="c003">PathName</span>.</p><p><span class="c003">unlink/1</span> is similar to <span class="c003">delete_file/1</span> except that it never
+causes a <span class="c003">system_error</span> (e.g. if <span class="c003">PathName</span> does not refer to
+an existing file).</p><p>See <a id="hevea_default854"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">PathName</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="file-permission/2">8.27.10&#XA0;&#XA0;<a id="hevea_default855"></a><span class="c003">file_permission/2</span>,
+<a id="hevea_default856"></a><span class="c003">file_exists/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+file_permission(+atom, +atom)<br>
+file_permission(+atom, +atom_list)<br>
+file_exists(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">file_permission(PathName, Permission)</span> succeeds if
+<span class="c003">PathName</span> is the pathname of an existing file (or directory) whose
+permissions include <span class="c003">Permission</span>.</p><p><span class="c009">File permissions</span>: <span class="c003">Permission</span> can be a single permission or
+a list of permissions. A permission is an atom among:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default857"></a><span class="c003">read</span>: the file or directory can be read.</li><li class="li-itemize"><a id="hevea_default858"></a><span class="c003">write</span>: the file or directory can be written.</li><li class="li-itemize"><a id="hevea_default859"></a><span class="c003">execute</span>: the file can be executed.</li><li class="li-itemize"><a id="hevea_default860"></a><span class="c003">search</span>: the directory can be searched.</li></ul><p>If <span class="c003">PathName</span> does not exists or if its permissions do not include
+<span class="c003">Permission</span> this predicate fails.</p><p><span class="c003">file_exists(PathName)</span> is equivalent to
+<span class="c003">file_permission(PathName, [])</span>, i.e. it succeeds if
+<span class="c003">PathName</span> is the pathname of an existing file (or directory).</p><p>See <a id="hevea_default861"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">PathName</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Permission</span> is a partial list or a list with an element
+which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Permission</span> is neither an atom nor partial list or a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Permission)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Permission</span> list is neither a
+variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Permission</span> is an atom but not
+a valid permission</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_file_permission, Permission)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="file-property/2">8.27.11&#XA0;&#XA0;<a id="hevea_default862"></a><span class="c003">file_property/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+file_property(+atom, ?os_file_property)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">file_property(PathName, Property)</span> succeeds if <span class="c003">PathName</span> is
+the pathname of an existing file (or directory) and if <span class="c003">Property</span>
+unifies with one of the properties of the file. This predicate is
+re-executable on backtracking.</p><p><span class="c009">File properties</span>:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default863"></a><span class="c003">absolute_file_name(File)</span>:
+<span class="c003">File</span> is the absolute file name of <span class="c003">PathName</span>
+(section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</li><li class="li-itemize"><a id="hevea_default864"></a><span class="c003">real_file_name(File)</span>: <span class="c003">File</span> is
+the real file name of <span class="c003">PathName</span> (follows symbolic links).</li><li class="li-itemize"><a id="hevea_default865"></a><span class="c003">type(Type)</span>: <span class="c003">Type</span> is the type of
+<span class="c003">PathName</span>. Possible values are: <a id="hevea_default866"></a><span class="c003">regular</span>,
+<a id="hevea_default867"></a><span class="c003">directory</span>, <a id="hevea_default868"></a><span class="c003">fifo</span>, <a id="hevea_default869"></a><span class="c003">socket</span>,
+<a id="hevea_default870"></a><span class="c003">character_device</span>, <a id="hevea_default871"></a><span class="c003">block_device</span> or <a id="hevea_default872"></a><span class="c003">unknown</span>.</li><li class="li-itemize"><a id="hevea_default873"></a><span class="c003">size(Size)</span>: <span class="c003">Size</span> is the size (in bytes) of
+<span class="c003">PathName</span>.</li><li class="li-itemize"><a id="hevea_default874"></a><span class="c003">permission(Permission)</span>: <span class="c003">Permission</span> is a
+permission of <span class="c003">PathName</span> (section&#XA0;<a href="#file-permission%2F2">8.27.10</a>).</li><li class="li-itemize"><a id="hevea_default875"></a><span class="c003">last_modification(DT)</span>: <span class="c003">DT</span> is
+the last modification date and time (section&#XA0;<a href="#date-time%2F1">8.27.14</a>).</li></ul><p>See <a id="hevea_default876"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">PathName</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> is neither a variable nor a file property term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_file_property, Property)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">absolute_file_name(E)</span>,
+<span class="c003">real_file_name(E)</span>, <span class="c003">type(E)</span> or <span class="c003">permission(E)</span> and
+<span class="c003">E</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">last_modification(DateTime)</span> and
+<span class="c003">DateTime</span> is neither a variable nor a compound term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(compound, DateTime)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">last_modification(DateTime)</span> and
+<span class="c003">DateTime</span> is a compound term but not a structure <span class="c003">dt/6</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(date_time, DateTime)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">size(E)</span> or
+<span class="c003">last_modification(DateTime)</span> and <span class="c003">DateTime</span> is a structure
+<span class="c003">dt/6</span> but an element <span class="c003">E</span> is neither a variable nor an
+integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec268">8.27.12&#XA0;&#XA0;<a id="hevea_default877"></a><span class="c003">temporary_name/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+temporary_name(+atom, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">temporary_name(Template, PathName)</span> creates a unique file name
+<span class="c003">PathName</span> whose pathname begins by <span class="c003">Template</span>.
+<span class="c003">Template</span> should contain a pathname with six trailing
+<span class="c003">X</span><em>s</em>. <span class="c003">PathName</span> is <span class="c003">Template</span> with the six
+<span class="c003">X</span><em>s</em> replaced with a letter and the process identifier. This
+predicate is an interface to the C Unix function <span class="c003">mktemp(3)</span>.</p><p>See <a id="hevea_default878"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">Template</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Template</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Template</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Template)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Template</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, Template)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec269">8.27.13&#XA0;&#XA0;<a id="hevea_default879"></a><span class="c003">temporary_file/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+temporary_file(+atom, +atom, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">temporary_file(Directory, Prefix, PathName)</span> creates a unique file
+name <span class="c003">PathName</span> whose pathname begins by <span class="c003">Directory/Prefix</span>.
+If <span class="c003">Directory</span> is the empty atom <span class="c003">&#X2019;&#X2019;</span> a standard temporary
+directory will be used (e.g. <span class="c003">/tmp</span>). <span class="c003">Prefix</span> can be the
+empty atom <span class="c003">&#X2019;&#X2019;</span>. This predicate is an interface to the C Unix
+function <span class="c003">tempnam(3)</span>.</p><p>See <a id="hevea_default880"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">Directory</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Directory</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Directory</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Directory)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Directory</span> is an atom but not a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, Directory)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prefix</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prefix</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Prefix)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">PathName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, PathName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="date-time/1">8.27.14&#XA0;&#XA0;<a id="hevea_default881"></a><span class="c003">date_time/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+date_time(?compound)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">date_time(DateTime)</span> unifies <span class="c003">DateTime</span> with a compound term
+containing the current date and time. <span class="c003">DateTime</span> is a structure
+<span class="c003">dt(Year, Month, Day, Hour, Minute, Second)</span>. Each sub-argument of
+the term <span class="c003">dt/6</span> is an integer.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">DateTime</span> is neither a variable nor a compound term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(compound, DateTime)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">DateTime</span> is a compound term but not a structure
+<span class="c003">dt/6</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(date_time, DateTime)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">DateTime</span> is a structure <span class="c003">dt/6</span> and an element
+<span class="c003">E</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec271">8.27.15&#XA0;&#XA0;<a id="hevea_default882"></a><span class="c003">host_name/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+host_name(?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">host_name(HostName)</span> unifies <span class="c003">HostName</span> with the name of the
+host machine executing the current GNU Prolog process. If the sockets are
+available (section&#XA0;<a href="gprolog052.html#Introduction%3A%28Sockets-input%2Foutput%29">8.28.1</a>), the name returned
+will be fully qualified. In that case, <span class="c003">host_name/1</span> will also
+succeed if <span class="c003">HostName</span> is instantiated to the unqualified name (or an
+alias) of the machine.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">HostName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, HostName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec272">8.27.16&#XA0;&#XA0;<a id="hevea_default883"></a><span class="c003">os_version/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+os_version(?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">os_version(OSVersion)</span> unifies <span class="c003">OSVersion</span> with the
+operating system version of the machine executing the current GNU Prolog
+process.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OSVersion</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, OSVersion)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec273">8.27.17&#XA0;&#XA0;<a id="hevea_default884"></a><span class="c003">architecture/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+architecture(?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">architecture(Architecture)</span> unifies <span class="c003">Architecture</span> with the
+name of the machine executing the current GNU Prolog process.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Architecture</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Architecture)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec274">8.27.18&#XA0;&#XA0;<a id="hevea_default885"></a><span class="c003">shell/2</span>,
+<a id="hevea_default886"></a><span class="c003">shell/1</span>,
+<a id="hevea_default887"></a><span class="c003">shell/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+shell(+atom, ?integer)<br>
+shell(+atom)<br>
+shell</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">shell(Command, Status)</span> invokes a new shell (named by the
+<span class="c003">SHELL</span> environment variable) passing <span class="c003">Command</span> for execution
+and unifies <span class="c003">Status</span> with the result of the execution. If
+<span class="c003">Command</span> is the empty atom <span class="c003">&#X2019;&#X2019;</span> a new interactive shell is
+executed. The control is returned to Prolog upon termination of the called
+process.</p><p><span class="c003">shell(Command)</span> is equivalent to <span class="c003">shell(Command, 0)</span>.</p><p><span class="c003">shell</span> is equivalent to <span class="c003">shell(&#X2019;&#X2019;, 0)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Command)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Status</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Status)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec275">8.27.19&#XA0;&#XA0;<a id="hevea_default888"></a><span class="c003">system/2</span>,
+<a id="hevea_default889"></a><span class="c003">system/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+system(+atom, ?integer)<br>
+system(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">system(Command, Status)</span> invokes a new default shell passing
+<span class="c003">Command</span> for execution and unifies <span class="c003">Status</span> with the result
+of the execution. The control is returned to Prolog upon termination of the
+shell process. This predicate is an interface to the C Unix function
+<span class="c003">system(3)</span>.</p><p><span class="c003">system(Command)</span> is equivalent to <span class="c003">system(Command, 0)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Command)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Status</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Status)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec276">8.27.20&#XA0;&#XA0;<a id="hevea_default890"></a><span class="c003">spawn/3</span>,
+<a id="hevea_default891"></a><span class="c003">spawn/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+spawn(+atom, +atom_list, ?integer)<br>
+spawn(+atom, +atom_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">spawn(Command, Arguments, Status)</span> executes <span class="c003">Command</span> passing
+as arguments of the command-line each element of the list <span class="c003">Arguments</span>
+and unifies <span class="c003">Status</span> with the result of the execution. The control is
+returned to Prolog upon termination of the command.</p><p><span class="c003">spawn(Command, Arguments)</span> is equivalent to <span class="c003">spawn(Command,
+Arguments, 0)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Command)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arguments</span> is a partial list or a list with an element
+which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arguments</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Arguments)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Arguments</span> list is neither a
+variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Status</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Status)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="popen/3">8.27.21&#XA0;&#XA0;<a id="hevea_default892"></a><span class="c003">popen/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+popen(+atom, +io_mode, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">popen(Command, Mode, Stream)</span> invokes a new default shell (by
+creating a pipe) passing <span class="c003">Command</span> for execution and associates a
+stream either to the standard input or the standard output of the created
+process. if <span class="c003">Mode</span> is <span class="c003">read</span> (resp. <span class="c003">write</span>) an input
+(resp. output) stream is created and <span class="c003">Stream</span> is unified with the
+stream-term associated. Writing to the stream writes to the standard input
+of the command while reading from the stream reads the command&#X2019;s standard
+output. The stream must be closed using <a id="hevea_default893"></a><span class="c003">close/2</span> (section&#XA0;<a href="gprolog034.html#close%2F2">8.10.7</a>).
+This predicate is an interface to the C Unix function <span class="c003">popen(3)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Command)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mode</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mode</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Mode)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mode</span> is an atom but neither <span class="c003">read</span> nor
+<span class="c003">write</span>.</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(io_mode, Mode)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec278">8.27.22&#XA0;&#XA0;<a id="hevea_default894"></a><span class="c003">exec/5</span>,
+<a id="hevea_default895"></a><span class="c003">exec/4</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+exec(+atom, -stream, -stream, -stream, -integer)<br>
+exec(+atom, -stream, -stream, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">exec(Command, StreamIn, StreamOut, StreamErr, Pid)</span> invokes a new
+default shell passing <span class="c003">Command</span> for execution and associates streams
+to standard streams of the created process. <span class="c003">StreamIn</span> is unified
+with the stream-term associated with the standard input stream of
+<span class="c003">Command</span> (it is an output stream). <span class="c003">StreamOut</span> is unified
+with the stream-term associated with the standard output stream of
+<span class="c003">Command</span> (it is an input stream). <span class="c003">StreamErr</span> is unified with
+the stream-term associated with the standard error stream of <span class="c003">Command</span>
+(it is an input stream). <span class="c003">Pid</span> is unified with the process identifier
+of the new process. This information is only useful if it is necessary to
+obtain the status of the execution using <span class="c003">wait/2</span> (section&#XA0;<a href="#wait%2F2">8.27.25</a>).
+Until a call to <span class="c003">wait/2</span> is done the process remains in the system
+processes table (as a zombie process if terminated). For this reason, if the
+status is not needed it is preferable to use <span class="c003">exec/4</span>.</p><p><span class="c003">exec/4</span> is similar to <span class="c003">exec/5</span> but the process is removed
+from system processes as soon as it is terminated.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Command</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Command)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamIn</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamIn)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamOut</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamOut)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamErr</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamErr)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Pid)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec279">8.27.23&#XA0;&#XA0;<a id="hevea_default896"></a><span class="c003">fork_prolog/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fork_prolog(-integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fork_prolog(Pid)</span> creates a child process that differs from the parent
+process only in its PID. In the parent process <span class="c003">Pid</span> is unified with
+the PID of the child while in the child process <span class="c003">Pid</span> is unified with
+0. In the parent process, the status of the child process can be obtained
+using <span class="c003">wait/2</span> (section&#XA0;<a href="#wait%2F2">8.27.25</a>). Until a call to <span class="c003">wait/2</span> is done
+the child process remains in the system processes table (as a zombie process
+if terminated). This predicate is an interface to the C Unix function
+<span class="c003">fork(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Pid)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec280">8.27.24&#XA0;&#XA0;<a id="hevea_default897"></a><span class="c003">create_pipe/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+create_pipe(-stream, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">create_pipe(StreamIn, StreamOut)</span> creates a pair of streams
+pointing to a pipe inode. <span class="c003">StreamIn</span> is unified with the stream-term
+associated with the input side of the pipe and <span class="c003">StreamOut</span> is unified
+with the stream-term associated with output side. This predicate is an
+interface to the C Unix function <span class="c003">pipe(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamIn</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamIn)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">StreamOut</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(StreamOut)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="wait/2">8.27.25&#XA0;&#XA0;<a id="hevea_default898"></a><span class="c003">wait/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+wait(+integer, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">wait(Pid, Status)</span> waits for the child process whose identifier is
+<span class="c003">Pid</span> to terminate. <span class="c003">Status</span> is then unified with the exit
+status. This predicate is an interface to the C Unix function
+<span class="c003">waitpid(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Pid)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Status</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Status)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec282">8.27.26&#XA0;&#XA0;<a id="hevea_default899"></a><span class="c003">prolog_pid/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+prolog_pid(?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">prolog_pid(Pid)</span> unifies <span class="c003">Pid</span> with the process identifier
+of the current GNU Prolog process.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Pid)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec283">8.27.27&#XA0;&#XA0;<a id="hevea_default900"></a><span class="c003">send_signal/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+send_signal(+integer, +integer)<br>
+send_signal(+integer, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">send_signal(Pid, Signal)</span> sends <span class="c003">Signal</span> to the process whose
+identifier is <span class="c003">Pid.</span> <span class="c003">Signal</span> can be specified directly as an
+integer or symbolically as an atom. Allowed atoms depend on the machine (e.g.
+<span class="c003">&#X2019;SIGINT&#X2019;</span>, <span class="c003">&#X2019;SIGQUIT&#X2019;</span>, <span class="c003">&#X2019;SIGKILL&#X2019;</span>,
+<span class="c003">&#X2019;SIGUSR1&#X2019;</span>, <span class="c003">&#X2019;SIGUSR2&#X2019;</span>, <span class="c003">&#X2019;SIGALRM&#X2019;</span>,&#X2026;). This
+predicate is an interface to the C Unix function <span class="c003">kill(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pid</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Pid)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Signal</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Signal</span> is neither a variable nor an integer or an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Signal)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec284">8.27.28&#XA0;&#XA0;<a id="hevea_default901"></a><span class="c003">sleep/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+sleep(+number)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">sleep(Seconds)</span> puts the GNU Prolog process to sleep for
+<span class="c003">Second</span>s seconds. <span class="c003">Seconds</span> can be an integer or a floating
+point number (in which case it can be &lt; 1). This predicate is an interface
+to the C Unix function <span class="c003">usleep(3)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Seconds</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Seconds</span> is neither a variable nor a number</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(number, Seconds)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Seconds</span> is a number &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Seconds)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="select/5">8.27.29&#XA0;&#XA0;<a id="hevea_default902"></a><span class="c003">select/5</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+select(+list, ?list, +list, ?list, +number)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">select(Reads, ReadyReads, Writes, ReadyWrites, TimeOut)</span> waits for a
+number of streams (or file descriptors) to change status.
+<span class="c003">ReadyReads</span> is unified with the list of elements listed in
+<span class="c003">Reads</span> that have characters available for reading. Similarly
+<span class="c003">ReadyWrites</span> is unified with the list of elements of <span class="c003">Writes</span>
+that are ok for immediate writing. The elements of <span class="c003">Reads</span> and
+<span class="c003">Writes</span> are either stream-terms or aliases or integers considered as
+file descriptors, e.g. for sockets (section&#XA0;<a href="gprolog052.html#Sockets-input%2Foutput">8.28</a>). Streams
+that must be tested with <span class="c003">select/5</span> should not be buffered. This can
+be done at the opening using <a id="hevea_default903"></a><span class="c003">open/4</span> (section&#XA0;<a href="gprolog034.html#open%2F4">8.10.6</a>) or later using
+<a id="hevea_default904"></a><span class="c003">set_stream_buffering/2</span> (section&#XA0;<a href="gprolog034.html#set-stream-buffering%2F2">8.10.27</a>).
+<span class="c003">TimeOut</span> is an upper bound on the amount of time (in milliseconds)
+elapsed before <span class="c003">select/5</span> returns. If <span class="c003">TimeOut</span> &#X2264; 0 (no
+timeout) <span class="c003">select/5</span> waits until something is available (either or
+reading or for writing) and thus can block indefinitely. This predicate is
+an interface to the C Unix function <span class="c003">select(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Reads</span> (or <span class="c003">Writes</span>) is a partial list or a list
+with an element <span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Reads</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Reads)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Writes</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Writes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">ReadyReads</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, ReadyReads)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">ReadyWrites</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, ReadyWrites)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Reads</span> (or <span class="c003">Writes</span>)
+list is neither a stream-term or alias nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Reads</span> (or <span class="c003">Writes</span>)
+list is not a selectable item</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(selectable_item, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Reads</span> (or <span class="c003">Writes</span>)
+list is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Reads</span> (or <span class="c003">Writes</span>)
+list is a stream-tern or alias not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Reads</span> list is associated with
+an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Writes</span> list is associated with
+an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">TimeOut</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">TimeOut</span> is neither a variable nor a number</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(number, TimeOut)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog050.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog052.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

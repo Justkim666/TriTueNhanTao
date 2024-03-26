@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>List processing</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog043.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog045.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec209">8.20&#XA0;&#XA0;List processing</h3>
+<ul>
+<li><a href="gprolog044.html#sec210"><span class="c003">append/3</span></a>
+</li><li><a href="gprolog044.html#member%2F2"><span class="c003">member/2</span>, 
+<span class="c003">memberchk/2</span></a>
+</li><li><a href="gprolog044.html#sec212"><span class="c003">reverse/2</span></a>
+</li><li><a href="gprolog044.html#sec213"><span class="c003">delete/3</span>,
+<span class="c003">select/3</span></a>
+</li><li><a href="gprolog044.html#sec214"><span class="c003">subtract/3</span></a>
+</li><li><a href="gprolog044.html#sec215"><span class="c003">permutation/2</span></a>
+</li><li><a href="gprolog044.html#sec216"><span class="c003">prefix/2</span>,
+<span class="c003">suffix/2</span></a>
+</li><li><a href="gprolog044.html#sec217"><span class="c003">sublist/2</span></a>
+</li><li><a href="gprolog044.html#sec218"><span class="c003">last/2</span></a>
+</li><li><a href="gprolog044.html#sec219"><span class="c003">flatten/2</span></a>
+</li><li><a href="gprolog044.html#sec220"><span class="c003">length/2</span></a>
+</li><li><a href="gprolog044.html#sec221"><span class="c003">nth/3</span></a>
+</li><li><a href="gprolog044.html#sec222"><span class="c003">max_list/2</span>,
+<span class="c003">min_list/2</span>,
+<span class="c003">sum_list/2</span></a>
+</li><li><a href="gprolog044.html#sec223"><span class="c003">maplist/2-8</span></a>
+</li><li><a href="gprolog044.html#sort%2F2"><span class="c003">sort/2</span>,
+<span class="c003">msort/2</span>,
+<span class="c003">keysort/2</span>
+<span class="c003">sort/1</span>,
+<span class="c003">msort/1</span>,
+<span class="c003">keysort/1</span></a>
+</li></ul>
+<p>These predicates manipulate lists. They are bootstrapped predicates (i.e.
+written in Prolog) and no error cases are tested (for the moment). However,
+since they are written in Prolog using other built-in predicates, some
+errors can occur due to those built-in predicates.</p>
+<h4 class="subsubsection" id="sec210">8.20.1&#XA0;&#XA0;<a id="hevea_default701"></a><span class="c003">append/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+append(?list, ?list, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">append(List1, List2, List12)</span> succeeds if the concatenation of the
+list <span class="c003">List1</span> and the list <span class="c003">List2</span> is the list <span class="c003">List12</span>.
+This predicate is re-executable on backtracking (e.g. if <span class="c003">List12</span> is
+instantiated and both <span class="c003">List1</span> and <span class="c003">List2</span> are variable).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="member/2">8.20.2&#XA0;&#XA0;<a id="hevea_default702"></a><span class="c003">member/2</span>, 
+<a id="hevea_default703"></a><span class="c003">memberchk/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+member(?term, ?list)<br>
+memberchk(?term, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">member(Element, List)</span> succeeds if <span class="c003">Element</span> belongs to the
+<span class="c003">List</span>. This predicate is re-executable on backtracking and can be
+thus used to enumerate the elements of <span class="c003">List</span>.</p><p><span class="c003">memberchk/2</span> is similar to <span class="c003">member/2</span> but only succeeds once.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec212">8.20.3&#XA0;&#XA0;<a id="hevea_default704"></a><span class="c003">reverse/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+reverse(?list, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">reverse(List1, List2)</span> succeeds if <span class="c003">List2</span> unifies with the
+list <span class="c003">List1</span> in reverse order.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec213">8.20.4&#XA0;&#XA0;<a id="hevea_default705"></a><span class="c003">delete/3</span>,
+<a id="hevea_default706"></a><span class="c003">select/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+delete(?list, ?term, ?list)<br>
+select(?term, ?list, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">delete(List1, Element, List2)</span> removes all occurrences of
+<span class="c003">Element</span> in <span class="c003">List1</span> to provide <span class="c003">List2</span>. A strict term
+equality is required, cf. <a id="hevea_default707"></a><span class="c003">(==)/2</span> (section&#XA0;<a href="gprolog027.html#%28%3D%3D%29%2F2">8.3.2</a>).</p><p><span class="c003">select(Element, List1, List2)</span> removes one occurrence of
+<span class="c003">Element</span> in <span class="c003">List1</span> to provide <span class="c003">List2</span>. This predicate
+is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec214">8.20.5&#XA0;&#XA0;<a id="hevea_default708"></a><span class="c003">subtract/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+subtract(+list, +list, ?list)
+</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">subtract(List1, List2, List3)</span> removes all elements in <span class="c003">List2</span>
+from <span class="c003">List1</span> to provide <span class="c003">List3</span>. Membership is tested using
+<span class="c003">memberchk/2</span> (section&#XA0;<a href="#member%2F2">8.20.2</a>). The predicate runs in
+<span class="c008">O</span>(|<span class="c003">List2</span>| &#XD7; |<span class="c003">List1</span>|).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec215">8.20.6&#XA0;&#XA0;<a id="hevea_default709"></a><span class="c003">permutation/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+permutation(?list, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">permutation(List1, List2)</span> succeeds if <span class="c003">List2</span>
+is a permutation of the elements of <span class="c003">List1</span>. This predicate is
+re-executable on backtracking.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec216">8.20.7&#XA0;&#XA0;<a id="hevea_default710"></a><span class="c003">prefix/2</span>,
+<a id="hevea_default711"></a><span class="c003">suffix/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+prefix(?list, ?list)<br>
+suffix(?list, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">prefix(Prefix, List)</span> succeeds if <span class="c003">Prefix</span> is a prefix of
+<span class="c003">List</span>. This predicate is re-executable on backtracking.</p><p><span class="c003">suffix(Suffix, List)</span> succeeds if <span class="c003">Suffix</span> is a suffix of
+<span class="c003">List</span>. This predicate is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec217">8.20.8&#XA0;&#XA0;<a id="hevea_default712"></a><span class="c003">sublist/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+sublist(?list, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">sublist(List1, List2)</span> succeeds if all elements of <span class="c003">List1</span> appear in <span class="c003">List2</span> in the same order. This predicate is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec218">8.20.9&#XA0;&#XA0;<a id="hevea_default713"></a><span class="c003">last/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+last(?list, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">last(List, Element)</span> succeeds if <span class="c003">Element</span> is the last element
+of <span class="c003">List</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec219">8.20.10&#XA0;&#XA0;<a id="hevea_default714"></a><span class="c003">flatten/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+flatten(?term, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">flat(List1, List2)</span> succeeds if <span class="c003">List2</span> is the flatten version
+of <span class="c003">List1</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec220">8.20.11&#XA0;&#XA0;<a id="hevea_default715"></a><span class="c003">length/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+length(?list, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">length(List, Length)</span> succeeds if <span class="c003">Length</span> is the length of
+<span class="c003">List</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Length)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec221">8.20.12&#XA0;&#XA0;<a id="hevea_default716"></a><span class="c003">nth/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+nth(?integer, ?list, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">nth(N, List, Element)</span> succeeds if the <span class="c003">N</span><em>th</em>
+argument of <span class="c003">List</span> is <span class="c003">Element</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec222">8.20.13&#XA0;&#XA0;<a id="hevea_default717"></a><span class="c003">max_list/2</span>,
+<a id="hevea_default718"></a><span class="c003">min_list/2</span>,
+<a id="hevea_default719"></a><span class="c003">sum_list/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+min_list(+list, ?number)<br>
+max_list(+list, ?number)<br>
+sum_list(+list, ?number)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">min_list(List, Min)</span> succeeds if <span class="c003">Min</span> is the
+smallest number in <span class="c003">List</span>.</p><p><span class="c003">max_list(List, Max)</span> succeeds if <span class="c003">Max</span> is the
+largest number in <span class="c003">List</span>.</p><p><span class="c003">sum_list(List, Sum)</span> succeeds if <span class="c003">Sum</span> is the
+sum of all the elements in <span class="c003">List</span>.</p><p><span class="c003">List</span> must be a list of arithmetic evaluable terms
+(section&#XA0;<a href="gprolog030.html#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec223">8.20.14&#XA0;&#XA0;<a id="hevea_default720"></a><span class="c003">maplist/2-8</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+maplist(+callable_term, +list, &#X2026;, +list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">maplist(Goal, List)</span> succeeds if <span class="c003">Goal</span> can succesfully be
+applied on all elements of <span class="c003">List</span>.</p><p><span class="c003">maplist(Goal, List1, List2)</span> succeeds if <span class="c003">Goal</span> can succesfully be
+applied to all pairs of elements of <span class="c003">List1</span> and <span class="c003">List2</span>.</p><p><span class="c003">maplist(Goal, List1, List2, List3)</span> succeeds if <span class="c003">Goal</span> can succesfully be
+applied to all triples of elements of <span class="c003">List1</span>..<span class="c003">List3</span>.</p><p><span class="c003">maplist(Goal, List1, List2, &#X2026;, List</span><span class="c008">N</span><span class="c003">)</span> succeeds if <span class="c003">Goal</span> can succesfully be
+applied to all <span class="c008">N</span>-uples (<span class="c008">N</span> &#X2264; 8) of elements of <span class="c003">List1</span>..<span class="c003">List</span><span class="c008">N</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an error occurs executing a directive</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">see <span class="c003">call/1</span> errors (section&#XA0;<a href="gprolog023.html#call%2F1">7.2.3</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sort/2">8.20.15&#XA0;&#XA0;<a id="hevea_default721"></a><span class="c003">sort/2</span>,
+<a id="hevea_default722"></a><span class="c003">msort/2</span>,
+<a id="hevea_default723"></a><span class="c003">keysort/2</span>
+<a id="hevea_default724"></a><span class="c003">sort/1</span>,
+<a id="hevea_default725"></a><span class="c003">msort/1</span>,
+<a id="hevea_default726"></a><span class="c003">keysort/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+sort(+list, ?list)<br>
+msort(+list, ?list)<br>
+keysort(+list, ?list)<br>
+sort(+list)<br>
+msort(+list)<br>
+keysort(+list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">sort(List1, List2)</span> succeeds if <span class="c003">List2</span> is the
+sorted list corresponding to <span class="c003">List1</span> where duplicate elements are
+merged.</p><p><span class="c003">msort/2</span> is similar to <span class="c003">sort/2</span> except that duplicate elements
+are not merged.</p><p><span class="c003">keysort(List1, List2)</span> succeeds if <span class="c003">List2</span> is the
+sorted list of <span class="c003">List1</span> according to the keys. The list <span class="c003">List1</span>
+consists of pairs (items of the form <span class="c003">Key-Value</span>). These items are sorted
+according to the value of <span class="c003">Key</span> yielding the <span class="c003">List2</span>. Duplicate
+keys are not merged. This predicate is stable, i.e. if <span class="c003">K-A</span> occurs
+before <span class="c003">K-B</span> in the input, then <span class="c003">K-A</span> will occur before
+<span class="c003">K-B</span> in the output.</p><p><span class="c003">sort/1</span>, <span class="c003">msort/1</span> and <span class="c003">keysort/1</span> are similar to
+<span class="c003">sort/2</span>, <span class="c003">msort/2</span> and <span class="c003">keysort/2</span> but achieve a sort
+in-place destructing the original <span class="c003">List1</span> (this in-place assignment is
+not undone at backtracking). The sorted list occupies the same memory space
+as the original list (saving thus memory consumption).</p><p>The time complexity of these sorts is <span class="c008">O</span>(<span class="c008">N</span>&#XA0;<span class="c008">log</span>&#XA0;<span class="c008">N</span>), <span class="c008">N</span> being the length of
+the list to sort.</p><p>These predicates refer to the standard ordering of terms
+(section&#XA0;<a href="gprolog027.html#Standard-total-ordering-of-terms">8.3.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List1</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List1</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List1)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List2</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List2)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+for <span class="c003">keysort/2</span>: an element of <span class="c003">List1</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+for <span class="c003">keysort/2</span>: an element <span class="c003">E</span> of <span class="c003">List1</span> is neither a variable nor a pair</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(pair, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+for <span class="c003">keysort/2</span>: an element <span class="c003">E</span> of <span class="c003">List2</span> is neither a variable nor a pair</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(pair, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p><span class="c003">sort/2</span> and <span class="c003">keysort/2</span> are ISO predicates.</p><p><span class="c003">sort/1</span>, <span class="c003">keysort/1</span> and <span class="c003">msort/1-2</span> are GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog043.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog045.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

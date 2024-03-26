@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Introduction</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog056.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec301">9.1&#XA0;&#XA0;Introduction</h3>
+<ul>
+<li><a href="gprolog055.html#sec302">Finite Domain variables</a>
+</li></ul>
+<p>
+<a id="Intro-FD"></a>
+The finite domain (FD) constraint solver extends Prolog with constraints over
+FD. This facility is available if the FD part of GNU Prolog has been
+installed. The solver is an instance of the Constraint Logic Programming
+scheme introduced by Jaffar and Lassez in 1987
+[<a href="gprolog073.html#Jaffar-Lassez87">7</a>]. Constraints on FD are solved using propagation
+techniques, in particular arc-consistency (AC). The interested reader can
+refer to &#X201C;Constraint Satisfaction in Logic Programming&#X201D; of P. Van
+Hentenryck (1989) [<a href="gprolog073.html#pvh89">8</a>]. The solver is based on the <span class="c003">clp(FD)</span>
+solver [<a href="gprolog073.html#long-clp-fd">4</a>]. The GNU Prolog FD solver offers arithmetic
+constraints, boolean constraints, reified constraints and symbolic
+constraints on an new kind of variables: Finite Domain variables.</p>
+<h4 class="subsubsection" id="sec302">9.1.1&#XA0;&#XA0;Finite Domain variables</h4>
+<p>
+<a id="Finite-Domain-variables"></a>
+A new type of data is introduced: FD variables which can only take values in
+their domains. The initial domain of an FD variable is
+<span class="c003">0..fd_max_integer</span> where <a id="hevea_default932"></a><span class="c003">fd_max_integer</span> represents the
+greatest value that any FD variable can take. The predicate
+<span class="c003">fd_max_integer/1</span> returns this value which may be different from
+the <a id="hevea_default933"></a><span class="c003">max_integer</span> <a id="hevea_default934"></a>Prolog flag
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). The domain of an FD variable <span class="c003">X</span> is
+reduced step by step by constraints in a monotonic way: when a value
+has been removed from the domain of <span class="c003">X</span> it will never reappear
+in the domain of <span class="c003">X</span>. An FD variable is fully compatible with
+both Prolog integers and Prolog variables. Namely, when an FD
+variable is expected by an FD constraint it is possible to pass a
+Prolog integer (considered as an FD variable whose domain is a
+singleton) or a Prolog variable (immediately bound to an initial range
+<span class="c003">0..fd_max_integer</span>). This avoids the need for specific type
+declaration. Although it is not necessary to declare the initial domain of an
+FD variable (since it will be bound <span class="c003">0..fd_max_integer</span> when
+appearing for the fist time in a constraint) it is advantageous to do so and
+thus reduce as soon as possible the size of its domain: particularly because
+GNU Prolog, for efficiency reasons, does not check for overflows. For instance,
+without any preliminary domain definitions for <span class="c003">X</span>, <span class="c003">Y</span> and
+<span class="c003">Z</span>, the non-linear constraint <span class="c003">X*Y#=Z</span> will fail due to an
+overflow when computing the upper bound of the domain of <span class="c003">Z</span>:
+<span class="c003">fd_max_integer </span>&#XD7;<span class="c003"> fd_max_integer</span>. This overflow causes a
+negative result for the upper bound and the constraint then fails.</p><p>There are two internal representations for an FD variable:</p><ul class="itemize"><li class="li-itemize"><span class="c009">interval representation</span>: only the <em>min</em> and the
+<em>max</em> of the variable are maintained. In this representation it is
+possible to store values included in <span class="c003">0..fd_max_integer</span>.</li><li class="li-itemize"><span class="c009">sparse representation</span>: an additional bit-vector is used to
+store the set of possible values for the variable (i.e. the domain). In
+this representation it is possible to store values included in
+<span class="c003">0..vector_max</span>. By default <a id="hevea_default935"></a><span class="c003">vector_max</span> is set to 127.
+This value can be redefined via an environment variable <span class="c003">VECTORMAX</span>
+or via the built-in predicate <a id="hevea_default936"></a><span class="c003">fd_set_vector_max/1</span>
+(section&#XA0;<a href="gprolog056.html#fd-set-vector-max%2F1">9.2.3</a>). The predicate <a id="hevea_default937"></a><span class="c003">fd_vector_max/1</span>
+returns the current value of <span class="c003">vector_max</span>
+(section&#XA0;<a href="gprolog056.html#fd-max-integer%2F1">9.2.1</a>).</li></ul><p><a id="hevea_default938"></a>
+The initial representation for an FD variable <span class="c003">X</span> is always an
+interval representation and is switched to a sparse representation when a
+&#X201C;hole&#X201D; appears in the domain (e.g. due to an inequality constraint). Once a
+variable uses a sparse representation it will not switch back to an interval
+representation even if there are no longer holes in its domain. When this
+switching occurs some values in the domain of <span class="c003">X</span> can be lost since
+<span class="c003">vector_max</span> is less than <span class="c003">fd_max_integer</span>. We say that
+&#X201C;<span class="c003">X</span> is extra-constrained&#X201D; since
+<span class="c003">X</span> is constrained by the solver to the domain
+<span class="c003">0..vector_max</span> (via an imaginary constraint
+<span class="c003">X #=&lt; <span class="c008">vector_max</span></span>). An <a id="hevea_default939"></a><span class="c003">extra_cstr</span> is
+associated with each FD variable to indicate that values have been lost due to
+the switch to a sparse representation. This flag is updated on every
+operations. The domain of an extra-constrained FD variable is output followed
+by the <span class="c003">@</span> symbol. When a constraint fails on a extra-constrained
+variable a message <span class="c003">Warning: Vector too small - maybe lost solutions
+(FD Var:<span class="c008">N</span>)</span> is displayed (<span class="c004">N</span> is the address of the involved
+variable).</p><p>Example 1 (<span class="c003">vector_max</span> = <span class="c003">127</span>):</p><table class="c000 cellpadding1" border=1><tr><td class="c014">
+Constraint on <span class="c003">X</span></td><td class="c014">Domain of <span class="c003">X</span></td><td class="c012"><span class="c003">extra_cstr</span></td><td class="c014">Lost values </td></tr>
+<tr><td class="c014">
+<span class="c003">X #=&lt; 512</span></td><td class="c014"><span class="c003">0..512</span></td><td class="c012"><span class="c003">off</span></td><td class="c014">none </td></tr>
+<tr><td class="c014">
+<span class="c003">X #\= 10</span></td><td class="c014"><span class="c003">0..9:11..127</span></td><td class="c012"><span class="c003">on</span></td><td class="c014"><span class="c003">128..512</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">X #=&lt; 100</span></td><td class="c014"><span class="c003">0..9:11..100</span></td><td class="c012"><span class="c003">off</span></td><td class="c014">none </td></tr>
+</table><p>In this example, when the constraint <span class="c003">X #\= 10</span> is posted some
+values are lost, the <span class="c003">extra_cstr</span> is then switched on. However,
+posting the constraint <span class="c003">X #=&lt; 100</span> will turn off the flag (no
+values are lost).</p><p>Example 2:</p><table class="c000 cellpadding1" border=1><tr><td class="c014">
+Constraint on <span class="c003">X</span></td><td class="c014">Domain of <span class="c003">X</span></td><td class="c012"><span class="c003">extra_cstr</span></td><td class="c014">Lost values </td></tr>
+<tr><td class="c014">
+<span class="c003">X #=&lt; 512</span></td><td class="c014"><span class="c003">0..512</span></td><td class="c012"><span class="c003">off</span></td><td class="c014">none </td></tr>
+<tr><td class="c014">
+<span class="c003">X #\= 10</span></td><td class="c014"><span class="c003">0..9:11..127</span></td><td class="c012"><span class="c003">on</span></td><td class="c014"><span class="c003">128..512</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">X #&gt;= 256</span></td><td class="c014"><span class="c003">Warning: Vector too small&#X2026;</span></td><td class="c012"><span class="c003">on</span></td><td class="c014"><span class="c003">128..512</span> </td></tr>
+</table><p>In this example, the constraint <span class="c003">X #&gt;= 256</span> fails due to the lost
+of <span class="c003">128..512</span> so a message is displayed onto the terminal. The
+solution would consist in increasing the size of the vector either by setting
+the environment variable <span class="c003">VECTORMAX</span> (e.g. to <span class="c003">512</span>) or using
+<span class="c003">fd_set_vector_max(512)</span>.</p><p>Finally, bit-vectors are not dynamic, i.e. all vectors have the same size
+(<span class="c003">0..vector_max</span>). So the use of <span class="c003">fd_set_vector_max/1</span> is
+limited to the initial definition of vector sizes and must occur before any
+constraint. As seen before, the solver tries to display a message when a
+failure occurs due to a too short <span class="c003">vector_max</span>. Unfortunately, in
+some cases it cannot detect the lost of values and no message is emitted. So
+the user should always take care to this parameter to be sure that it is
+large to encode any vector.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog056.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

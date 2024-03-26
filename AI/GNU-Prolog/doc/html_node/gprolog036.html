@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Character input/output</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog035.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog037.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec149">8.12&#XA0;&#XA0;Character input/output</h3>
+<ul>
+<li><a href="gprolog036.html#get-char%2F2"><span class="c003">get_char/2</span>,
+<span class="c003">get_char/1</span>,
+<span class="c003">get_code/1</span>,
+<span class="c003">get_code/2</span></a>
+</li><li><a href="gprolog036.html#sec151"><span class="c003">get_key/2</span>,
+<span class="c003">get_key/1</span>
+	 <span class="c003">get_key_no_echo/2</span>,
+<span class="c003">get_key_no_echo/1</span></a>
+</li><li><a href="gprolog036.html#sec152"><span class="c003">peek_char/2</span>,
+<span class="c003">peek_char/1</span>,
+<span class="c003">peek_code/1</span>,
+<span class="c003">peek_code/2</span></a>
+</li><li><a href="gprolog036.html#sec153"><span class="c003">unget_char/2</span>,
+<span class="c003">unget_char/1</span>,
+<span class="c003">unget_code/2</span>,
+<span class="c003">unget_code/1</span></a>
+</li><li><a href="gprolog036.html#put-char%2F2"><span class="c003">put_char/2</span>,
+<span class="c003">put_char/1</span>,
+<span class="c003">put_code/1</span>,
+<span class="c003">put_code/2</span>,
+<span class="c003">nl/1</span>,
+<span class="c003">nl/0</span></a>
+</li></ul>
+<p>
+These built-in predicates enable a single character or character code to be
+input from and output to a text stream. The atom <span class="c003">end_of_file</span> is
+returned as character to indicate the end-of-file. <span class="c003">-1</span> is returned
+as character code to indicate the end-of-file.</p>
+<h4 class="subsubsection" id="get-char/2">8.12.1&#XA0;&#XA0;<a id="hevea_default438"></a><span class="c003">get_char/2</span>,
+<a id="hevea_default439"></a><span class="c003">get_char/1</span>,
+<a id="hevea_default440"></a><span class="c003">get_code/1</span>,
+<a id="hevea_default441"></a><span class="c003">get_code/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+get_char(+stream_or_alias, ?in_character)<br>
+get_char(?in_character)<br>
+get_code(+stream_or_alias, ?in_character_code)<br>
+get_code(?in_character_code)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">get_char(SorA, Char)</span> succeeds if <span class="c003">Char</span> unifies with the
+next character read from the stream associated with the stream-term or alias
+<span class="c003">SorA</span>.</p><p><span class="c003">get_code/2</span> is similar to <span class="c003">get_char/2</span> but deals with
+character codes.</p><p><span class="c003">get_char/1</span> and <span class="c003">get_code/1</span> apply to the current input
+stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is neither a variable nor an in-character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(in_character, Char)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream properties <span class="c003">end_of_stream(past)</span>
+and <span class="c003">eof_action(error)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, past_end_of_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The entity input from the stream is not a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is an integer but not an in-character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(in_character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+<h4 class="subsubsection" id="sec151">8.12.2&#XA0;&#XA0;<a id="hevea_default442"></a><span class="c003">get_key/2</span>,
+<a id="hevea_default443"></a><span class="c003">get_key/1</span>
+	 <a id="hevea_default444"></a><span class="c003">get_key_no_echo/2</span>,
+<a id="hevea_default445"></a><span class="c003">get_key_no_echo/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+get_key(+stream_or_alias, ?integer)<br>
+get_key(?integer)<br>
+get_key_no_echo(+stream_or_alias, ?integer)<br>
+get_key_no_echo(?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">get_key(SorA, Code)</span> succeeds if <span class="c003">Code</span> unifies with the
+character code of the next key read from the stream associated with the
+stream-term or alias <span class="c003">SorA</span>. It is intended to read a single key from
+the keyboard (thus <span class="c003">SorA</span> should refer to current input stream). No
+buffering is performed (a character is read as soon as available) and
+function keys can also be read (in that case, <span class="c003">Code</span> is an integer &gt;
+255). The read character is echoed if it is printable.</p><p>This facility is only possible if the <a id="hevea_default446"></a><span class="c003">linedit</span> facility has been
+installed (section&#XA0;<a href="gprolog007.html#The-line-editor">4.2.6</a>) otherwise <span class="c003">get_key/2</span> behaves
+similarly to <a id="hevea_default447"></a><span class="c003">get_code/2</span> (section&#XA0;<a href="#get-char%2F2">8.12.1</a>) (the code of the first
+character is returned) but also pumps remaining characters until a character
+&lt; space (0x20) is read (in particular RETURN). The same behavior
+occurs if <span class="c003">SorA</span> does not refer to the current input stream or if
+this stream is not attached to a terminal.</p><p><span class="c003">get_key_no_echo/2</span> behaves similarly to <span class="c003">get_key/2</span>
+except that the read character is not echoed.</p><p><span class="c003">get_key/1</span> and <span class="c003">get_key_no_echo/1</span> apply to the current
+input stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream properties <span class="c003">end_of_stream(past)</span>
+and <span class="c003">eof_action(error)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, past_end_of_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec152">8.12.3&#XA0;&#XA0;<a id="hevea_default448"></a><span class="c003">peek_char/2</span>,
+<a id="hevea_default449"></a><span class="c003">peek_char/1</span>,
+<a id="hevea_default450"></a><span class="c003">peek_code/1</span>,
+<a id="hevea_default451"></a><span class="c003">peek_code/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+peek_char(+stream_or_alias, ?in_character)<br>
+peek_char(?in_character)<br>
+peek_code(+stream_or_alias, ?in_character_code)<br>
+peek_code(?in_character_code)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">peek_char(SorA, Char)</span> succeeds if <span class="c003">Char</span> unifies with the
+next character that will be read from the stream associated with the stream-term
+or alias <span class="c003">SorA</span>. The character is not read.</p><p><span class="c003">peek_code/2</span> is similar to <span class="c003">peek_char/2</span> but deals with
+character codes.</p><p><span class="c003">peek_char/1</span> and <span class="c003">peek_code/1</span> apply to the current input
+stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is neither a variable nor an in-character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(in_character, Char)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream properties <span class="c003">end_of_stream(past)</span>
+and <span class="c003">eof_action(error)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, past_end_of_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The entity input from the stream is not a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is an integer but not an in-character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(in_character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+<h4 class="subsubsection" id="sec153">8.12.4&#XA0;&#XA0;<a id="hevea_default452"></a><span class="c003">unget_char/2</span>,
+<a id="hevea_default453"></a><span class="c003">unget_char/1</span>,
+<a id="hevea_default454"></a><span class="c003">unget_code/2</span>,
+<a id="hevea_default455"></a><span class="c003">unget_code/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+unget_char(+stream_or_alias, +character)<br>
+unget_char(+character)<br>
+unget_code(+stream_or_alias, +character_code)<br>
+unget_code(+character_code)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">unget_char(SorA, Char)</span> pushes back <span class="c003">Char</span>
+onto the stream associated with the stream-term or alias <span class="c003">SorA</span>.
+<span class="c003">Char</span> will be the next character read by <span class="c003">get_char/2</span>. The
+maximum number of characters that can be cumulatively pushed back is given by
+the <a id="hevea_default456"></a><span class="c003">max_unget</span> <a id="hevea_default457"></a>Prolog flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>).</p><p><span class="c003">unget_code/2</span> is similar to <span class="c003">unget_char/2</span> but deals with
+character codes.</p><p><span class="c003">unget_char/1</span> and <span class="c003">unget_code/1</span> apply to the current input
+stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is neither a variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, Char)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is an integer but not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="put-char/2">8.12.5&#XA0;&#XA0;<a id="hevea_default458"></a><span class="c003">put_char/2</span>,
+<a id="hevea_default459"></a><span class="c003">put_char/1</span>,
+<a id="hevea_default460"></a><span class="c003">put_code/1</span>,
+<a id="hevea_default461"></a><span class="c003">put_code/2</span>,
+<a id="hevea_default462"></a><span class="c003">nl/1</span>,
+<a id="hevea_default463"></a><span class="c003">nl/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+put_char(+stream_or_alias, +character)<br>
+put_char(+character)<br>
+put_code(+stream_or_alias, +character_code)<br>
+put_code(+character_code)<br>
+nl(+stream_or_alias)<br>
+nl</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">put_char(SorA, Char)</span> writes <span class="c003">Char</span> onto the
+stream associated with the stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c003">put_code/2</span> is similar to <span class="c003">put_char/2</span> but deals with
+character codes.</p><p><span class="c003">nl(SorA)</span> writes a new-line character onto the stream
+associated with the stream-term or alias <span class="c003">SorA</span>. This is equivalent to
+<span class="c003">put_char(SorA, &#X2019;\n&#X2019;)</span>.</p><p><span class="c003">put_char/1</span>, <span class="c003">put_code/1</span> and <span class="c003">nl/0</span> apply to the
+current output stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is neither a variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, Char)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is an integer but not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog035.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog037.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

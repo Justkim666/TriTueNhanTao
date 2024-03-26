@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Labeling constraints</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog062.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog064.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec331">9.9&#XA0;&#XA0;Labeling constraints</h3>
+<ul>
+<li><a href="gprolog063.html#fd-labeling%2F2"><span class="c003">fd_labeling/2</span>,
+<span class="c003">fd_labeling/1</span>,
+<span class="c003">fd_labelingff/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="fd-labeling/2">9.9.1&#XA0;&#XA0;<a id="hevea_default1001"></a><span class="c003">fd_labeling/2</span>,
+<a id="hevea_default1002"></a><span class="c003">fd_labeling/1</span>,
+<a id="hevea_default1003"></a><span class="c003">fd_labelingff/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_labeling(+fd_variable_list, +fd_labeling_option_list)<br>
+fd_labeling(+fd_variable, +fd_labeling_option_list)<br>
+fd_labeling(+fd_variable_list)<br>
+fd_labeling(+fd_variable)<br>
+fd_labelingff(+fd_variable_list)<br>
+fd_labelingff(+fd_variable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_labeling(Vars, Options)</span> assigns a value to each variable
+<span class="c003">X</span> of the list <span class="c003">Vars</span> according to the list of labeling
+options given by <span class="c003">Options</span>. <span class="c003">Vars</span> can be also a single FD
+variable. This predicate is re-executable on backtracking.</p><p><span class="c009">FD labeling options</span>: <span class="c003">Options</span> is a list of labeling
+options. If this list contains contradictory options, the rightmost option
+is the one which applies. Possible options are:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default1004"></a><span class="c003">variable_method(V)</span>: specifies the
+heuristics to select the variable to enumerate:<ul class="itemize"><li class="li-itemize"><a id="hevea_default1005"></a><span class="c003">standard</span>: no heuristics, the leftmost variable is selected.</li><li class="li-itemize"><a id="hevea_default1006"></a><span class="c003">first_fail</span> (or <span class="c003">ff</span>): selects the variable with the
+smallest number of elements in its domain. If several variables have the
+same number of elements the leftmost variable is selected.</li><li class="li-itemize"><a id="hevea_default1007"></a><span class="c003">most_constrained</span>: like <span class="c003">first_fail</span> but when
+several variables have the same number of elements selects the
+variable that appears in most constraints.</li><li class="li-itemize"><a id="hevea_default1008"></a><span class="c003">smallest</span>: selects the variable that has the smallest value
+in its domain. If there is more than one such variable selects the
+variable that appears in most constraints.</li><li class="li-itemize"><a id="hevea_default1009"></a><span class="c003">largest</span>: selects the variable that has the greatest value in
+its domain. If there is more than one such variable selects the variable
+that appears in most constraints.</li><li class="li-itemize"><a id="hevea_default1010"></a><span class="c003">max_regret</span>: selects the variable that has the greatest
+difference between the smallest value and the next value of its domain. If
+there is more than one such variable selects the variable that appears in
+most constraints.</li><li class="li-itemize"><a id="hevea_default1011"></a><span class="c003">random</span>: selects randomly a variable. Each variable is 
+chosen only once.</li></ul><p>The default value is <span class="c003">standard</span>.</p></li><li class="li-itemize"><a id="hevea_default1012"></a><span class="c003">reorder(true/false)</span>: specifies if the variable
+heuristics should dynamically reorder the list of variable (<span class="c003">true</span>) or
+not (<span class="c003">false</span>). Dynamic reordering is generally more efficient but in
+some cases a static ordering is faster. The default value is
+<span class="c003">true</span>.</li><li class="li-itemize"><a id="hevea_default1013"></a><span class="c003">value_method(V)</span>: specifies the heuristics
+to select the value to assign to the chosen variable:<ul class="itemize"><li class="li-itemize"><a id="hevea_default1014"></a><span class="c003">min</span>: enumerates the values from the smallest to the greatest
+(default).</li><li class="li-itemize"><a id="hevea_default1015"></a><span class="c003">max</span>: enumerates the values from the greatest to the smallest.</li><li class="li-itemize"><a id="hevea_default1016"></a><span class="c003">middle</span>: enumerates the values from the middle to the bounds.</li><li class="li-itemize"><a id="hevea_default1017"></a><span class="c003">bounds</span>: enumerates the values from the bounds to the middle.</li><li class="li-itemize"><a id="hevea_default1018"></a><span class="c003">random</span>: enumerates the values randomly. Each value is tried
+only once.</li><li class="li-itemize"><a id="hevea_default1019"></a><span class="c003">bisect</span>: recursively creates a choice between <span class="c003">X #=&lt;
+M</span> and <span class="c003">X #&gt; M</span>, where <span class="c003">M</span> is the midpoint of the
+domain of the variable. Values are thus tried from the smallest to the
+greatest. This is also known as <span class="c008">domain splitting</span>.</li></ul><p>The default value is <span class="c003">min</span>.</p></li><li class="li-itemize"><a id="hevea_default1020"></a><span class="c003">backtracks(B)</span>: unifies <span class="c003">B</span> with the
+number of backtracks during the enumeration.</li></ul><p><span class="c003">fd_labeling(Vars)</span> is equivalent to <span class="c003">fd_labeling(Vars,
+[])</span>.</p><p><span class="c003">fd_labelingff(Vars)</span> is equivalent to <span class="c003">fd_labeling(Vars,
+[variable_method(ff)])</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Vars</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Vars</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Vars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Vars</span> list is neither a
+variable nor an integer nor an FD variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Options)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is neither a
+variable nor a labeling option</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(fd_labeling_option, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog062.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog064.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

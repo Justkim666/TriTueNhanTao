@@ -1,0 +1,50 @@
+.c000{border-spacing:0;}
+.c001{border-spacing:6px;border-collapse:separate;}
+.c002{color:#006600}
+.c003{font-family:monospace}
+.c004{font-family:monospace;font-style:italic}
+.c005{font-family:monospace;font-weight:bold}
+.c006{font-size:small}
+.c007{font-size:x-large}
+.c008{font-style:italic}
+.c009{font-weight:bold}
+.c010{font-weight:bold;font-size:x-large}
+.c011{height:2}
+.c012{text-align:center;border:solid 1px;white-space:nowrap}
+.c013{text-align:center;white-space:nowrap}
+.c014{text-align:left;border:solid 1px;white-space:nowrap}
+.c015{text-align:left;white-space:nowrap}
+.c016{vertical-align:middle;text-align:left;}
+.c017{vertical-align:middle;text-align:left;border:solid 1px;}
+.c018{vertical-align:top;text-align:center;border:solid 1px;white-space:nowrap}
+.c019{vertical-align:top;text-align:left;}
+.c020{vertical-align:top;text-align:left;border:solid 1px;}
+.c021{vertical-align:top;text-align:left;border:solid 1px;white-space:nowrap}
+.c022{vertical-align:top;text-align:left;white-space:nowrap}
+.c023{vertical-align:top;text-align:right;border:solid 1px;white-space:nowrap}
+.c024{width:80%;height:2}
+.li-itemize{margin:1ex 0ex;}
+.dd-description{margin:0ex 0ex 1ex 4ex;}
+.dt-description{margin:0ex;}
+div.footnotetext P{margin:0px; text-indent:1em;}
+.center{text-align:center;margin-left:auto;margin-right:auto;}
+.flushleft{text-align:left;margin-left:0ex;margin-right:auto;}
+div table{margin-left:inherit;margin-right:inherit;margin-bottom:2px;margin-top:2px}
+td table{margin:auto;}
+table{border-collapse:collapse;}
+td{padding:0;}
+.cellpadding1 tr td{padding:1px;}
+pre{text-align:left;margin-left:0ex;margin-right:auto;}
+blockquote{margin-left:4ex;margin-right:4ex;text-align:left;}
+td p{margin:0px;}
+.hbar{border:none;height:2px;width:100%;background-color:black;}
+body{background-color:white}
+a:link{color:#00B200;text-decoration:underline;}
+a:visited{color:#006600;text-decoration:underline;}
+a:hover{color:black;text-decoration:none;background-color:#99FF99}
+.section{padding:.5ex;background-color:#2DE52D}
+.subsection{padding:0.3ex;background-color:#66FF66}
+.subsubsection{padding:0.5ex;background-color:#99FF99}
+.ftoc1{list-style:none;margin:0ex 1ex;padding:0ex 1ex;border-left:1ex solid #00CC00}
+.ftoc2{list-style:none;margin:1ex 1ex;padding:0ex 1ex;border-left:1ex solid #2DE52D}
+.ftoc3{list-style:none;margin:0ex 1ex;padding:0ex 1ex;border-left:1ex solid #66FF66}

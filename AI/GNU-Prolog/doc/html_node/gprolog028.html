@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Term processing</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog027.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog029.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec81">8.4&#XA0;&#XA0;Term processing</h3>
+<ul>
+<li><a href="gprolog028.html#functor%2F3"><span class="c003">functor/3</span> </a>
+</li><li><a href="gprolog028.html#arg%2F3"><span class="c003">arg/3</span> </a>
+</li><li><a href="gprolog028.html#%28%3D..%29%2F2"><span class="c003">(=..)/2</span> - univ </a>
+</li><li><a href="gprolog028.html#sec85"><span class="c003">copy_term/2</span></a>
+</li><li><a href="gprolog028.html#sec86"><span class="c003">term_variables/2</span>,
+		<span class="c003">term_variables/3</span></a>
+</li><li><a href="gprolog028.html#sec87"><span class="c003">subsumes_term/2</span></a>
+</li><li><a href="gprolog028.html#sec88"><span class="c003">acyclic_term/1</span></a>
+</li><li><a href="gprolog028.html#term-hash%2F4"><span class="c003">term_hash/4</span>,
+<span class="c003">term_hash/2</span></a>
+</li><li><a href="gprolog028.html#sec90"><span class="c003">setarg/4</span>,
+<span class="c003">setarg/3</span></a>
+</li></ul>
+<h4 class="subsubsection" id="functor/3">8.4.1&#XA0;&#XA0;<a id="hevea_default255"></a><span class="c003">functor/3</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+functor(+nonvar, ?atomic, ?integer)<br>
+functor(-nonvar, +atomic, +integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">functor(Term, Name, Arity)</span> succeeds if the principal functor of
+<span class="c003">Term</span> is <span class="c003">Name</span> and its arity is <span class="c003">Arity</span>. This
+predicate can be used in two ways:</p><ul class="itemize"><li class="li-itemize"><span class="c003">Term</span> is not a variable: extract the name (an atom or a number
+if <span class="c003">Term</span> is a number) and the arity of <span class="c003">Term</span> (if
+<span class="c003">Term</span> is atomic <span class="c003">Arity</span> = 0).</li><li class="li-itemize"><span class="c003">Term</span> is a variable: unify <span class="c003">Term</span> with a general term
+whose principal functor is given by <span class="c003">Name</span> and arity is given by
+<span class="c003">Arity</span>.</li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> and <span class="c003">Name</span> are both variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> and <span class="c003">Arity</span> are both variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">Name</span> is neither a variable
+nor an atomic term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atomic, Name)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">Arity</span> is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable, <span class="c003">Name</span> is a constant but not an
+atom and <span class="c003">Arity</span> is an integer &gt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Name)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">Arity</span> is an integer &gt;
+<span class="c003">max_arity</span> flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(max_arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">Arity</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="arg/3">8.4.2&#XA0;&#XA0;<a id="hevea_default256"></a><span class="c003">arg/3</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+arg(+integer, +compound_term, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">arg(N, Term, Arg)</span> succeeds if the <span class="c003">N</span><em>th</em> argument of
+<span class="c003">Term</span> is <span class="c003">Arg</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is neither a variable nor a compound term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(compound, Term)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="(=..)/2">8.4.3&#XA0;&#XA0;<a id="hevea_default257"></a><span class="c003">(=..)/2</span> - univ </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+=..(+nonvar, ?list)<br>
+=..(-nonvar, +list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">Term =.. List</span> succeeds if <span class="c003">List</span> is a list whose head is the
+atom corresponding to the principal functor of <span class="c003">Term</span> and whose tail
+is a list of the arguments of <span class="c003">Term</span>.</p><p><span class="c003">=..</span> is a predefined infix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">List</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">List</span> is a list whose head
+is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is a list whose head <span class="c003">H</span> is neither an atom
+nor a variable and whose tail is not the empty list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, H)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is a list whose head <span class="c003">H</span> is a compound term
+and whose tail is the empty list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atomic, H)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and <span class="c003">List</span> is the empty list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(non_empty_list, [])</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable and the tail of <span class="c003">List</span> has a
+length &gt; <span class="c003">max_arity</span> flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(max_arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec85">8.4.4&#XA0;&#XA0;<a id="hevea_default258"></a><span class="c003">copy_term/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+copy_term(?term, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">copy_term(Term1, Term2)</span> succeeds if <span class="c003">Term2</span> unifies with a
+term <span class="c003">T</span> which is a renamed copy of <span class="c003">Term1</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec86">8.4.5&#XA0;&#XA0;<a id="hevea_default259"></a><span class="c003">term_variables/2</span>,
+		<a id="hevea_default260"></a><span class="c003">term_variables/3</span></h4>
+<p><a id="term_variables/2-3"></a></p><p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+term_variables(?term, ?list)<br>
+term_variables(?term, ?list, ?list)<br>
+
+</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">term_variables(Term, List)</span> succeeds if <span class="c003">List</span> unifies with a
+list of variables (including FD variables), each sharing with a unique
+variable of <span class="c003">Term</span>. The variables in <span class="c003">List</span> are ordered in
+order of appearance traversing <span class="c003">Term</span> depth-first and left-to-right.</p><p><span class="c003">term_variables(Term, List, Tail)</span> is a difference-list version of
+the above predicate, i.e. <span class="c003">Tail</span> is the tail of the variable-list
+<span class="c003">List</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+in <span class="c003">term_variables/2</span> <span class="c003">List</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p><span class="c003">term_variables/2</span> is an ISO Predicate. <span class="c003">term_variables/3</span> is a 
+GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec87">8.4.6&#XA0;&#XA0;<a id="hevea_default261"></a><span class="c003">subsumes_term/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+subsumes_term(?term, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">subsumes_term(General, Specific)</span> succeeds if <span class="c003">General</span> can
+be made equivalent to <span class="c003">Specific</span> by binding variables in
+<span class="c003">General</span> leaving <span class="c003">Specific</span> unaffected. The current implementation performs the unification (with
+occurs check) and ensures that the variable set of <span class="c003">Specific</span> is not
+changed by the unification (which is then undone). Note that this predicate
+fails in the presence of FD variables in <span class="c003">Specific</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec88">8.4.7&#XA0;&#XA0;<a id="hevea_default262"></a><span class="c003">acyclic_term/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+acyclic_term(?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">acyclic_term(Term)</span> succeeds if <span class="c003">Term</span> does not contain a
+cyclic (sub-)term. In this case, Term may be processed safely. If
+<span class="c003">acyclic_term(Term)</span> fails, <span class="c003">Term</span> contains a cycle and
+processing Term is not safe, because GNU Prolog does not support the
+unification of cyclic terms but permits their creation. Cycles can be safely
+undone by failing over their creation. The use of <span class="c003">acyclic_term/1</span>
+shall thus be reserved to protect critical predicates against cyclic terms.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="term-hash/4">8.4.8&#XA0;&#XA0;<a id="hevea_default263"></a><span class="c003">term_hash/4</span>,
+<a id="hevea_default264"></a><span class="c003">term_hash/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+term_hash(?term, +integer, +integer, ?integer) <br>
+term_hash(?term, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">term_hash(Term, Depth, Range, Hash)</span> succeeds if <span class="c003">Hash</span> is
+the <a id="hevea_default265"></a>hash code of <span class="c003">Term</span>. If <span class="c003">Term</span> is not ground (see
+<span class="c003">ground/1</span> (section&#XA0;<a href="gprolog025.html#var%2F1">8.1.1</a>)), the predicate simply succeeds
+(<span class="c003">Hash</span> is not unified). <span class="c003">Depth</span> is the depth limit to scan
+<span class="c003">Term</span> (starting from 1 for the top-level term). With <span class="c003">Depth</span> =
+0 nothing is hashed, with 1 only atomic terms and the main functors/arity are
+hashed,... With <span class="c003">Depth</span> = -1 the full term is considered.</p><p>The hash code is as follows: 0 &#X2264; <span class="c003">Hash</span> &lt; <span class="c003">Range</span>. If <span class="c003">Range</span> = 0 then
+<span class="c003">Hash</span> is not restricted (currently it is &lt; 268435456).</p><p><span class="c003">term_hash(Term, Hash)</span> is equivalent to <span class="c003">term_hash(Term, -1, 0, Hash)</span>.</p><p>NB: the computed hash code is independent of any runtime context (i.e. it is
+constant across different executions). It is also independent on the
+underlying machine.</p><p>These predicates are useful to implement hash tables or argument indexing.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Depth</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Depth</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Depth)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Range</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Range</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Range)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Range</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Range)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Hash</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Hash)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec90">8.4.9&#XA0;&#XA0;<a id="hevea_default266"></a><span class="c003">setarg/4</span>,
+<a id="hevea_default267"></a><span class="c003">setarg/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+setarg(+integer, +compound_term, +term, +boolean)<br>
+setarg(+integer, +compound_term, +term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">setarg(N, Term, NewValue, Undo)</span> replaces destructively the
+<span class="c003">N</span><em>th</em> argument of <span class="c003">Term</span> with <span class="c003">NewValue</span>. This
+assignment is undone on backtracking if <span class="c003">Undo</span> = <span class="c003">true</span>. This
+should only used if there is no further use of the old value of the replaced
+argument. If <span class="c003">Undo</span> = <span class="c003">false</span> then <span class="c003">NewValue</span> must be
+either an atom or an integer.</p><p><span class="c003">setarg(N, Term, NewValue)</span> is equivalent to <span class="c003">setarg(N, Term,
+NewValue, true)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Term</span> is neither a variable nor a compound term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(compound, Term)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">NewValue</span> is neither an atom nor an integer and
+<span class="c003">Undo</span> = <span class="c003">false</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atomic, NewValue)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Undo</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Undo</span> is neither a variable nor a boolean</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(boolean, Undo)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog027.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog029.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

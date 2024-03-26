@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Predicate information</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog031.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog033.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec108">8.8&#XA0;&#XA0;Predicate information</h3>
+<ul>
+<li><a href="gprolog032.html#current-predicate%2F1"><span class="c003">current_predicate/1</span></a>
+</li><li><a href="gprolog032.html#predicate-property%2F2"><span class="c003">predicate_property/2</span></a>
+</li></ul>
+<h4 class="subsubsection" id="current-predicate/1">8.8.1&#XA0;&#XA0;<a id="hevea_default303"></a><span class="c003">current_predicate/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_predicate(?predicate_indicator)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_predicate(Pred)</span> succeeds if there
+exists a predicate indicator of a defined procedure that unifies with
+<span class="c003">Pred</span>. All user defined procedures are found, whether static or
+dynamic. Internal system procedures whose name begins
+with <span class="c003">&#X2019;$&#X2019;</span> are not found. A user-defined procedure is found
+even when it has no clauses. A user-defined procedure is not found if
+it has been abolished. To conform to the ISO reference, built-in predicates
+are not found except if the <a id="hevea_default304"></a><span class="c003">strict_iso</span> <a id="hevea_default305"></a>Prolog flag is switched off (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). This predicate is re-executable on
+backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is neither a variable nor a predicate indicator</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(predicate_indicator, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Arity</span> is
+neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Name</span> is
+neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Name)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Arity</span> is
+an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Arity</span> is
+an integer &gt; <span class="c003">max_arity</span> flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(max_arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="predicate-property/2">8.8.2&#XA0;&#XA0;<a id="hevea_default306"></a><span class="c003">predicate_property/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+predicate_property(?callable, ?predicate_property)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">predicate_property(Head, Property)</span> succeeds if <span class="c003">Head</span> refers
+to a predicate that has a property <span class="c003">Property</span>. All user defined
+procedures and built-in predicates are found. Internal system procedures
+whose name begins with <span class="c003">&#X2019;$&#X2019;</span> are not found. This predicate is
+re-executable on backtracking.</p><p>Since version 1.4.0, <span class="c003">predicate_property/2</span> no longer accepts a
+predicate indicator. Control constructs are now returned. Properties
+<span class="c003">built_in_fd</span> and <span class="c003">control_construct</span> now imply the property
+<span class="c003">built_in</span>.</p><p><span class="c009">Predicate properties</span>:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default307"></a><span class="c003">static</span>: if the procedure is static.</li><li class="li-itemize"><a id="hevea_default308"></a><span class="c003">dynamic</span>: if the procedure is dynamic.</li><li class="li-itemize"><a id="hevea_default309"></a><span class="c003">private</span>: if the procedure is private.</li><li class="li-itemize"><a id="hevea_default310"></a><span class="c003">public</span>: if the procedure is public.</li><li class="li-itemize"><a id="hevea_default311"></a><span class="c003">monofile</span>: if the procedure is monofile.</li><li class="li-itemize"><a id="hevea_default312"></a><span class="c003">multifile</span>: if the procedure is multifile.</li><li class="li-itemize"><a id="hevea_default313"></a><span class="c003">user</span>: if the procedure is a user-defined procedure.</li><li class="li-itemize"><a id="hevea_default314"></a><span class="c003">built_in</span>: if the procedure is a built-in predicate or a control construct.</li><li class="li-itemize"><a id="hevea_default315"></a><span class="c003">built_in_fd</span>: if the procedure is an FD built-in predicate.</li><li class="li-itemize"><a id="hevea_default316"></a><span class="c003">control_construct</span>: if the procedure is a control construct (section&#XA0;<a href="gprolog023.html#control-construct">7.2</a>).</li><li class="li-itemize"><a id="hevea_default317"></a><span class="c003">native_code</span>: if the procedure is compiled in native code.</li><li class="li-itemize"><a id="hevea_default318"></a><span class="c003">prolog_file(File)</span>: source file from which the
+procedure has been read.</li><li class="li-itemize"><a id="hevea_default319"></a><span class="c003">prolog_line(Line)</span>: line number of the source
+file.</li><li class="li-itemize"><a id="hevea_default320"></a><span class="c003">meta_predicate(Head)</span>: if the procedure is a
+meta-predicate unify <span class="c003">Head</span> with the head-pattern. The head-pattern
+is a compound term with the same name and arity as the predicate where each
+argument of the term is a meta argument specifier as follows:<dl class="description"><dt class="dt-description"><span class="c009">integer <span class="c003">N</span></span></dt><dd class="dd-description"> the argument is a term that is used to reference a
+predicate with <span class="c003">N</span> more arguments than the given argument term (e.g. <span class="c003">call(0)</span>).</dd><dt class="dt-description"><span class="c005">:</span></dt><dd class="dd-description"> the argument is module sensitive, but does not directly
+refer to a predicate (e.g. <span class="c003">consult(:)</span>).</dd><dt class="dt-description"><span class="c005">-</span></dt><dd class="dd-description"> the argument is not module sensitive and unbound on entry.</dd><dt class="dt-description"><span class="c005">?</span></dt><dd class="dd-description"> the argument is not module sensitive and the mode is unspecified.</dd><dt class="dt-description"><span class="c005">+</span></dt><dd class="dd-description"> the argument is not module sensitive and bound (i.e., nonvar) on entry.</dd></dl></li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Head)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> is neither a variable nor a predicate property
+term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(predicate_property, Property)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">prolog_file(File)</span> and <span class="c003">File</span>
+is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, File)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">prolog_line(Line)</span> and <span class="c003">Line</span>
+is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Line)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog031.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog033.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Interfacing Prolog and C</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog054.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="index.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog073.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h2 class="section" id="sec335">10&#XA0;&#XA0;Interfacing Prolog and C</h2>
+<p>
+<a id="Interfacing-Prolog-and-C"></a>
+</p><ul>
+<li><a href="gprolog066.html">Introduction</a>
+</li><li><a href="gprolog067.html">Including and using <span class="c003">gprolog.h</span></a>
+</li><li><a href="gprolog068.html">Calling C from Prolog</a>
+<ul>
+<li><a href="gprolog068.html#sec339">Introduction</a>
+</li><li><a href="gprolog068.html#foreign%2F2-directive"><span class="c003">foreign/2</span> directive </a>
+</li><li><a href="gprolog068.html#sec341">The C function</a>
+</li><li><a href="gprolog068.html#sec342">Input arguments</a>
+</li><li><a href="gprolog068.html#sec343">Output arguments</a>
+</li><li><a href="gprolog068.html#sec344">Input/output arguments</a>
+</li><li><a href="gprolog068.html#sec345">Writing non-deterministic C code</a>
+</li><li><a href="gprolog068.html#sec346">Example: input and output arguments</a>
+</li><li><a href="gprolog068.html#sec347">Example: non-deterministic code</a>
+</li><li><a href="gprolog068.html#sec348">Example: input/output arguments</a>
+</li></ul>
+</li><li><a href="gprolog069.html">Manipulating Prolog terms</a>
+<ul>
+<li><a href="gprolog069.html#sec350">Introduction</a>
+</li><li><a href="gprolog069.html#sec351">Managing Prolog atoms</a>
+</li><li><a href="gprolog069.html#sec352">Reading Prolog terms</a>
+</li><li><a href="gprolog069.html#sec353">Unifying Prolog terms</a>
+</li><li><a href="gprolog069.html#sec354">Creating Prolog terms</a>
+</li><li><a href="gprolog069.html#sec355">Testing the type of Prolog terms</a>
+</li><li><a href="gprolog069.html#sec356">Comparing Prolog terms</a>
+</li><li><a href="gprolog069.html#sec357">Term processing</a>
+</li><li><a href="gprolog069.html#sec358">Comparing and evaluating arithmetic expressions</a>
+</li></ul>
+</li><li><a href="gprolog070.html">Raising Prolog errors</a>
+<ul>
+<li><a href="gprolog070.html#sec360">Managing the error context</a>
+</li><li><a href="gprolog070.html#sec361">Instantiation error</a>
+</li><li><a href="gprolog070.html#sec362">Uninstantiation error</a>
+</li><li><a href="gprolog070.html#sec363">Type error</a>
+</li><li><a href="gprolog070.html#sec364">Domain error</a>
+</li><li><a href="gprolog070.html#sec365">Existence error</a>
+</li><li><a href="gprolog070.html#sec366">Permission error</a>
+</li><li><a href="gprolog070.html#sec367">Representation error</a>
+</li><li><a href="gprolog070.html#sec368">Evaluation error</a>
+</li><li><a href="gprolog070.html#sec369">Resource error</a>
+</li><li><a href="gprolog070.html#sec370">Syntax error</a>
+</li><li><a href="gprolog070.html#sec371">System error</a>
+</li></ul>
+</li><li><a href="gprolog071.html">Calling Prolog from C</a>
+<ul>
+<li><a href="gprolog071.html#sec373">Introduction</a>
+</li><li><a href="gprolog071.html#sec374">Example: <span class="c003">my_call/1</span> - a <span class="c003">call/1</span> clone</a>
+</li><li><a href="gprolog071.html#sec375">Example: recovering the list of all operators</a>
+</li></ul>
+</li><li><a href="gprolog072.html">Defining a new C <span class="c003">main()</span> function</a>
+<ul>
+<li><a href="gprolog072.html#sec377">Example: asking for ancestors</a>
+</li></ul>
+</li></ul>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog054.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="index.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog073.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

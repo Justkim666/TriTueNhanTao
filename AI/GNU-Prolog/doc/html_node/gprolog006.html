@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Introduction</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog007.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec6">4.1&#XA0;&#XA0;Introduction</h3>
+<p>
+<a id="Introduction:(Using-GNU-Prolog)"></a>
+GNU Prolog offers two ways to execute a Prolog program:</p><ul class="itemize"><li class="li-itemize">interpreting it using the GNU Prolog interactive interpreter.</li><li class="li-itemize">compiling it to a (machine-dependent) executable using the GNU Prolog
+native-code compiler.</li></ul><p>Running a program under the interactive interpreter allows the user to
+list it and to make full use of the debugger on it (section&#XA0;<a href="gprolog010.html#Debugging">5</a>).
+Compiling a program to native code makes it possible to obtain a stand alone
+executable, with a reduced size and optimized for speed. Running a Prolog
+program compiled to native-code is around 3-5 times faster than running it
+under the interpreter. However, it is not possible to make full use of
+the debugger on a program compiled to native-code. Nor is it possible to list
+the program. In general, it is preferable to run a program under the
+interpreter for debugging and then use the native-code compiler to produce an
+autonomous executable. It is also possible to combine these two modes by
+producing an executable that contains some parts of the program (e.g.
+already debugged predicates whose execution-time speed is crucial) and
+interpreting the other parts under this executable. In that case, the
+executable has the same facilities as the GNU Prolog interpreter but also
+integrates the native-code predicates. This way to define a new enriched
+interpreter is detailed later (section&#XA0;<a href="gprolog009.html#Generating-a-new-interactive-interpreter">4.4.5</a>).</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog007.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

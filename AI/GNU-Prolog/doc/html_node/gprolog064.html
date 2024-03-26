@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Optimization constraints</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog063.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<hr>
+<h3 class="subsection" id="sec333">9.10&#XA0;&#XA0;Optimization constraints</h3>
+<ul>
+<li><a href="gprolog064.html#sec334"><span class="c003">fd_minimize/2</span>,
+<span class="c003">fd_maximize/2</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec334">9.10.1&#XA0;&#XA0;<a id="hevea_default1021"></a><span class="c003">fd_minimize/2</span>,
+<a id="hevea_default1022"></a><span class="c003">fd_maximize/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_minimize(+callable_term, ?fd_variable)<br>
+fd_maximize(+callable_term, ?fd_variable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_minimize(Goal, X)</span> repeatedly calls <span class="c003">Goal</span> to find a
+value that minimizes the variable <span class="c003">X</span>. <span class="c003">Goal</span> is a Prolog goal
+that should instantiate <span class="c003">X</span>, a common case being the use of
+<a id="hevea_default1023"></a><span class="c003">fd_labeling/2</span> (section&#XA0;<a href="gprolog063.html#fd-labeling%2F2">9.9.1</a>). This predicate uses a
+branch-and-bound algorithm with restart: each time <span class="c003">call(Goal)</span>
+succeeds the computation restarts with a new constraint <span class="c003">X #&lt; V</span>
+where <span class="c003">V</span> is the value of <span class="c003">X</span> at the end of the last call of
+<span class="c003">Goal</span>. When a failure occurs (either because there are no remaining
+choice-points for <span class="c003">Goal</span> or because the added constraint is
+inconsistent with the rest of the store) the last solution is recomputed
+since it is optimal.</p><p><span class="c003">fd_maximize(Goal, X)</span> is similar to <span class="c003">fd_minimize/2</span> but
+<span class="c003">X</span> is maximized<span class="c003">.</span></p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Goal</span> does not
+correspond to an existing procedure and the value of the <span class="c003">unknown</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is neither a variable nor an FD variable nor an integer
+</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.
+</p>
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog063.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+</body>
+</html>

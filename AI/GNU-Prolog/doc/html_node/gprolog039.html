@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Input/output from/to constant terms</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog038.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog040.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec174">8.15&#XA0;&#XA0;Input/output from/to constant terms</h3>
+<ul>
+<li><a href="gprolog039.html#read-term-from-atom%2F3"><span class="c003">read_term_from_atom/3</span>,
+<span class="c003">read_from_atom/2</span>,
+<span class="c003">read_token_from_atom/2</span></a>
+</li><li><a href="gprolog039.html#sec176"><span class="c003">read_term_from_chars/3</span>,
+<span class="c003">read_from_chars/2</span>,
+<span class="c003">read_token_from_chars/2</span></a>
+</li><li><a href="gprolog039.html#sec177"><span class="c003">read_term_from_codes/3</span>,
+<span class="c003">read_from_codes/2</span>,
+<span class="c003">read_token_from_codes/2</span></a>
+</li><li><a href="gprolog039.html#sec178"><span class="c003">write_term_to_atom/3</span>,
+<span class="c003">write_to_atom/2</span>,
+<span class="c003">writeq_to_atom/2</span>, <br>
+ <span class="c003">write_canonical_to_atom/2</span>,
+<span class="c003">display_to_atom/2</span>,
+<span class="c003">print_to_atom/2</span>, <br>
+ <span class="c003">format_to_atom/3</span></a>
+</li><li><a href="gprolog039.html#sec179"><span class="c003">write_term_to_chars/3</span>,
+<span class="c003">write_to_chars/2</span>,
+<span class="c003">writeq_to_chars/2</span>, <br>
+ <span class="c003">write_canonical_to_chars/2</span>,
+<span class="c003">display_to_chars/2</span>,
+<span class="c003">print_to_chars/2</span>, <br>
+ <span class="c003">format_to_chars/3</span></a>
+</li><li><a href="gprolog039.html#sec180"><span class="c003">write_term_to_codes/3</span>,
+<span class="c003">write_to_codes/2</span>,
+<span class="c003">writeq_to_codes/2</span>, <br>
+ <span class="c003">write_canonical_to_codes/2</span>,
+<span class="c003">display_to_codes/2</span>,
+<span class="c003">print_to_codes/2</span>, <br>
+ <span class="c003">format_to_codes/3</span></a>
+</li></ul>
+<p>
+<a id="Input/output-from/to-constant-terms"></a>
+These built-in predicates enable a Prolog term to be input from or output to
+a Prolog constant term (atom, character list or character code list). All
+these predicates can be defined using constant term streams
+(section&#XA0;<a href="gprolog035.html#Constant-term-streams">8.11</a>). They are however simpler to use.</p>
+<h4 class="subsubsection" id="read-term-from-atom/3">8.15.1&#XA0;&#XA0;<a id="hevea_default567"></a><span class="c003">read_term_from_atom/3</span>,
+<a id="hevea_default568"></a><span class="c003">read_from_atom/2</span>,
+<a id="hevea_default569"></a><span class="c003">read_token_from_atom/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+read_term_from_atom(+atom ?term, +read_option_list)<br>
+read_from_atom(+atom, ?term)<br>
+read_token_from_atom(+atom, ?nonvar)</span></dd></dl><p><span class="c009">Description</span></p><p>Like <a id="hevea_default570"></a><span class="c003">read_term/3</span>, <a id="hevea_default571"></a><span class="c003">read/2</span> (section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) and
+<a id="hevea_default572"></a><span class="c003">read_token/2</span> (section&#XA0;<a href="gprolog038.html#read-token%2F2">8.14.3</a>) except that characters are not
+read from a text-stream but from <span class="c003">Atom</span>; the atom given as first
+argument.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+see associated predicate errors</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">(section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) and (section&#XA0;<a href="gprolog038.html#read-token%2F2">8.14.3</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec176">8.15.2&#XA0;&#XA0;<a id="hevea_default573"></a><span class="c003">read_term_from_chars/3</span>,
+<a id="hevea_default574"></a><span class="c003">read_from_chars/2</span>,
+<a id="hevea_default575"></a><span class="c003">read_token_from_chars/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+read_term_from_chars(+character_list ?term,
++read_option_list)<br>
+read_from_chars(+character_list, ?term)<br>
+read_token_from_chars(+character_list, ?nonvar)</span></dd></dl><p><span class="c009">Description</span></p><p>Like <a id="hevea_default576"></a><span class="c003">read_term/3</span>, <a id="hevea_default577"></a><span class="c003">read/2</span> (section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) and
+<a id="hevea_default578"></a><span class="c003">read_token/2</span> (section&#XA0;<a href="gprolog038.html#read-token%2F2">8.14.3</a>) except that characters are not
+read from a text-stream but from <span class="c003">Chars</span>; the character list given as
+first argument.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Chars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Chars</span> list is neither a
+variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+see associated predicate errors</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">(section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) and (section&#XA0;<a href="gprolog038.html#read-token%2F2">8.14.3</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec177">8.15.3&#XA0;&#XA0;<a id="hevea_default579"></a><span class="c003">read_term_from_codes/3</span>,
+<a id="hevea_default580"></a><span class="c003">read_from_codes/2</span>,
+<a id="hevea_default581"></a><span class="c003">read_token_from_codes/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+read_term_from_codes(+character_code_list ?term,
++read_option_list)<br>
+read_from_codes(+character_code_list, ?term)<br>
+read_token_from_codes(+character_code_list, ?nonvar)</span></dd></dl><p><span class="c009">Description</span></p><p>Like <a id="hevea_default582"></a><span class="c003">read_term/3</span>, <a id="hevea_default583"></a><span class="c003">read/2</span> (section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) and
+<a id="hevea_default584"></a><span class="c003">read_token/2</span> (section&#XA0;<a href="gprolog038.html#read-token%2F2">8.14.3</a>) except that characters are not
+read from a text-stream but from <span class="c003">Codes</span>; the character code list
+given as first argument.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Codes</span> list is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Codes</span> list is an integer but
+not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+see associated predicate errors</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">(section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) and (section&#XA0;<a href="gprolog038.html#read-token%2F2">8.14.3</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec178">8.15.4&#XA0;&#XA0;<a id="hevea_default585"></a><span class="c003">write_term_to_atom/3</span>,
+<a id="hevea_default586"></a><span class="c003">write_to_atom/2</span>,
+<a id="hevea_default587"></a><span class="c003">writeq_to_atom/2</span>, <br>
+ <a id="hevea_default588"></a><span class="c003">write_canonical_to_atom/2</span>,
+<a id="hevea_default589"></a><span class="c003">display_to_atom/2</span>,
+<a id="hevea_default590"></a><span class="c003">print_to_atom/2</span>, <br>
+ <a id="hevea_default591"></a><span class="c003">format_to_atom/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+write_term_to_atom(?atom, ?term, +write_option_list)<br>
+write_to_atom(?atom, ?term)<br>
+writeq_to_atom(?atom, ?term)<br>
+write_canonical_to_atom(?atom, ?term)<br>
+display_to_atom(?atom, ?term)<br>
+print_to_atom(?atom, ?term)<br>
+format_to_atom(?atom, +character_code_list_or_atom, +list)</span></dd></dl><p><span class="c009">Description</span></p><p>Similar to <a id="hevea_default592"></a><span class="c003">write_term/3</span>, <a id="hevea_default593"></a><span class="c003">write/2</span>, <a id="hevea_default594"></a><span class="c003">writeq/2</span>,
+<a id="hevea_default595"></a><span class="c003">write_canonical/2</span>, <a id="hevea_default596"></a><span class="c003">display/2</span>, <a id="hevea_default597"></a><span class="c003">print/2</span>
+(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) and <a id="hevea_default598"></a><span class="c003">format/3</span> (section&#XA0;<a href="gprolog038.html#format%2F3">8.14.7</a>) except that
+characters are not written onto a text-stream but are collected as an atom
+which is then unified with the first argument <span class="c003">Atom</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+see associated predicate errors</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) and (section&#XA0;<a href="gprolog038.html#format%2F3">8.14.7</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec179">8.15.5&#XA0;&#XA0;<a id="hevea_default599"></a><span class="c003">write_term_to_chars/3</span>,
+<a id="hevea_default600"></a><span class="c003">write_to_chars/2</span>,
+<a id="hevea_default601"></a><span class="c003">writeq_to_chars/2</span>, <br>
+ <a id="hevea_default602"></a><span class="c003">write_canonical_to_chars/2</span>,
+<a id="hevea_default603"></a><span class="c003">display_to_chars/2</span>,
+<a id="hevea_default604"></a><span class="c003">print_to_chars/2</span>, <br>
+ <a id="hevea_default605"></a><span class="c003">format_to_chars/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+write_term_to_chars(?character_list, ?term, +write_option_list)<br>
+write_to_chars(?character_list, ?term)<br>
+writeq_to_chars(?character_list, ?term)<br>
+write_canonical_to_chars(?character_list, ?term)<br>
+display_to_chars(?character_list, ?term)<br>
+print_to_chars(?character_list, ?term)<br>
+format_to_chars(?character_list, +character_code_list_or_atom, +list)</span></dd></dl><p><span class="c009">Description</span></p><p>Similar to <a id="hevea_default606"></a><span class="c003">write_term/3</span>, <a id="hevea_default607"></a><span class="c003">write/2</span>, <a id="hevea_default608"></a><span class="c003">writeq/2</span>,
+<a id="hevea_default609"></a><span class="c003">write_canonical/2</span>, <a id="hevea_default610"></a><span class="c003">display/2</span>, <a id="hevea_default611"></a><span class="c003">print/2</span>
+(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) and <a id="hevea_default612"></a><span class="c003">format/3</span> (section&#XA0;<a href="gprolog038.html#format%2F3">8.14.7</a>) except that
+characters are not written onto a text-stream but are collected as a
+character list which is then unified with the first argument <span class="c003">Chars</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Chars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Chars</span> is neither a
+variable nor a one-char atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+see associated predicate errors</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) and (section&#XA0;<a href="gprolog038.html#format%2F3">8.14.7</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec180">8.15.6&#XA0;&#XA0;<a id="hevea_default613"></a><span class="c003">write_term_to_codes/3</span>,
+<a id="hevea_default614"></a><span class="c003">write_to_codes/2</span>,
+<a id="hevea_default615"></a><span class="c003">writeq_to_codes/2</span>, <br>
+ <a id="hevea_default616"></a><span class="c003">write_canonical_to_codes/2</span>,
+<a id="hevea_default617"></a><span class="c003">display_to_codes/2</span>,
+<a id="hevea_default618"></a><span class="c003">print_to_codes/2</span>, <br>
+ <a id="hevea_default619"></a><span class="c003">format_to_codes/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+write_term_to_codes(?character_code_list, ?term, +write_option_list)<br>
+write_to_codes(?character_code_list, ?term)<br>
+writeq_to_codes(?character_code_list, ?term)<br>
+write_canonical_to_codes(?character_code_list, ?term)<br>
+display_to_codes(?character_code_list, ?term)<br>
+print_to_codes(?character_code_list, ?term)<br>
+format_to_codes(?character_code_list, +character_code_list_or_atom,
++list)</span></dd></dl><p><span class="c009">Description</span></p><p>Similar to <a id="hevea_default620"></a><span class="c003">write_term/3</span>, <a id="hevea_default621"></a><span class="c003">write/2</span>, <a id="hevea_default622"></a><span class="c003">writeq/2</span>,
+<a id="hevea_default623"></a><span class="c003">write_canonical/2</span>, <a id="hevea_default624"></a><span class="c003">display/2</span>, <a id="hevea_default625"></a><span class="c003">print/2</span>
+(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) and <a id="hevea_default626"></a><span class="c003">format/3</span> (section&#XA0;<a href="gprolog038.html#format%2F3">8.14.7</a>) except that
+characters are not written onto a text-stream but are collected as a
+character code list which is then unified with the first argument
+<span class="c003">Codes</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Codes</span> is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Codes</span> is an integer but
+not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+see associated predicate errors</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) and (section&#XA0;<a href="gprolog038.html#format%2F3">8.14.7</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog038.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog040.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

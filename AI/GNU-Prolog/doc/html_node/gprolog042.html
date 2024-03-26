@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Logic, control and exceptions</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog041.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog043.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec192">8.18&#XA0;&#XA0;Logic, control and exceptions</h3>
+<ul>
+<li><a href="gprolog042.html#abort%2F0"><span class="c003">abort/0</span>,
+<span class="c003">stop/0</span>,
+<span class="c003">top_level/0</span>,
+<span class="c003">break/0</span>,
+<span class="c003">halt/1</span>,
+<span class="c003">halt/0</span></a>
+</li><li><a href="gprolog042.html#sec194"><span class="c003">false/0</span>, <span class="c003">once/1</span>, <span class="c003">(</span><span class="c003">\</span><span class="c003">+)/1</span> - not provable,
+<span class="c003">call/2-11</span>,
+	 <span class="c003">call_with_args/1-11</span>, <span class="c003">call_det/2</span>, <span class="c003">forall/2</span></a>
+</li><li><a href="gprolog042.html#sec195"><span class="c003">repeat/0</span></a>
+</li><li><a href="gprolog042.html#sec196"><span class="c003">between/3</span>, <span class="c003">for/3</span></a>
+</li></ul>
+<h4 class="subsubsection" id="abort/0">8.18.1&#XA0;&#XA0;<a id="hevea_default656"></a><span class="c003">abort/0</span>,
+<a id="hevea_default657"></a><span class="c003">stop/0</span>,
+<a id="hevea_default658"></a><span class="c003">top_level/0</span>,
+<a id="hevea_default659"></a><span class="c003">break/0</span>,
+<a id="hevea_default660"></a><span class="c003">halt/1</span>,
+<a id="hevea_default661"></a><span class="c003">halt/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+abort<br>
+stop<br>
+top_level<br>
+break<br>
+halt(+integer)<br>
+halt</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">abort</span> aborts the current execution. If this execution was initiated
+under a <a id="hevea_default662"></a>top-level the control is given back to the top-level and the
+message <span class="c003">{execution aborted}</span> is displayed. Otherwise,
+e.g. execution started by a <span class="c003">initialization/1</span> directive
+(section&#XA0;<a href="gprolog022.html#initialization%2F1">7.1.14</a>), <span class="c003">abort/0</span> is equivalent to
+<span class="c003">halt(1)</span> (see below).</p><p><span class="c003">stop</span> stops the current execution. If this execution was initiated
+under a <a id="hevea_default663"></a>top-level the control is given back to the
+top-level. Otherwise, <span class="c003">stop/0</span> is equivalent to <span class="c003">halt(0)</span>
+(see below).</p><p><span class="c003">top_level</span> starts a new recursive <a id="hevea_default664"></a>top-level (including the
+banner display). To end this new <a id="hevea_default665"></a>top-level simply type the end-of-file
+key sequence (<span class="c003">Ctl-D</span>) or its term representation:
+<span class="c003">end_of_file.</span></p><p><span class="c003">break</span> invokes a recursive top-level (no banner is displayed). To
+end this new level simply type the end-of-file key sequence (<span class="c003">Ctl-D</span>)
+or its term representation: <span class="c003">end_of_file.</span></p><p><span class="c003">halt(Status)</span> causes the GNU Prolog process to immediately exit back to
+the shell with the return code <span class="c003">Status</span>.</p><p><span class="c003">halt</span> is equivalent to <span class="c003">halt(0)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Status</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Status</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Status)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p><span class="c003">halt/1</span> and <span class="c003">halt/0</span> are ISO predicates. <span class="c003">abort/0</span>,
+<span class="c003">stop/0</span>, <span class="c003">top_level/0</span> and <span class="c003">break/0</span> are GNU Prolog
+predicates.</p>
+<h4 class="subsubsection" id="sec194">8.18.2&#XA0;&#XA0;<a id="hevea_default666"></a><span class="c003">false/0</span>, <a id="hevea_default667"></a><span class="c003">once/1</span>, <a id="hevea_default668"></a><span class="c003">(\+)/1</span> - not provable,
+<a id="hevea_default669"></a><span class="c003">call/2-11</span>,
+	 <a id="hevea_default670"></a><span class="c003">call_with_args/1-11</span>, <a id="hevea_default671"></a><span class="c003">call_det/2</span>, <a id="hevea_default672"></a><span class="c003">forall/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+false<br>
+once(+callable_term)<br>
+\+(+callable_term) <br>
+call(+callable_term, +term,&#X2026;, +term)<br>
+call_with_args(+atom, +term,&#X2026;, +term)<br>
+call_det(+callable_term, ?boolean) <br>
+forall(+callable_term, +callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">false</span> always fails and enforces backtracking. It is equivalent to the
+<a id="hevea_default673"></a><span class="c003">fail/0</span> control construct (section&#XA0;<a href="gprolog023.html#true%2F0">7.2.1</a>).</p><p><span class="c003">once(Goal)</span> succeeds if <span class="c003">call(Goal)</span> succeeds. However
+<span class="c003">once/1</span> is not re-executable on backtracking since all alternatives
+of <span class="c003">Goal</span> are cut. <span class="c003">once(Goal)</span> is equivalent to
+<span class="c003">call(Goal), !</span>.</p><p><span class="c003">\+ Goal</span> succeeds if <span class="c003">call(Goal)</span> fails and fails
+otherwise. This built-in predicate gives negation by failure.</p><p><span class="c003">call(Closure, Arg1,&#X2026;, ArgN)</span> calls the goal <span class="c003">call(Goal)</span>
+where <span class="c003">Goal</span> is constructed by appending <span class="c003">Arg1,&#X2026;, ArgN</span>
+(1 &#X2264; <span class="c003">N</span> &#X2264; 10) additional arguments to the arguments (if any)
+of <span class="c003">Closure</span>.</p><p><span class="c003">call_with_args(Functor, Arg1,&#X2026;, ArgN)</span> calls the goal
+whose functor is <span class="c003">Functor</span> and whose arguments are
+<span class="c003">Arg1</span>,&#X2026;, <span class="c003">ArgN</span> (0 &#X2264; <span class="c003">N</span> &#X2264; 10).</p><p><span class="c003">call_det(Goal, Deterministic)</span> succeeds if <span class="c003">call(Goal)</span>
+succeeds and unifies <span class="c003">Deterministic</span> with <span class="c003">true</span> if
+<span class="c003">Goal</span> has not created any choice-points, with <span class="c003">false</span>
+otherwise.</p><p><span class="c003">forall(Condition, Action)</span> succeeds if for all alternative bindings of
+<span class="c003">Condition</span>, <span class="c003">Action</span> can be proven.
+It is equivalent to <span class="c003">\+ (Condition, \+ Action)</span>.</p><p><span class="c003">\+</span> is a predefined prefix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> (or <span class="c003">Condition</span> or <span class="c003">Action</span>) is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> (or <span class="c003">Condition</span> or <span class="c003">Action</span>) is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Goal</span> does not
+correspond to an existing procedure and the value of the <span class="c003">unknown</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Functor</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Functor</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Functor)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Deterministic</span> is neither a variable nor a boolean</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(boolean, Deterministic)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+for <span class="c003">call/2-11</span> the resulting arity of <span class="c003">Goal</span> (arity of <span class="c003">Closure</span> + <span class="c003">N</span>) is an integer &gt; <span class="c003">max_arity</span> flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(max_arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p><span class="c003">false/0</span>, <span class="c003">call/2-8</span>, <span class="c003">once/1</span> and <span class="c003">(\+)/1</span>
+are ISO predicates. <span class="c003">call/9-11</span>, <span class="c003">call_with_args/1-11</span>,
+<span class="c003">call_det/2</span> and <span class="c003">forall/2</span> are GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec195">8.18.3&#XA0;&#XA0;<a id="hevea_default674"></a><span class="c003">repeat/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+repeat</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">repeat</span> generates an infinite sequence of backtracking choices. The
+purpose is to repeatedly perform some action on elements which are somehow
+generated, e.g. by reading them from a stream, until some test becomes true.
+Repeat loops cannot contribute to the logic of the program. They are only
+meaningful if the action involves side-effects. The only reason for using
+repeat loops instead of a more natural tail-recursive formulation is
+efficiency: when the test fails back, the Prolog engine immediately reclaims
+any working storage consumed since the call to <span class="c003">repeat/0</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec196">8.18.4&#XA0;&#XA0;<a id="hevea_default675"></a><span class="c003">between/3</span>, <a id="hevea_default676"></a><span class="c003">for/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+between(+integer, +integer, ?integer) <br>
+for(?integer, +integer, +integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">between(Lower, Upper, Counter)</span> generates an sequence of backtracking
+choices instantiating <span class="c003">Counter</span> to the values <span class="c003">Lower</span>,
+<span class="c003">Lower+1</span>,&#X2026;, <span class="c003">Upper</span>. </p><p><span class="c003">for(Counter, Lower, Upper)</span> is equivalent to
+<span class="c003">between(Lower, Upper, Counter)</span>. This predicate is deprecated and new
+code should use <span class="c003">between/3</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Counter</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Counter)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Lower</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Lower</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Lower)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Upper</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Upper</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Upper)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog041.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog043.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

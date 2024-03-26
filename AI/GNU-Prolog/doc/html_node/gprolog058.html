@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Type testing</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog057.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog059.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec310">9.4&#XA0;&#XA0;Type testing</h3>
+<ul>
+<li><a href="gprolog058.html#sec311"><span class="c003">fd_var/1</span>, <span class="c003">non_fd_var/1</span>,
+<span class="c003">generic_var/1</span>,
+<span class="c003">non_generic_var/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec311">9.4.1&#XA0;&#XA0;<a id="hevea_default949"></a><span class="c003">fd_var/1</span>, <a id="hevea_default950"></a><span class="c003">non_fd_var/1</span>,
+<a id="hevea_default951"></a><span class="c003">generic_var/1</span>,
+<a id="hevea_default952"></a><span class="c003">non_generic_var/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_var(?term)<br>
+non_fd_var(?term)<br>
+generic_var(?term)<br>
+non_generic_var(?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_var(Term)</span> succeeds if <span class="c003">Term</span> is currently an
+FD variable.</p><p><span class="c003">non_fd_var(Term)</span> succeeds if <span class="c003">Term</span> is
+currently not an FD variable (opposite of <span class="c003">fd_var/1</span>).</p><p><span class="c003">generic_var(Term)</span> succeeds if <span class="c003">Term</span> is
+either a Prolog variable or an FD variable.</p><p><span class="c003">non_generic_var(Term)</span> succeeds if
+<span class="c003">Term</span> is neither a Prolog variable nor an FD variable
+(opposite of <span class="c003">generic_var/1</span>).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog057.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog059.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

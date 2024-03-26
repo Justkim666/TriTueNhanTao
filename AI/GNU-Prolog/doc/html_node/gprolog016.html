@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>The WAM debugger</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog015.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog010.html"><img src="contents_motif.svg" alt="Up"></a>
+<hr>
+<h3 class="subsection" id="sec31">5.6&#XA0;&#XA0;The WAM debugger</h3>
+<p>
+<a id="The-WAM-debugger"></a>
+In some cases it is interesting to have access to the <a id="hevea_default180"></a>WAM data
+structures. This sub-debugger allows the user to inspect/modify the contents
+of any stack or register of the WAM. The WAM debugger is invoked
+using the built-in predicate <a id="hevea_default181"></a><span class="c003">wam_debug/0</span> (section&#XA0;<a href="gprolog013.html#Running-and-stopping-the-debugger">5.3.1</a>) or the <span class="c003">W</span> debugger command (section&#XA0;<a href="gprolog015.html#Debugger-commands">5.5</a>). The following table presents the specific commands of the WAM
+debugger:</p><table class="c000 cellpadding1" border=1><tr><td class="c014">
+Command</td><td class="c014">Description </td></tr>
+<tr><td class="c014">
+<span class="c003">write</span> <span class="c004">A</span> [<span class="c004">N</span>]</td><td class="c014">write
+<span class="c004">N</span> terms starting at the address <span class="c004">A</span> using <span class="c003">write/1</span>
+(section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) </td></tr>
+<tr><td class="c014">
+<span class="c003">data</span> <span class="c004">A</span> [<span class="c004">N</span>]</td><td class="c014">display <span class="c004">N</span> words starting at
+the address <span class="c004">A</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">modify</span> <span class="c004">A</span> [<span class="c004">N</span>]</td><td class="c014">display and modify <span class="c004">N</span> words
+starting at the address <span class="c004">A</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">where</span> <span class="c004">A</span></td><td class="c014">display the real address corresponding to
+<span class="c004">A</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">what</span> <span class="c004">RA</span></td><td class="c014">display what corresponds to the real address
+<span class="c004">RA</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">deref</span> <span class="c004">A</span></td><td class="c014">display the dereferenced word starting at the
+address <span class="c004">A</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">envir</span> [<span class="c004">SA</span>]</td><td class="c014">display the contents of the environment
+located at <span class="c004">SA</span> (or the current one) </td></tr>
+<tr><td class="c014">
+<span class="c003">backtrack</span> [<span class="c004">SA</span>]</td><td class="c014">display the contents of the choice-point
+located at <span class="c004">SA</span> (or the current one) </td></tr>
+<tr><td class="c014">
+<span class="c003">backtrack all</span></td><td class="c014">display all choice-points </td></tr>
+<tr><td class="c014">
+<span class="c003">quit</span></td><td class="c014">quit the WAM debugger </td></tr>
+<tr><td class="c014">
+<span class="c003">help</span></td><td class="c014">display a summary of available commands </td></tr>
+</table><p>In the above table the following conventions apply:</p><ul class="itemize"><li class="li-itemize">elements between [ and ] are optional.</li><li class="li-itemize"><span class="c004">N</span> is an optional integer (defaults to 1).</li><li class="li-itemize"><span class="c004">A</span> is a WAM address, its syntax is:
+<span class="c004">BANK_NAME</span> [ <span class="c003">[ <span class="c008">N</span> ]</span> ], i.e. a bank name
+possibly followed by an index (defaults to 0). <span class="c004">BANK_NAME</span>
+is either:<ul class="itemize"><li class="li-itemize"><span class="c003">reg</span>: WAM general register (stack pointers, continuation,
+...).</li><li class="li-itemize"><span class="c003">x</span>: WAM X register (temporary variables, i.e. arguments).</li><li class="li-itemize"><span class="c003">y</span>: WAM Y register (permanent variables).</li><li class="li-itemize"><span class="c003">ab</span>: WAM X register saved in the current choice-point.</li><li class="li-itemize"><span class="c004">STACK_NAME</span>: WAM stack
+(<span class="c004">STACK_NAME</span> in <span class="c003">local</span>, <span class="c003">global</span>, <span class="c003">trail</span>,
+<span class="c003">cstr</span>).</li></ul></li><li class="li-itemize"><span class="c004">SA</span> is a WAM stack address, i.e.
+<span class="c004">STACK_NAME</span> [ <span class="c003">[ <span class="c008">N</span> ]</span> ] (special case of
+WAM addresses).</li><li class="li-itemize"><span class="c004">RA</span> is a real address, its syntax is the syntax of C
+integers (in particular the notation <span class="c003">0x&#X2026;</span> is recognized).</li></ul><p>It is possible to only use the first letters of a commands and bank names
+when there is no ambiguity. Also the square brackets <span class="c003">[</span> <span class="c003">]</span>
+enclosing the index of a bank name can be omitted. For instance the
+following command (showing the contents of 25 consecutive words of the
+global stack from the index 3): <span class="c003">data global[3] 25</span> can be
+abbreviated as: <span class="c003">d g 3 25</span>.</p>
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog015.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog010.html"><img src="contents_motif.svg" alt="Up"></a>
+</body>
+</html>

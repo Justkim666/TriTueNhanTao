@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Term unification</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog025.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog027.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec73">8.2&#XA0;&#XA0;Term unification</h3>
+<ul>
+<li><a href="gprolog026.html#sec74"><span class="c003">(=)/2</span> - Prolog unification</a>
+</li><li><a href="gprolog026.html#sec75"><span class="c003">unify_with_occurs_check/2</span></a>
+</li><li><a href="gprolog026.html#sec76"><span class="c003">(</span><span class="c003">\</span><span class="c003">=)/2</span> - not Prolog unifiable</a>
+</li></ul>
+<h4 class="subsubsection" id="sec74">8.2.1&#XA0;&#XA0;<a id="hevea_default245"></a><span class="c003">(=)/2</span> - Prolog unification</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+=(?term, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">Term1 = Term2</span> unifies <span class="c003">Term1</span> and <span class="c003">Term2</span>. No occurs
+check is done, i.e. this predicate does not check if a variable is unified
+with a compound term containing this variable (this can lead to an infinite
+loop).</p><p><span class="c003">=</span> is a predefined infix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec75">8.2.2&#XA0;&#XA0;<a id="hevea_default246"></a><span class="c003">unify_with_occurs_check/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+unify_with_occurs_check(?term, ?term)
+</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">unify_with_occurs_check(Term1, Term2)</span> unifies <span class="c003">Term1</span> and
+<span class="c003">Term2</span>. The occurs check test is done (i.e. the unification fails if
+a variable is unified with a compound term containing this variable).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec76">8.2.3&#XA0;&#XA0;<a id="hevea_default247"></a><span class="c003">(\=)/2</span> - not Prolog unifiable</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+\=(?term, ?term)
+</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">Term1 \= Term2</span> succeeds if <span class="c003">Term1</span> and <span class="c003">Term2</span>
+are not unifiable (no occurs check is done).</p><p><span class="c003">\=</span> is a predefined infix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog025.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog027.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

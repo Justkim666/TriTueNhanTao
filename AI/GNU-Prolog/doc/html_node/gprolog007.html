@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>The GNU Prolog interactive interpreter</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog006.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog008.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec7">4.2&#XA0;&#XA0;The GNU Prolog interactive interpreter</h3>
+<ul>
+<li><a href="gprolog007.html#sec8">Starting/exiting the interactive interpreter</a>
+</li><li><a href="gprolog007.html#sec9">The interactive interpreter read-execute-write loop</a>
+</li><li><a href="gprolog007.html#sec10">Consulting a Prolog program</a>
+</li><li><a href="gprolog007.html#sec11">Scripting Prolog</a>
+</li><li><a href="gprolog007.html#sec12">Interrupting a query</a>
+</li><li><a href="gprolog007.html#sec13">The line editor</a>
+</li></ul>
+<p>
+<a id="The-GNU-Prolog-interactive-interpreter"></a></p>
+<h4 class="subsubsection" id="sec8">4.2.1&#XA0;&#XA0;Starting/exiting the interactive interpreter</h4>
+<p>
+<a id="hevea_default3"></a>
+GNU Prolog offers a classical Prolog interactive interpreter also called
+<em>top-level</em>. It allows the user to execute queries, to consult Prolog
+programs, to list them, to execute them and to debug them. The
+<a id="hevea_default4"></a>top-level can be invoked using the following command:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015"><span class="c003">% gprolog </span>[<span class="c004">OPTION</span>]&#X2026;</td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the <span class="c003">%</span> symbol is the operating system shell prompt)</td></tr>
+</table></dd></dl><p><span class="c009">Options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default5"></a><span class="c003">--init-goal</span> <span class="c004">GOAL</span></td><td class="c022">execute <span class="c004">GOAL</span> before entering the top-level </td></tr>
+<tr><td class="c016"><a id="hevea_default6"></a><span class="c003">--consult-file</span> <span class="c004">FILE</span></td><td class="c022">consult <span class="c004">FILE</span> inside the top-level </td></tr>
+<tr><td class="c016"><a id="hevea_default7"></a><span class="c003">--entry-goal</span> <span class="c004">GOAL</span></td><td class="c022">execute <span class="c004">GOAL</span> inside the top-level </td></tr>
+<tr><td class="c016"><a id="hevea_default8"></a><span class="c003">--query-goal</span> <span class="c004">GOAL</span></td><td class="c022">execute <span class="c004">GOAL</span> as a query for the top-level </td></tr>
+<tr><td class="c016">
+<a id="hevea_default9"></a><span class="c003">--help</span></td><td class="c022">print a help and exit </td></tr>
+<tr><td class="c016">
+<a id="hevea_default10"></a><span class="c003">--version</span></td><td class="c022">print version number and exit </td></tr>
+<tr><td class="c016">
+<a id="hevea_default11"></a><span class="c003">--</span></td><td class="c022">do not parse the rest of the command-line </td></tr>
+</table><p>The main role of the <span class="c003">gprolog</span> command is to execute the top-level
+itself, i.e. to execute the built-in predicate
+<a id="hevea_default12"></a><span class="c003">top_level/0</span> (section&#XA0;<a href="gprolog042.html#abort%2F0">8.18.1</a>) which will produce something like:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+</span><pre class="verbatim"><span class="c003">GNU Prolog 1.5.0 (64 bits)
+Compiled May  3 2021, 16:36:43 with gcc
+Copyright (C) 1999-2021 Daniel Diaz
+
+| ?- 
+</span></pre><span class="c003">
+</span></dd></dl><p>The top-level is ready to execute your queries as explained in the next
+section.</p><p>To quit the top-level type the end-of-file key sequence (<span class="c003">Ctl-D</span>) or
+its term representation: <span class="c003">end_of_file.</span> It is also possible to use
+the built-in predicate <a id="hevea_default13"></a><span class="c003">halt/0</span> (section&#XA0;<a href="gprolog042.html#abort%2F0">8.18.1</a>).</p><p>However, before entering the top-level itself, the command-line is processed
+to treat all known options (those listed above). All unrecognized arguments
+are collected together to form the argument list which will be available
+using
+<a id="hevea_default14"></a><span class="c003">argument_value/2</span> (section&#XA0;<a href="gprolog051.html#argument-value%2F2">8.27.2</a>) or
+<a id="hevea_default15"></a><span class="c003">argument_list/1</span> (section&#XA0;<a href="gprolog051.html#argument-list%2F1">8.27.3</a>).
+The <span class="c003">--</span> option stops the parsing of the command-line, all remainding
+options are collected into the argument list.</p><p>Several options are provided to execute a goal before entering the
+interaction with the user:</p><ul class="itemize"><li class="li-itemize">The <span class="c003">--init-goal</span> option executes the <span class="c004">GOAL</span> as soon as
+it is encountered (while the command-line is processed). <span class="c004">GOAL</span> is thus
+executed before entering <span class="c003">top_level/0</span>.</li><li class="li-itemize">The <span class="c003">--consult-file</span> option consults the <span class="c004">FILE</span> at the
+entry of <span class="c003">top_level/0</span> just after the banner is displayed. 
+<span class="c003">--consult-file</span> options are handled before <span class="c003">--consult-file</span> options.</li><li class="li-itemize">The <span class="c003">--entry-goal</span> option executes the <span class="c004">GOAL</span> at the
+entry of <span class="c003">top_level/0</span> just after the banner is displayed.</li><li class="li-itemize">The <span class="c003">--query-goal</span> option executes the <span class="c004">GOAL</span> as if the
+user has typed in (under the top-level).</li></ul><p>The above order is thus the order in which each kind of goal (init, entry,
+query) is executed. If there are several goals of a same kind they are
+executed in the order of appearance. Thus, all init goals are executed (in the
+order of appearance) before all entry goals and all entry goals are executed
+before all query goals.</p><p>Each <span class="c004">GOAL</span> is passed as a shell argument (i.e. one shell string) and
+should not contain a terminal dot. Example: <span class="c003">--init-goal
+&#X2019;write(hello), nl&#X2019;</span> under a sh-like. To be executed, a <span class="c004">GOAL</span> is
+transformed into a term using
+<a id="hevea_default16"></a><span class="c003">read_term_from_atom(Goal, Term,
+[end_of_term(eof)])</span>. Respecting both the syntax of shell strings and of
+Prolog can be heavy. For instance, passing a backslash character
+<span class="c003">\</span> can be difficult since it introduces an <a id="hevea_default17"></a>escape sequence
+both in sh and inside Prolog quoted atoms. The use of back quotes can then be
+useful since, by default, no escape sequence is processed inside back quotes
+(this behavior can be controlled using the <a id="hevea_default18"></a><span class="c003">back_quotes</span> <a id="hevea_default19"></a>Prolog
+flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)).</p><p>Since the Prolog argument list is created when the whole command-line is
+parsed, if a <span class="c003">--init-goal</span> option uses <span class="c003">argument_value/2</span> or
+<span class="c003">argument_list/1</span> it will obtained the original command-line
+arguments (i.e. including all recognized arguments).</p><p>Here is an example of using execution goal options:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+% gprolog --init-goal &#X2019;write(before), nl&#X2019; --entry-goal &#X2019;write(inside), nl&#X2019;<br>
+--query-goal &#X2019;append([a,b],[c,d],X)&#X2019;
+</span></dd></dl><p>will produce the following:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+</span><pre class="verbatim"><span class="c003">before
+GNU Prolog 1.5.0 (64 bits)
+Compiled May  3 2021, 16:36:43 with gcc
+Copyright (C) 1999-2021 Daniel Diaz
+
+inside
+| ?- append([a,b],[c,d],X).
+
+X = [a,b,c,d]
+
+yes
+| ?-
+</span></pre><span class="c003">
+</span></dd></dl><p>NB: depending on the used shell it may be necessary to use other string
+delimiters (e.g. use <span class="c003">"</span> under Windows <span class="c003">cmd.exe</span>).</p>
+<h4 class="subsubsection" id="sec9">4.2.2&#XA0;&#XA0;The interactive interpreter read-execute-write loop</h4>
+<p>
+The GNU Prolog top-level is built on a classical read-execute-write loop that
+also allows for re-executions (when the query is not deterministic) as
+follows:</p><ul class="itemize"><li class="li-itemize">display the prompt, i.e. &#X2019;<span class="c003">| ?-</span>&#X2019;.</li><li class="li-itemize">read a query (i.e. a goal).</li><li class="li-itemize">execute the query.</li><li class="li-itemize">in case of success display the values of the variables of the query.</li><li class="li-itemize">if there are remaining alternatives (i.e. the query is not
+deterministic), display a <span class="c003">?</span> and ask the user who can use one of the
+following commands: <span class="c003">RETURN</span> to stop the execution, <span class="c003">;</span> to
+compute the next solution or <span class="c003">a</span> to compute all remaining solution.</li></ul><p>Here is an example of execution of a query (&#X201C;find the lists <span class="c003">X</span> and
+<span class="c003">Y</span> such that the concatenation of <span class="c003">X</span> and <span class="c003">Y</span> is
+<span class="c003">[a,b]</span>&#X201D;):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- append(X,Y,[a,b,c]).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">X = []</span> </td></tr>
+<tr><td class="c015"><span class="c003">Y = [a,b,c] ? ;</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">;</span> to compute another
+solution)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">X = [a]</span> </td></tr>
+<tr><td class="c015"><span class="c003">Y = [b,c] ? a</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">a</span> to compute all remaining
+solutions)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">X = [a,b]</span> </td></tr>
+<tr><td class="c015"><span class="c003">Y = [c]</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user is not asked and the next solution is
+computed)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">X = [a,b,c]</span> </td></tr>
+<tr><td class="c015"><span class="c003">Y = []</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user is not asked and the next solution is
+computed)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">no</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(no more solution)</td></tr>
+</table></dd></dl><p>In some cases the top-level can detect that the current solution is the last
+one (no more alternatives remaining). In such a case it does not display the
+<span class="c003">?</span> symbol (and does not ask the user). Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- (X=1 ; X=2).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = 1 ? ;</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">;</span> to compute another solution)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = 2</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user is not prompted since there are no more
+alternatives)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">yes</span> </td></tr>
+</table></dd></dl><p>The user can stop the execution even if there are more alternatives by
+typing <span class="c003">RETURN</span>.</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- (X=1 ; X=2).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = 1 ?</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">RETURN</span> to stop the execution)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">yes</span> </td></tr>
+</table></dd></dl><p>The top-level tries to display the values of the variables of the query in a
+readable manner. For instance, when a variable is bound to a query variable,
+the name of this variable appears. When a variable is a singleton an
+underscore symbol <span class="c003">_</span> is displayed (<span class="c003">_</span> is a generic name
+for a singleton variable, it is also called an anonymous variable). Other
+variables are bound to new brand variable names. When a query variable name
+<span class="c003">X</span> appears as the value of another query variable <span class="c003">Y</span> it is
+because <span class="c003">X</span> is itself not instantiated otherwise the value of
+<span class="c003">X</span> is displayed. In such a case, nothing is output for <span class="c003">X</span>
+itself (since it is a variable). Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- X=f(A,B,_,A), A=k.</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">A = k</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the value of <span class="c003">A</span> is displayed also in <span class="c003">f/3</span> for
+<span class="c003">X</span>)</td></tr>
+<tr><td class="c015"><span class="c003">X = f(k,B,_,k)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(since <span class="c003">B</span> is a variable which is also a part
+of <span class="c003">X</span>, <span class="c003">B</span> is not displayed)</td></tr>
+</table></dd></dl><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- functor(T,f,3), arg(1,T,X), arg(3,T,X).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">T = f(X,_,X)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the 1<sup><span class="c008">st</span></sup> and 3<sup><span class="c008">rd</span></sup> args are equal to <span class="c003">X</span>,
+the 2<sup><span class="c008">nd</span></sup> is an anonymous variable)</td></tr>
+</table></dd></dl><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- read_from_atom(&#X2019;k(X,Y,X).&#X2019;,T).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">T = k(A,_,A)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the 1<sup><span class="c008">st</span></sup> and 3<sup><span class="c008">rd</span></sup> args are unified, a new
+variable name <span class="c003">A</span> is introduced)</td></tr>
+</table></dd></dl><p>The top-level uses variable binding predicates (section&#XA0;<a href="gprolog029.html#Variable-naming%2Fnumbering">8.5</a>). To display the value of a variable, the top-level calls
+<a id="hevea_default20"></a><span class="c003">write_term/3</span> with the following option list:
+<span class="c003">[</span><a id="hevea_default21"></a><span class="c003">quoted(true),</span><a id="hevea_default22"></a><span class="c003">numbervars(false),
+</span><a id="hevea_default23"></a><span class="c003">namevars(true)]</span> (section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>). A term of the
+form <span class="c003">&#X2019;$VARNAME&#X2019;(Name)</span> where <span class="c003">Name</span> is an atom is displayed
+as a variable name while a term of the form <span class="c003">&#X2019;$VAR&#X2019;(N)</span> where
+<span class="c003">N</span> is an integer is displayed as a normal compound term (such a term
+could be output as a variable name by <span class="c003">write_term/3</span>). Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- X=&#X2019;$VARNAME&#X2019;(&#X2019;Y&#X2019;), Y=&#X2019;$VAR&#X2019;(1).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = Y</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the term <span class="c003">&#X2019;$VARNAME&#X2019;(&#X2019;Y&#X2019;)</span> is displayed as <span class="c003">Y</span>)</td></tr>
+<tr><td class="c015"><span class="c003">Y = &#X2019;$VAR&#X2019;(1)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the term <span class="c003">&#X2019;$VAR&#X2019;(1)</span> is displayed as is)</td></tr>
+</table></dd></dl><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- X=Y, Y=&#X2019;$VAR&#X2019;(1).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">X = &#X2019;$VAR&#X2019;(1)</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">Y = &#X2019;$VAR&#X2019;(1)</span> </td></tr>
+</table></dd></dl><p>In the first example, <span class="c003">X</span> is explicitly bound to
+<span class="c003">&#X2019;$VARNAME&#X2019;(&#X2019;Y&#X2019;)</span> by the query so the top-level displays <span class="c003">Y</span>
+as the value of <span class="c003">X</span>. <span class="c003">Y</span> is unified with <span class="c003">&#X2019;$VAR&#X2019;(1)</span> so
+the top-level displays it as a normal compound term. It should be clear that
+<span class="c003">X</span> is not bound to <span class="c003">Y</span> (whereas it is in the second
+query). This behavior should be kept in mind when doing variable binding
+operations.</p><p>Finally, the top-level computes the user-time (section&#XA0;<a href="gprolog048.html#user-time%2F1">8.24.2</a>) taken
+by a query and displays it when it is significant. Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- retractall(p(_)), assertz(p(0)),</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;repeat,</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;retract(p(X)),</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;Y is X + 1,</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;assertz(p(Y)),</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;X = 1000, !.</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">X = 1000</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">Y = 1001</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">(180 ms) yes</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the query took 180ms of user time)</td></tr>
+</table></dd></dl>
+<h4 class="subsubsection" id="sec10">4.2.3&#XA0;&#XA0;Consulting a Prolog program</h4>
+<p>
+<a id="Consulting-a-Prolog-program"></a>
+The top-level allows the user to consult Prolog source files. Consulted
+predicates can be listed, executed and debugged (while predicates compiled
+to native-code cannot). For more information about the difference between a
+native-code predicate and a consulted predicate refer to the introduction of
+this section (section&#XA0;<a href="gprolog006.html#Introduction%3A%28Using-GNU-Prolog%29">4.1</a>) and to the part devoted
+to the compiler (section&#XA0;<a href="gprolog009.html#Different-kinds-of-codes">4.4.1</a>).</p><p>To consult a program use the built-in predicate <a id="hevea_default24"></a><span class="c003">consult/1</span>
+(section&#XA0;<a href="gprolog047.html#consult%2F1">8.23.1</a>). The argument of this predicate is a Prolog file name or
+<span class="c003">user</span> to specify the terminal. This allows the user to directly input
+the predicates from the terminal. In that case the input shall be terminated
+by the end-of-file key sequence (<span class="c003">Ctl-D</span>) or its term representation:
+<span class="c003">end_of_file.</span> A shorthand for
+<span class="c003">consult(<span class="c008">FILE</span>)</span> is
+<span class="c003">[<span class="c008">FILE</span>]</span>. Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015" colspan=3><span class="c003">| ?- [user].</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">{compiling user for byte code...}</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">even(0).</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">even(s(s(X))):-</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;even(X).</span> </td></tr>
+<tr><td class="c015">&nbsp;</td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">Ctl-D</span> to end the input)</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">{user compiled, 3 lines read - 350 bytes written, 1180 ms}</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">| ?- even(X).</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = 0 ? ;</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">;</span> to compute another solution)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = s(s(0)) ? ;</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">;</span> to compute another
+solution)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">X = s(s(s(s(0)))) ?</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">RETURN</span> to stop the
+execution)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">yes</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">| ?- listing.</span> </td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">even(0).</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">even(s(s(A))) :-</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;&#XA0;even(A).</span> </td></tr>
+</table></dd></dl><p>When <a id="hevea_default25"></a><span class="c003">consult/1</span> (section&#XA0;<a href="gprolog047.html#consult%2F1">8.23.1</a>) is invoked on a Prolog file it
+first runs the GNU Prolog compiler (section&#XA0;<a href="gprolog009.html#The-GNU-Prolog-compiler">4.4</a>) as a child
+process to generate a temporary WAM file for byte-code. If the compilation
+fails a message is displayed and nothing is loaded. If the compilation
+succeeds, the produced file is loaded into memory using <a id="hevea_default26"></a><span class="c003">load/1</span>
+(section&#XA0;<a href="gprolog047.html#load%2F1">8.23.2</a>). Namely, the byte-code of each predicate is loaded. When a
+predicate <span class="c004">P</span> is loaded if there is a previous definition
+for <span class="c004">P</span> it is removed (i.e. all clauses defining
+<span class="c004">P</span> are erased). We say that <span class="c004">P</span> is
+redefined. Note that only consulted predicates can be redefined. If
+<span class="c004">P</span> is a native-code predicate, trying to redefine it will
+produce an error at load-time: the predicate redefinition will be ignored
+and the following message displayed:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">native code procedure <span class="c008">P</span> cannot be redefined</span></dd></dl><p>Finally, an existing predicate will not be removed if it is not re-loaded.
+This means that if a predicate <span class="c004">P</span> is loaded when consulting
+the file <span class="c004">F</span>, and if later the definition of
+<span class="c004">P</span> is removed from the file <span class="c004">F</span>, consulting
+<span class="c004">F</span> again will not remove the previously loaded definition
+of <span class="c004">P</span> from the memory.</p><p>Consulted predicates can be debugged using the Prolog debugger. Use the
+debugger predicate <a id="hevea_default27"></a><span class="c003">trace/0</span> or <a id="hevea_default28"></a><span class="c003">debug/0</span> (section&#XA0;<a href="gprolog013.html#Running-and-stopping-the-debugger">5.3.1</a>) to activate the debugger.</p>
+<h4 class="subsubsection" id="sec11">4.2.4&#XA0;&#XA0;Scripting Prolog</h4>
+<p>
+<a id="Scripting-Prolog"></a>
+Since version 1.4.0 it is possible to use a Prolog source file as a Unix
+script-file (<a id="hevea_default29"></a>shebang support). A <a id="hevea_default30"></a>PrologScript file should begin as follows:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+</span><pre class="verbatim"><span class="c003">#!/usr/bin/gprolog --consult-file
+</span></pre><span class="c003">
+</span></dd></dl><p>GNU Prolog will be invoked as</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+</span><pre class="verbatim"><span class="c003">/usr/bin/gprolog --consult-file FILE
+</span></pre><span class="c003">
+</span></dd></dl><p>Then <span class="c003">FILE</span> will be consulted. In order to correctly deal with the
+<span class="c003">#!</span> first line, <span class="c003">consult/1</span> treats as a comment a first line
+of a file which begins with <span class="c003">#</span> (if you want to use a predicate name
+starting with a <span class="c003">#</span>, simply skip a line before its definition).</p><p>Remark: it is almost never possible to pass additionnal parameters
+(e.g. <span class="c003">query-goal</span>) this way since in most systems 
+the shebang implementation deliver all arguments (following
+<span class="c003">#!/usr/bin/gprolog</span>) as a single string (which cannot then correctly
+be recognized by <span class="c003">gprolog</span>).</p>
+<h4 class="subsubsection" id="sec12">4.2.5&#XA0;&#XA0;Interrupting a query</h4>
+<p>
+<a id="Interrupting-a-query"></a>
+Under the top-level it is possible to interrupt the execution of a query by
+typing the interruption key (<span class="c003">Ctl-C</span>). This can be used to abort a
+query, to stop an infinite loop, to activate the debugger,&#X2026;When an
+interruption occurs the top-level displays the following message:
+<span class="c003">Prolog interruption (h for help)&#XA0;?</span> The user can then type one of
+the following commands:</p><table class="c000 cellpadding1" border=1><tr><td class="c012">
+Command</td><td class="c012">Name</td><td class="c014">Description </td></tr>
+<tr><td class="c012">
+<span class="c003">a</span></td><td class="c012">abort</td><td class="c014">abort the current execution. Same as <a id="hevea_default31"></a><span class="c003">abort/0</span>
+(section&#XA0;<a href="gprolog042.html#abort%2F0">8.18.1</a>) </td></tr>
+<tr><td class="c012">
+<span class="c003">e</span></td><td class="c012">exit</td><td class="c014">quit the current Prolog process.
+Same as <a id="hevea_default32"></a><span class="c003">halt/0</span> (section&#XA0;<a href="gprolog042.html#abort%2F0">8.18.1</a>) </td></tr>
+<tr><td class="c012">
+<span class="c003">b</span></td><td class="c012">break</td><td class="c014">invoke a recursive top-level. Same as <a id="hevea_default33"></a><span class="c003">break/0</span>
+(section&#XA0;<a href="gprolog042.html#abort%2F0">8.18.1</a>) </td></tr>
+<tr><td class="c012">
+<span class="c003">c</span></td><td class="c012">continue</td><td class="c014">resume the execution </td></tr>
+<tr><td class="c012">
+<span class="c003">t</span></td><td class="c012">trace</td><td class="c014">start the debugger using <a id="hevea_default34"></a><span class="c003">trace/0</span>
+(section&#XA0;<a href="gprolog013.html#Running-and-stopping-the-debugger">5.3.1</a>) </td></tr>
+<tr><td class="c012">
+<span class="c003">d</span></td><td class="c012">debug</td><td class="c014">start the debugger using <a id="hevea_default35"></a><span class="c003">debug/0</span>
+(section&#XA0;<a href="gprolog013.html#Running-and-stopping-the-debugger">5.3.1</a>) </td></tr>
+<tr><td class="c012">
+<span class="c003">h</span> or <span class="c003">?</span></td><td class="c012">help</td><td class="c014">display a summary of available commands </td></tr>
+</table>
+<h4 class="subsubsection" id="sec13">4.2.6&#XA0;&#XA0;The line editor</h4>
+<p>
+<a id="The-line-editor"></a>
+The line editor (<a id="hevea_default36"></a><span class="c003">linedit</span>) allows the user to build/update the current
+input line using a variety of commands. This facility is available if the
+<span class="c003">linedit</span> part of GNU Prolog has been installed. <span class="c003">linedit</span> is
+implicitly called by any built-in predicate reading from a terminal (e.g.
+<span class="c003">get_char/1</span>, <span class="c003">read/1</span>,&#X2026;). This is the case when the
+<a id="hevea_default37"></a>top-level reads a query.</p><p><span class="c009">Bindings</span>: each command of <span class="c003">linedit</span> is activated using a
+key. For some commands another key is also available to invoke the command
+(on some terminals this other key may not work properly while the primary
+key always works). Here is the list of available commands:</p><table class="c000 cellpadding1" border=1><tr><td class="c012">
+Key</td><td class="c012">Alternate key</td><td class="c014">Description </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-B</span></td><td class="c012">&#X2190;</td><td class="c014">go to the previous character </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-F</span></td><td class="c012">&#X2192;</td><td class="c014">go to the next character </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-B</span></td><td class="c012"><span class="c003">Ctl-</span>&#X2190;</td><td class="c014">go to the previous word </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-F</span></td><td class="c012"><span class="c003">Ctl-</span>&#X2192;</td><td class="c014">go to the next word </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-A</span></td><td class="c012"><span class="c003">Home</span></td><td class="c014">go to the beginning of the line </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-E</span></td><td class="c012"><span class="c003">End</span></td><td class="c014">go to the end of the line </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-H</span></td><td class="c012"><span class="c003">Backspace</span></td><td class="c014">delete the previous character </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-D</span></td><td class="c012"><span class="c003">Delete</span></td><td class="c014">delete the current character </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-U</span></td><td class="c012"><span class="c003">Ctl-Home</span></td><td class="c014">delete from beginning of the line to the current character </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-K</span></td><td class="c012"><span class="c003">Ctl-End</span></td><td class="c014">delete from the current character to the end of the line </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-L</span></td><td class="c012">&nbsp;</td><td class="c014">lower case the next word </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-U</span></td><td class="c012">&nbsp;</td><td class="c014">upper case the next word </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-C</span></td><td class="c012">&nbsp;</td><td class="c014">capitalize the next word </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-T</span></td><td class="c012">&nbsp;</td><td class="c014">exchange last two characters </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-V</span></td><td class="c012"><span class="c003">Insert</span></td><td class="c014">switch on/off the insert/replace mode </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-I</span></td><td class="c012"><span class="c003">Tab</span></td><td class="c014">complete word (twice displays all possible
+completions) </td></tr>
+<tr><td class="c012"><span class="c003">Esc-Ctl-I</span></td><td class="c012"><span class="c003">Esc-Tab</span></td><td class="c014">insert spaces to emulate a tabulation </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-space</span></td><td class="c012">&nbsp;</td><td class="c014">mark beginning of the selection </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-W</span></td><td class="c012">&nbsp;</td><td class="c014">copy (from the begin selection mark to the current
+character) </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-W</span></td><td class="c012">&nbsp;</td><td class="c014">cut (from the begin selection mark to the current
+character) </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-Y</span></td><td class="c012">&nbsp;</td><td class="c014">paste </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-P</span></td><td class="c012">&#X2191;</td><td class="c014">recall previous history line </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-N</span></td><td class="c012">&#X2193;</td><td class="c014">recall next history line </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-P</span></td><td class="c012">&nbsp;</td><td class="c014">recall previous history line beginning with the current
+prefix </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-N</span></td><td class="c012">&nbsp;</td><td class="c014">recall next history line beginning with the current
+prefix </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-&lt;</span></td><td class="c012"><span class="c003">Page Up</span></td><td class="c014">recall first history line </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-&gt;</span></td><td class="c012"><span class="c003">Page Down</span></td><td class="c014">recall last history line </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-C</span></td><td class="c012">&nbsp;</td><td class="c014">generate an interrupt signal (section&#XA0;<a href="#Interrupting-a-query">4.2.5</a>) </td></tr>
+<tr><td class="c012">
+<span class="c003">Ctl-D</span></td><td class="c012">&nbsp;</td><td class="c014">generate an end-of-file character (at the begin of the
+line) </td></tr>
+<tr><td class="c012">
+<span class="c003">RETURN</span></td><td class="c012">&nbsp;</td><td class="c014">validate a line </td></tr>
+<tr><td class="c012">
+<span class="c003">Esc-?</span></td><td class="c012">&nbsp;</td><td class="c014">display a summary of available commands </td></tr>
+</table><p><span class="c009">History</span>: when a line is entered (i.e. terminated by <span class="c003">RETURN</span>),
+<span class="c003">linedit</span> records it in an internal list called
+history. It is later possible to recall history lines using appropriate
+commands (e.g. <span class="c003">Ctl-P</span> recall the last entered line) and to modify
+them as needed. It is also possible to recall a history line beginning with
+a given prefix. For instance to recall the previous line beginning with
+<span class="c003">write</span> simply type <span class="c003">write</span> followed by <span class="c003">Esc-P</span>.
+Another <span class="c003">Esc-P</span> will recall an earlier line beginning with
+<span class="c003">write</span>,&#X2026;</p><p><span class="c009">Completion</span>: another important feature of <span class="c003">linedit</span> is its
+<a id="hevea_default38"></a>completion facility. Indeed, <span class="c003">linedit</span> maintains a list of
+known words and uses it to complete the prefix of a word. Initially this list
+contains all predefined atoms and the atoms corresponding to available
+predicates. This list is dynamically updated when a new atom appears in the
+system (whether read at the top-level, created with a built-in predicate,
+associated with a new consulted predicate,&#X2026;). When the completion key
+(<span class="c003">Tab</span>) is pressed <span class="c003">linedit</span> acts as follows:</p><ul class="itemize"><li class="li-itemize">use the current word as a prefix.</li><li class="li-itemize">collect all words of the list that begin with this prefix.</li><li class="li-itemize">complete the current word with the longest common part of all matching
+words.</li><li class="li-itemize">if more than one word matches emit a beep (a second <span class="c003">Tab</span> will
+display all possibilities).</li></ul><p>Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015"><span class="c003">| ?- argu</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(here the user presses <span class="c003">Tab</span> to complete the word)</td></tr>
+<tr><td class="c015"><span class="c003">| ?- argument_</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(<span class="c003">linedit</span> completes <span class="c003">argu</span> with
+<span class="c003">argument_</span> and emits a beep)</td></tr>
+<tr><td class="c015">&nbsp;</td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the user presses again <span class="c003">Tab</span> to see all possible completions)</td></tr>
+<tr><td class="c015"><span class="c003">argument_counter</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(<span class="c003">linedit</span> shows 3 possible completions)</td></tr>
+<tr><td class="c015" colspan=3><span class="c003">argument_list</span> </td></tr>
+<tr><td class="c015" colspan=3><span class="c003">argument_value</span> </td></tr>
+<tr><td class="c015"><span class="c003">| ?- argument_</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(<span class="c003">linedit</span> redisplays the input line)</td></tr>
+<tr><td class="c015" colspan=3>&nbsp;</td></tr>
+<tr><td class="c015"><span class="c003">| ?- argument_c</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(to select <span class="c003">argument_counter</span> the user presses
+<span class="c003">c</span> and <span class="c003">Tab</span>)</td></tr>
+<tr><td class="c015"><span class="c003">| ?- argument_counter</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(<span class="c003">linedit</span> completes with
+<span class="c003">argument_counter</span>)</td></tr>
+</table></dd></dl><p><span class="c009">Balancing</span>: <span class="c003">linedit</span> allows the user to check that (square/curly)
+brackets are well balanced. For this, when a close bracket symbol, i.e.
+<span class="c003">)</span>, <span class="c003">]</span> or <span class="c003">}</span>, is typed, <span class="c003">linedit</span> determines
+the associated open bracket, i.e. <span class="c003">(</span>, <span class="c003">[</span> or <span class="c003">{</span>, and
+temporarily repositions the cursor on it to show the match.</p><p><span class="c009">Customization</span>: the behavior of <span class="c003">linedit</span> can be controlled via
+an environment variable called <span class="c003">LINEDIT</span>. This variable can contain
+the following substrings:</p><table class="c001 cellpading0"><tr><td class="c015">
+<span class="c003">no</span></td><td class="c015">do not activated linedit (should the only value of the variable) </td></tr>
+<tr><td class="c015"><span class="c003">ansi=no</span></td><td class="c015">do not use ANSI escape sequence (unix only) </td></tr>
+<tr><td class="c015"><span class="c003">out=</span><span class="c008">N</span></td><td class="c015">use the file descriptor <span class="c008">N</span> for the output (unix only) </td></tr>
+<tr><td class="c015"><span class="c003">gui=no</span></td><td class="c015">even if compiled with the <a id="hevea_default39"></a>GUI console run in text mode (windows) </td></tr>
+<tr><td class="c015"><span class="c003">gui=silent</span></td><td class="c015">if the <a id="hevea_default40"></a>GUI console is not found, silently run in text mode (windows) </td></tr>
+<tr><td class="c015"><span class="c003">cp=</span><span class="c008">N</span></td><td class="c015">use code page <span class="c008">N</span> (windows text console) </td></tr>
+<tr><td class="c015"><span class="c003">oem_put=no</span></td><td class="c015">do not use Char&#X2192;Oem conversion when emitting a char (windows text console) </td></tr>
+<tr><td class="c015"><span class="c003">oem_get=no</span></td><td class="c015">do not use Oem&#X2192;Char conversion when reading a char (windows text console) </td></tr>
+</table>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog006.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog008.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>The GNU Prolog compiler</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog008.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<hr>
+<h3 class="subsection" id="sec15">4.4&#XA0;&#XA0;The GNU Prolog compiler</h3>
+<ul>
+<li><a href="gprolog009.html#sec16">Different kinds of codes</a>
+</li><li><a href="gprolog009.html#sec17">Compilation scheme</a>
+</li><li><a href="gprolog009.html#sec18">Using the compiler</a>
+</li><li><a href="gprolog009.html#sec19">Running an executable</a>
+</li><li><a href="gprolog009.html#sec20">Generating a new interactive interpreter</a>
+</li><li><a href="gprolog009.html#sec21">The name mangling scheme</a>
+</li></ul>
+<p>
+<a id="The-GNU-Prolog-compiler"></a></p>
+<h4 class="subsubsection" id="sec16">4.4.1&#XA0;&#XA0;Different kinds of codes</h4>
+<p>
+<a id="Different-kinds-of-codes"></a>
+One of the main advantages of GNU Prolog is its ability to produce stand
+alone executables. A Prolog program can be compiled to native code to give
+rise to a machine-dependent executable using the GNU Prolog compiler. However
+native-code predicates cannot be listed nor fully debugged. So there is an
+alternative to native-code compilation: byte-code compilation. By default the
+GNU Prolog compiler produces native-code but via a command-line option it can
+produce a file ready for byte-code loading. This is exactly what
+<a id="hevea_default43"></a><span class="c003">consult/1</span> does as was explained above (section&#XA0;<a href="gprolog007.html#Consulting-a-Prolog-program">4.2.3</a>). GNU Prolog also manages interpreted code using a Prolog interpreter
+written in Prolog. Obviously interpreted code is slower than byte-code but
+does not require the invocation of the GNU Prolog compiler. This interpreter is
+used each time a meta-call is needed as by <span class="c003">call/1</span> (section&#XA0;<a href="gprolog023.html#call%2F1">7.2.3</a>).
+This also the case of dynamically asserted clauses. The following table
+summarizes these three kinds of codes:</p><table class="c000 cellpadding1" border=1><tr><td class="c014">
+Type</td><td class="c014">Speed</td><td class="c012">Debug ?</td><td class="c014">For what </td></tr>
+<tr><td class="c014">
+interpreted-code</td><td class="c014">slow</td><td class="c012">yes</td><td class="c014">meta-call and dynamically asserted clauses
+</td></tr>
+<tr><td class="c014">
+byte-code</td><td class="c014">medium</td><td class="c012">yes</td><td class="c014">consulted predicates </td></tr>
+<tr><td class="c014">
+native-code</td><td class="c014">fast</td><td class="c012">no</td><td class="c014">compiled predicates </td></tr>
+</table>
+<h4 class="subsubsection" id="sec17">4.4.2&#XA0;&#XA0;Compilation scheme</h4>
+<p>
+<a id="Compilation-scheme"></a>
+<span class="c009">Native-code compilation</span>: a Prolog source is compiled in several
+stages to produce an object file that is linked to the GNU Prolog libraries
+to produce an executable. The Prolog source is first compiled to obtain a
+<a id="hevea_default44"></a>WAM [<a href="gprolog073.html#Warren83">9</a>] file. For a detailed study of the WAM the
+interested reader can refer to
+<a href="http://www.isg.sfu.ca/~hak/documents/wam.html">&#X201C;Warren&#X2019;s Abstract
+Machine: A Tutorial Reconstruction&#X201D;</a> [<a href="gprolog073.html#Ait-Kaci91">1</a>]. The WAM file is
+translated to a machine-independent language specifically designed for GNU
+Prolog. This language is close to a (universal) assembly language and is
+based on a very reduced instruction set. For this reason this language is
+called <a id="hevea_default45"></a>mini-assembly (<a id="hevea_default46"></a>MA). The mini-assembly file is then
+mapped to the assembly language of the target machine. This assembly file is
+assembled to give rise to an object file which is then linked with the GNU
+Prolog libraries to provide an executable. The compiler also takes into
+account Finite Domain constraint definition files. It translates them to C
+and invoke the C compiler to obtain object files. The following figure
+presents this compilation scheme:</p><div class="center"><img src="compil-scheme.png"></div><p>Obviously all intermediate stages are hidden to the user who simply invokes
+the compiler on his Prolog file(s) (plus other files: C,&#X2026;) and
+obtains an executable. However, it is also possible to stop the compiler at
+any given stage. This can be useful, for instance, to see the <a id="hevea_default47"></a>WAM code
+produced (perhaps when learning the WAM). Finally it is possible to give any
+kind of file to the compiler which will insert it in the compilation chain
+at the stage corresponding to its type. The type of a file is determined
+using the suffix of its file name. The following table presents all
+recognized types/suffixes:</p><table class="c000 cellpadding1" border=1><tr><td class="c014">
+Suffix of the file</td><td class="c014">Type of the file</td><td class="c014">Handled by: </td></tr>
+<tr><td class="c014">
+<span class="c003">.pl</span>, <span class="c003">.pro</span>, <span class="c003">.prolog</span></td><td class="c014">Prolog source file</td><td class="c014"><span class="c003">pl2wam</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">.wam</span></td><td class="c014">WAM source file</td><td class="c014"><span class="c003">wam2ma</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">.ma</span></td><td class="c014">Mini-assembly source file</td><td class="c014"><span class="c003">ma2asm</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">.s</span></td><td class="c014">Assembly source file</td><td class="c014">the assembler </td></tr>
+<tr><td class="c014">
+<span class="c003">.c</span>, <span class="c003">.C</span>, <span class="c003">.CC</span>, <span class="c003">.cc</span>, <span class="c003">.cxx</span>,
+<span class="c003">.c++</span>, <span class="c003">.cpp</span></td><td class="c014">C or C++ source file</td><td class="c014">the C compiler </td></tr>
+<tr><td class="c014">
+<span class="c003">.fd</span></td><td class="c014">Finite Domain constraint source file</td><td class="c014"><span class="c003">fd2c</span> </td></tr>
+<tr><td class="c014">
+any other suffix (<span class="c003">.o</span>, <span class="c003">.a</span>,&#X2026;)</td><td class="c014">any other type
+(object, library,&#X2026;)</td><td class="c014">the linker (C linker) </td></tr>
+</table><p><span class="c009">Byte-code compilation</span>: the same compiler can be used to compile a
+source Prolog file for byte-code. In that case the Prolog to WAM compiler is
+invoked using a specific option and produces a WAM for byte-code source file
+(suffixed <span class="c003">.wbc</span>) that can be later loaded using <a id="hevea_default48"></a><span class="c003">load/1</span>
+(section&#XA0;<a href="gprolog047.html#load%2F1">8.23.2</a>). Note that this is exactly what <a id="hevea_default49"></a><span class="c003">consult/1</span>
+(section&#XA0;<a href="gprolog047.html#consult%2F1">8.23.1</a>) does as explained above (section&#XA0;<a href="gprolog007.html#Consulting-a-Prolog-program">4.2.3</a>).</p>
+<h4 class="subsubsection" id="sec18">4.4.3&#XA0;&#XA0;Using the compiler</h4>
+<p>
+<a id="Using-the-compiler"></a>
+The GNU Prolog compiler is a command-line compiler similar in spirit to a Unix
+C compiler like <span class="c003">gcc</span>. To invoke the compiler use the <a id="hevea_default50"></a><span class="c003">gplc</span>
+command as follows:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015"><span class="c003">% gplc </span>[<span class="c004">OPTION</span>]&#X2026;<span class="c003">&#XA0;<span class="c008">FILE</span></span>&#X2026;</td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the <span class="c003">%</span> symbol is the operating system shell prompt)</td></tr>
+</table></dd></dl><p>The arguments of <span class="c003">gplc</span> are file names that are dispatched in the
+compilation scheme depending on the type determined from their suffix as was
+explained previously (section&#XA0;<a href="#Compilation-scheme">4.4.2</a>). All object files are then
+linked to produce an executable. Note however that GNU Prolog has no module
+facility (since there is not yet an ISO reference for Prolog modules) thus a
+predicate defined in a Prolog file is visible from any other predicate
+defined in any other file. GNU Prolog allows the user to split a big Prolog
+source into several files but does not offer any way to hide a predicate
+from others.</p><p>The simplest way to obtain an executable from a Prolog source file
+<span class="c003">prog.pl</span> is to use:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc prog.pl</span></dd></dl><p>This will produce an native executable called <span class="c003">prog</span> which can be
+executed as follows:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% prog</span></dd></dl><p>However, there are several options that can be used to control the
+compilation:</p><p><span class="c009">General options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default51"></a><span class="c003">-o</span> <span class="c004">FILE</span>, <a id="hevea_default52"></a><span class="c003">--output</span> <span class="c004">FILE</span></td><td class="c022">use
+<span class="c004">FILE</span> as the name of the output file </td></tr>
+<tr><td class="c016">
+<a id="hevea_default53"></a><span class="c003">-W</span>, <a id="hevea_default54"></a><span class="c003">--wam-for-native</span></td><td class="c022">stop after producing WAM file(s)</td></tr>
+<tr><td class="c016">
+<a id="hevea_default55"></a><span class="c003">-w</span>, <a id="hevea_default56"></a><span class="c003">--wam-for-byte-code</span></td><td class="c022">stop after producing WAM for
+byte-code file(s) (force <span class="c003">--no-call-c</span>) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default57"></a><span class="c003">-M</span>, <a id="hevea_default58"></a><span class="c003">--mini-assembly</span></td><td class="c022">stop after producing mini-assembly
+file(s) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default59"></a><span class="c003">-S</span>, <a id="hevea_default60"></a><span class="c003">--assembly</span></td><td class="c022">stop after producing assembly file(s)
+</td></tr>
+<tr><td class="c016">
+<a id="hevea_default61"></a><span class="c003">-F</span>, <a id="hevea_default62"></a><span class="c003">--fd-to-c</span></td><td class="c022">stop after producing C file(s) from FD
+constraint definition file(s) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default63"></a><span class="c003">-c</span>, <a id="hevea_default64"></a><span class="c003">--object</span></td><td class="c022">stop after producing object file(s) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default65"></a><span class="c003">--temp-dir</span> <span class="c004">PATH</span></td><td class="c022">use <span class="c004">PATH</span> as directory
+for temporary files </td></tr>
+<tr><td class="c016">
+<a id="hevea_default66"></a><span class="c003">--no-del-temp</span></td><td class="c022">do not delete temporary files </td></tr>
+<tr><td class="c016">
+<a id="hevea_default67"></a><span class="c003">--no-demangling</span></td><td class="c022">do not decode predicate names (name demangling) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default68"></a><span class="c003">-v</span>, <a id="hevea_default69"></a><span class="c003">--verbose</span></td><td class="c022">print executed commands </td></tr>
+<tr><td class="c016">
+<a id="hevea_default70"></a><span class="c003">-h</span>, <a id="hevea_default71"></a><span class="c003">--help</span></td><td class="c022">print a help and exit </td></tr>
+<tr><td class="c016">
+<a id="hevea_default72"></a><span class="c003">--version</span></td><td class="c022">print version number and exit </td></tr>
+</table><p><span class="c009">Prolog to WAM compiler options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default73"></a><span class="c003">--pl-state</span> <span class="c004">FILE</span></td><td class="c022">read <span class="c004">FILE</span> to set the initial Prolog state </td></tr>
+<tr><td class="c016">
+<a id="hevea_default74"></a><span class="c003">--wam-comment</span> <span class="c004">COMMENT</span></td><td class="c022">emit <span class="c004">COMMENT</span> as a comment in the WAM file </td></tr>
+<tr><td class="c016">
+<a id="hevea_default75"></a><span class="c003">--no-susp-warn</span></td><td class="c022">do not show warnings for suspicious predicates </td></tr>
+<tr><td class="c016">
+<a id="hevea_default76"></a><span class="c003">--no-singl-warn</span></td><td class="c022">do not show warnings for named singleton
+variables </td></tr>
+<tr><td class="c016">
+<a id="hevea_default77"></a><span class="c003">--no-redef-error</span></td><td class="c022">do not show errors for built-in predicate
+redefinitions </td></tr>
+<tr><td class="c016">
+<a id="hevea_default78"></a><span class="c003">--foreign-only</span></td><td class="c022">only compile <span class="c003">foreign/1-2</span> directives </td></tr>
+<tr><td class="c016">
+<a id="hevea_default79"></a><span class="c003">--no-call-c</span></td><td class="c022">do not allow the use of <span class="c003">fd_tell</span>,
+<span class="c003">&#X2019;$call_c</span>&#X2019;,&#X2026;</td></tr>
+<tr><td class="c016">
+<a id="hevea_default80"></a><span class="c003">--no-inline</span></td><td class="c022">do not inline predicates </td></tr>
+<tr><td class="c016">
+<a id="hevea_default81"></a><span class="c003">--no-reorder</span></td><td class="c022">do not reorder predicate arguments </td></tr>
+<tr><td class="c016">
+<a id="hevea_default82"></a><span class="c003">--no-reg-opt</span></td><td class="c022">do not optimize registers </td></tr>
+<tr><td class="c016">
+<a id="hevea_default83"></a><span class="c003">--min-reg-opt</span></td><td class="c022">minimally optimize registers </td></tr>
+<tr><td class="c016">
+<a id="hevea_default84"></a><span class="c003">--no-opt-last-subterm</span></td><td class="c022">do not optimize last subterm
+compilation </td></tr>
+<tr><td class="c016">
+<a id="hevea_default85"></a><span class="c003">--fast-math</span></td><td class="c022">use fast mathematical mode (assume integer
+arithmetics) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default86"></a><span class="c003">--keep-void-inst</span></td><td class="c022">keep void WAM instructions in the output file </td></tr>
+<tr><td class="c016">
+<a id="hevea_default87"></a><span class="c003">--compile-msg</span></td><td class="c022">print a compile message </td></tr>
+<tr><td class="c016">
+<a id="hevea_default88"></a><span class="c003">--statistics</span></td><td class="c022">print statistics information </td></tr>
+</table><p><span class="c009">WAM to mini-assembly translator options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default89"></a><span class="c003">--comment</span></td><td class="c022">include comments in the output file </td></tr>
+</table><p><span class="c009">Mini-assembly to assembly translator options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default90"></a><span class="c003">--comment</span></td><td class="c022">include comments in the output file </td></tr>
+<tr><td class="c016"><a id="hevea_default91"></a><span class="c003">--pic</span></td><td class="c022">produce position independent code (PIC) </td></tr>
+</table><p><span class="c009">C compiler options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default92"></a><span class="c003">--c-compiler</span> <span class="c004">FILE</span></td><td class="c022">use <span class="c004">FILE</span> as C compiler/linker </td></tr>
+<tr><td class="c016">
+<a id="hevea_default93"></a><span class="c003">-C</span> <span class="c004">OPTION</span></td><td class="c022">pass <span class="c004">OPTION</span> to the C compiler </td></tr>
+</table><p><span class="c009">Assembler options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default94"></a><span class="c003">-A</span> <span class="c004">OPTION</span></td><td class="c022">pass <span class="c004">OPTION</span> to the assembler </td></tr>
+</table><p><span class="c009">Linker options</span>:</p><table class="c001 cellpading0"><tr><td class="c016">
+<a id="hevea_default95"></a><span class="c003">--linker</span> <span class="c004">FILE</span></td><td class="c022">use <span class="c004">FILE</span> as linker </td></tr>
+<tr><td class="c016">
+<a id="hevea_default96"></a><span class="c003">--local-size</span> <span class="c004">N</span></td><td class="c022">set default local stack size to
+<span class="c004">N</span> Kb </td></tr>
+<tr><td class="c016">
+<a id="hevea_default97"></a><span class="c003">--global-size</span> <span class="c004">N</span></td><td class="c022">set default global stack size to
+<span class="c004">N</span> Kb </td></tr>
+<tr><td class="c016">
+<a id="hevea_default98"></a><span class="c003">--trail-size</span> <span class="c004">N</span></td><td class="c022">set default trail stack size to
+<span class="c004">N</span> Kb </td></tr>
+<tr><td class="c016">
+<a id="hevea_default99"></a><span class="c003">--cstr-size</span> <span class="c004">N</span></td><td class="c022">set default constraint stack size to
+<span class="c004">N</span> Kb </td></tr>
+<tr><td class="c016">
+<a id="hevea_default100"></a><span class="c003">--max-atom</span> <span class="c004">N</span></td><td class="c022">set default atom table size to <span class="c004">N</span> atoms </td></tr>
+<tr><td class="c016">
+<a id="hevea_default101"></a><span class="c003">--fixed-sizes</span></td><td class="c022">do not consult environment variables at run-time
+(use default sizes) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default102"></a><span class="c003">--gui-console</span></td><td class="c022">link with the <a id="hevea_default103"></a>GUI console (windows only)</td></tr>
+<tr><td class="c016">
+<a id="hevea_default104"></a><span class="c003">--new-top-level</span></td><td class="c022">link the <a id="hevea_default105"></a>top-level main (to recognize top-level command-line options) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default106"></a><span class="c003">--no-top-level</span></td><td class="c022">do not link the <a id="hevea_default107"></a>top-level (force
+<a id="hevea_default108"></a><span class="c003">--no-debugger</span>) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default109"></a><span class="c003">--no-debugger</span></td><td class="c022">do not link the Prolog/WAM debugger </td></tr>
+<tr><td class="c016">
+<a id="hevea_default110"></a><span class="c003">--min-pl-bips</span></td><td class="c022">link only used Prolog built-in predicates </td></tr>
+<tr><td class="c016">
+<a id="hevea_default111"></a><span class="c003">--min-fd-bips</span></td><td class="c022">link only used FD solver built-in predicates </td></tr>
+<tr><td class="c016">
+<a id="hevea_default112"></a><span class="c003">--min-bips</span></td><td class="c022">shorthand for: <span class="c003">--no-top-level</span>
+<span class="c003">--min-pl-bips</span> <span class="c003">--min-fd-bips</span> </td></tr>
+<tr><td class="c016">
+<a id="hevea_default113"></a><span class="c003">--min-size</span></td><td class="c022">shorthand for: <span class="c003">--min-bips</span> <span class="c003">--strip</span> </td></tr>
+<tr><td class="c016">
+<a id="hevea_default114"></a><span class="c003">--no-fd-lib</span></td><td class="c022">do not look for the FD library (maintenance only) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default115"></a><span class="c003">-s</span>, <a id="hevea_default116"></a><span class="c003">--strip</span></td><td class="c022">strip the executable </td></tr>
+<tr><td class="c016">
+<a id="hevea_default117"></a><span class="c003">-L</span> <span class="c004">OPTION</span></td><td class="c022">Pass <span class="c004">OPTION</span> to the linker </td></tr>
+</table><p>It is possible to only give the prefix of an option if there is no ambiguity.</p><p>The name of the output file is controlled via the <span class="c003">-o</span>
+<span class="c004">FILE</span> option. If present the output file produced will be
+named <span class="c004">FILE</span>. If not specified, the output file name depends on the
+last stage reached by the compiler. If the link is not done the output file
+name(s) is the input file name(s) with the suffix associated with the last
+stage. If the link is done, the name of the executable is the name (without
+suffix) of the first file name encountered in the command-line. Note that if
+the link is not done <span class="c003">-o</span> has no sense in the presence of multiple
+input file names. For this reason, several meta characters are available for substitution in <span class="c004">FILE</span>:</p><ul class="itemize"><li class="li-itemize">
+<span class="c003">%f</span> is substitued by the whole input file name.
+</li><li class="li-itemize"><span class="c003">%F</span> is similar to <span class="c003">%f</span> but the directory part is omitted.
+</li><li class="li-itemize"><span class="c003">%p</span> is substitued by the whole prefix file name (omitting the suffix).
+</li><li class="li-itemize"><span class="c003">%P</span> is similar to <span class="c003">%p</span> but the directory part is omitted.
+</li><li class="li-itemize"><span class="c003">%s</span> is substitued by the file suffix (including the dot).
+</li><li class="li-itemize"><span class="c003">%d</span> is substitued by the directory part (empty if no directory is specified).
+</li><li class="li-itemize"><span class="c003">%c</span> is substitued by the value of an internal counter starting from 1 and auto-incremented.
+</li></ul><p>By default the compiler runs in the native-code compilation scheme. To
+generate a WAM file for byte-code use the <span class="c003">--wam-for-byte-code</span>
+option. The resulting file can then be loaded using <a id="hevea_default118"></a><span class="c003">load/1</span>
+(section&#XA0;<a href="gprolog047.html#load%2F1">8.23.2</a>).</p><p>To execute the Prolog to WAM compiler in a given <em>read environment</em>
+(operator definitions, character conversion table,&#X2026;) use
+<span class="c003">--pl-state</span> <span class="c004">FILE</span>. The state file should be
+produced by <a id="hevea_default119"></a><span class="c003">write_pl_state_file/1</span>
+(section&#XA0;<a href="gprolog046.html#write-pl-state-file%2F1">8.22.5</a>).</p><p>By default the Prolog to WAM compiler inlines calls to some deterministic
+built-in predicates (e.g. <span class="c003">arg/3</span> and <span class="c003">functor/3</span>). Namely a
+call to such a predicate will not yield a classical predicate call but a
+simple C function call (which is obviously faster). It is possible to avoid
+this using <span class="c003">--no-inline</span>.</p><p>Another optimization performed by the Prolog to WAM compiler is unification
+reordering. The arguments of a predicate are reordered to optimize
+unification. This can be deactivated using <span class="c003">--no-reorder</span>. The
+compiler also optimizes the unification/loading of nested compound terms.
+More precisely, the compiler emits optimized instructions when the last
+subterm of a compound term is itself a compound term (e.g. lists). This can
+be deactivated using <span class="c003">--no-opt-last-subterm</span>.</p><p>By default the Prolog to WAM compiler fully optimizes the allocation of
+registers to decrease both the number of instruction produced and the number
+of used registers. A good allocation will generate many <em>void
+instructions</em> that are removed from the produced file except if
+<span class="c003">--keep-void-inst</span> is specified. To prevent any optimization use
+<span class="c003">--no-reg-opt</span> while <span class="c003">--min-reg-opt</span> forces the compiler to
+only perform simple register optimizations.</p><p>The Prolog to WAM compiler emits an error when a control construct or a
+built-in predicate is redefined. This can be avoided using
+<span class="c003">--no-redef-error</span>. The compiler also emits warnings for suspicious
+predicate definitions like <span class="c003">-/2</span> since this often corresponds to an
+earlier syntax error (e.g. <span class="c003">-</span> instead of <span class="c003">_</span>. This can be
+deactivated by specifying <span class="c003">--no-susp-warn</span>. Finally, the compiler
+warns when a singleton variable has a name (i.e. not the generic anonymous
+name <span class="c003">_</span>). This can be deactivated specifying
+<span class="c003">--no-singl-warn</span>.</p><p>Internally, predicate names are encoded to fit the syntax of (assembly)
+identifiers. For this GNU Prolog uses it own <a id="hevea_default120"></a>name mangling scheme. This
+is explained in more detail later (section&#XA0;<a href="#Name-mangling-scheme">4.4.6</a>). By default
+the error messages from the linker (e.g. multiple definitions for a given
+predicate, reference to an undefined predicate,&#X2026;) are filtered to
+replace an internal name representation by the real predicate name
+(<a id="hevea_default121"></a>demangling). Specifying the <span class="c003">--no-demangling</span> prevents
+<a id="hevea_default122"></a><span class="c003">gplc</span> from filtering linker output messages (internal identifiers are
+then shown).</p><p>When producing an executable it is possible to specify default stack sizes
+(using <span class="c003">--<span class="c008">STACK_NAME</span>-size</span>) and to prevent it from consulting
+environment variables (using <span class="c003">--fixed-sizes</span>) as was explained above
+(section&#XA0;<a href="gprolog008.html#Adjusting-the-size-of-Prolog-stacks">4.3</a>). By default the produced
+executable will include the top-level, the Prolog/WAM debugger
+and all Prolog and FD built-in predicates. It is possible to avoid linking
+the top-level (section&#XA0;<a href="gprolog007.html#The-GNU-Prolog-interactive-interpreter">4.2</a>) by specifying
+<span class="c003">--no-top-level</span>. In this case, at least one
+<a id="hevea_default123"></a><span class="c003">initialization/1</span> directive (section&#XA0;<a href="gprolog022.html#initialization%2F1">7.1.14</a>) should be
+defined. The option <span class="c003">--no-debugger</span> does not link the debugger. To
+include only used built-in predicates that are actually used the options
+<span class="c003">--no-pl-bips</span> and/or <span class="c003">--no-fd-bips</span> can be specified. For the
+smallest executable all these options should be specified. This can be
+abbreviated by using the shorthand option <span class="c003">--min-bips</span>. By default,
+executables are not <em>stripped</em>, i.e. their symbol table is not
+removed. This table is only useful for the C debugger (e.g. when interfacing
+Prolog and C). To remove the symbol table (and then to reduce the size of
+the final executable) use <span class="c003">--strip</span>. Finally <span class="c003">--min-size</span> is a
+shortcut for <span class="c003">--min-bips</span> and <span class="c003">--strip</span>, i.e. the produced
+executable is as small as possible.</p><p>Example: compile and link two Prolog sources <span class="c003">prog1.pl</span> and
+<span class="c003">prog2.pl</span>. The resulting executable will be named <span class="c003">prog1</span>
+(since <span class="c003">-o</span> is not specified):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc prog1.pl prog2.pl</span></dd></dl><p>Example: compile the Prolog file <span class="c003">prog.pl</span> to study basic WAM code.
+The resulting file will be named <span class="c003">prog.wam</span>:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc -W --no-inline --no-reorder --keep-void-inst prog.pl</span></dd></dl><p>Example: compile the Prolog file <span class="c003">prog.pl</span> and its C interface file
+<span class="c003">utils.c</span> to provide an autonomous executable called
+<span class="c003">mycommand</span>. The executable is not stripped to allow the use of the C
+debugger:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc -o mycommand prog.pl utils.c</span></dd></dl><p>Example: detail all steps to compile the Prolog file <span class="c003">prog.pl</span> (the
+resulting executable is stripped). All intermediate files are produced
+(<span class="c003">prog.wam</span>, <span class="c003">prog.ma</span>, <span class="c003">prog.s</span>, <span class="c003">prog.o</span> and
+the executable <span class="c003">prog</span>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">% gplc -W prog.pl
+% gplc -M --comment prog.wam
+% gplc -S --comment prog.ma
+% gplc -c prog.s
+% gplc -o prog -s prog.o
+</pre>
+</dd></dl>
+<h4 class="subsubsection" id="sec19">4.4.4&#XA0;&#XA0;Running an executable</h4>
+<p>
+<a id="Running-an-executable"></a>
+In this section we explain what happens when running an executable produced
+by the GNU Prolog native-code compiler. The default main function first starts
+the Prolog engine. This function collects all linked objects (issued from the
+compilation of Prolog files) and initializes them. The initialization of a
+Prolog object file consists in adding to appropriate tables new atoms, new
+predicates and executing its system directives. A system directive is
+generated by the Prolog to WAM compiler to reflect a (user) directive
+executed at compile-time such as <span class="c003">op/3</span> (section&#XA0;<a href="gprolog022.html#op%2F3">7.1.11</a>). Indeed, when the
+compiler encounters such a directive it immediately executes it and also
+generates a system directive to execute it at the start of the executable.
+When all system directives have been executed the Prolog engine executes all
+initialization directives defined with <a id="hevea_default124"></a><span class="c003">initialization/1</span>
+(section&#XA0;<a href="gprolog022.html#initialization%2F1">7.1.14</a>). If several initialization directives appear in the
+same file they are executed in the order of appearance. If several
+initialization directives appear in different files the order in which they
+are executed is machine-dependant. However, on most machines the order will
+be the reverse order in which the associated files have been linked (this is
+not true under native win32). When all initialization directives have been
+executed the default main function looks for the GNU Prolog
+<a id="hevea_default125"></a>top-level. If present (i.e. it has been linked) it is called otherwise
+the program simply ends. Note that if the top-level is not linked and if
+there is no initialization directive the program is useless since it simply
+ends without doing any work. The default main function detects such a
+behavior and emits a warning message.</p><p>Example: compile an empty file <span class="c003">prog.pl</span> without linking the
+top-level and execute it:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">% gplc --no-top-level prog.pl
+% prog
+Warning: no initial goal executed
+   use a directive :- initialization(Goal)
+   or remove the link option --no-top-level (or --min-bips or --min-size)
+</pre>
+</dd></dl>
+<h4 class="subsubsection" id="sec20">4.4.5&#XA0;&#XA0;Generating a new interactive interpreter</h4>
+<p>
+<a id="Generating-a-new-interactive-interpreter"></a>
+In this section we show how to define a new <a id="hevea_default126"></a>top-level extending the
+GNU Prolog interactive interpreter with new predicate definitions. The
+obtained top-level can then be considered as an enriched version of the basic
+GNU Prolog top-level (section&#XA0;<a href="gprolog007.html#The-GNU-Prolog-interactive-interpreter">4.2</a>). Indeed, each
+added predicate can be viewed as a predefined predicate just like any other
+built-in predicate. This can be achieved by compiling these predicates and
+including the top-level at link-time.</p><p>The real question is: why would we include some predicates in a new
+top-level instead of simply consulting them under the GNU Prolog top-level ?
+There are two reasons for this:</p><ul class="itemize"><li class="li-itemize">the predicate cannot be consulted. This is the case of a predicate
+calling foreign code, like a predicate interfacing with C (section&#XA0;<a href="gprolog065.html#Interfacing-Prolog-and-C">10</a>) or a predicate defining a new FD constraint.</li><li class="li-itemize">the performance of the predicate is crucial. Since it is compiled to
+native-code such a predicate will be executed very quickly. Consulting will
+load it as byte-code. The gain is much more noticeable if the program is run
+under the debugger. The included version will not be affected by the
+debugger while the consulted version will be several times slower.
+Obviously, a predicate should be included in a new top-level only when it is
+itself debugged since it is difficult to debug native-code.</li></ul><p>To define a new top-level simply compile the set of desired predicates and
+linking them with the GNU Prolog top-level (this is the default) using
+<a id="hevea_default127"></a><span class="c003">gplc</span> (section&#XA0;<a href="#Using-the-compiler">4.4.3</a>).</p><p>Example: let us define a new top-level called <span class="c003">my_top_level</span>
+including all predicates defined in <span class="c003">prog.pl</span>:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc -o my_top_level prog.pl</span></dd></dl><p>By the way, note that if <span class="c003">prog.pl</span> is an empty Prolog file the
+previous command will simply create a new interactive interpreter similar to
+the GNU Prolog top-level.</p><p>Example: as before where some predicates of <span class="c003">prog.pl</span> call C functions
+defined in <span class="c003">utils.c</span>:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc -o my_top_level prog.pl utils.c</span></dd></dl><p>To obtain a fully extended executable, it is desirable to accept the same set
+of opions as the original top-level, see
+(section&#XA0;<a href="gprolog007.html#The-GNU-Prolog-interactive-interpreter">4.2</a>), e.g. <a id="hevea_default128"></a><span class="c003">--init-goal</span>. For this it is necessary to link <a id="hevea_default129"></a><span class="c003">main()</span> function used by the original top-level. This can be achieved passing the <a id="hevea_default130"></a><span class="c003">--new-top-level</span> to <span class="c003">gplc</span>:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% gplc --new-top-level -o my_top_level prog.pl utils.c</span></dd></dl><p>In conclusion, defining a particular top-level is nothing else but a
+particular case of the native-code compilation. It is simple to do and very
+useful in practice.</p>
+<h4 class="subsubsection" id="sec21">4.4.6&#XA0;&#XA0;The name mangling scheme</h4>
+<p>
+<a id="Name-mangling-scheme"></a></p><p>When the GNU Prolog compiler compiles a Prolog source to an object file it
+has to associate a symbol to each predicate name. However, the syntax of
+symbols is restricted to identifiers: string containing only letters, digits
+or underscore characters. On the other hand, predicate names (i.e. atoms) can
+contain any character with quotes if necessary (e.g. <span class="c003">&#X2019;x+y=z&#X2019;</span> is a
+valid predicate name). The compiler may thus have to encode predicate names
+respecting the syntax of identifiers. In addition, Prolog allows the user to
+define several predicates with the same name and different arities, for this
+GNU Prolog encodes predicate indicators (predicate name followed by the
+arity). Finally, to support modules in the future, the module name is also
+encoded.</p><p>Since version 1.4.0, GNU Prolog adopts the following <a id="hevea_default131"></a>name mangling
+scheme. A predicate indicator of the form
+[<span class="c003"><span class="c008">MODULE</span>:</span>]<span class="c003"><span class="c008">PRED</span>/<span class="c008">N</span></span> (where
+the <span class="c004">MODULE</span> can be omitted) will give rise to an identifier of the
+following form:
+<span class="c003">X<span class="c008">K</span>_</span>[<span class="c008">E(<span class="c003">MODULE</span>)</span><span class="c003">__</span>]<span class="c008">E(<span class="c003">PRED</span>)</span><span class="c003">__a<span class="c008">N</span></span>
+where:</p><dl class="description"><dt class="dt-description"></dt><dd class="dd-description"><span class="c004">K</span> is a digit in <span class="c003">0</span>..<span class="c003">5</span> storing coding information about <span class="c004">MODULE</span> and <span class="c004">PRED</span>. Possible values are:<ul class="itemize"><li class="li-itemize"><span class="c003">0</span>: no module present, <span class="c004">PRED</span> is not encoded
+</li><li class="li-itemize"><span class="c003">1</span>: no module present, <span class="c004">PRED</span> is encoded
+</li><li class="li-itemize"><span class="c003">2</span>: <span class="c004">MODULE</span> is not encoded, <span class="c004">PRED</span> is not encoded
+</li><li class="li-itemize"><span class="c003">3</span>: <span class="c004">MODULE</span> is not encoded, <span class="c004">PRED</span> is encoded
+</li><li class="li-itemize"><span class="c003">4</span>: <span class="c004">MODULE</span> is encoded, <span class="c004">PRED</span> is not encoded
+</li><li class="li-itemize"><span class="c003">5</span>: <span class="c004">MODULE</span> is encoded, <span class="c004">PRED</span> is encoded</li></ul></dd><dt class="dt-description"></dt><dd class="dd-description"><span class="c008">E(<span class="c003">STR</span>)</span> is a function to encode a string <span class="c004">STR</span> which returns:<ul class="itemize"><li class="li-itemize"><span class="c004">STR</span> itself (not encoded) if <span class="c004">STR</span> only contains letters, digits or <span class="c003">_</span> but does not contain the substring <span class="c003">__</span> and does not begin nor end with <span class="c003">_</span> (i.e. regexp: <span class="c003">[a-zA-Z0-9]([-]?[a-zA-Z0-9])*</span>).</li><li class="li-itemize">an hexadecimal representation of each character of the string otherwise. For example: <span class="c008">E(</span><span class="c003">x+y=z</span><span class="c008">)</span> returns <span class="c003">782B793D7A</span> since
+<span class="c003">78</span> is the hexadecimal representation of the ASCII code of <span class="c003">x</span>,
+<span class="c003">2B</span> of the code of <span class="c003">+</span>, etc.</li></ul></dd></dl><p>Examples: </p><div class="center">
+<table class="c000 cellpadding1" border=1><tr><td class="c014">
+Predicate indicator</td><td class="c014">internal identifier </td></tr>
+<tr><td class="c014"><span class="c003">father/2</span></td><td class="c014"><span class="c003">X0_father__a2</span> </td></tr>
+<tr><td class="c014"><span class="c003">&#X2019;x+y=z&#X2019;/3</span></td><td class="c014"><span class="c003">X1_782B793D7A__a3</span> </td></tr>
+<tr><td class="c014"><span class="c003">util:same/2</span></td><td class="c014"><span class="c003">X2_util__same__a2</span> </td></tr>
+<tr><td class="c014"><span class="c003">util:same__1/3</span></td><td class="c014"><span class="c003">X3_util__73616D655F5F31__a3</span> </td></tr>
+</table>
+</div><p>&#XA0;</p><p>So, from the <a id="hevea_default132"></a>mini-assembly stage, each predicate indicator is handled
+via its name mangling identifier. The knowledge of this scheme is normally
+not of interest for the user, i.e. the Prolog programmer. For this reason the
+GNU Prolog compiler hides this mangling. When an error occurs on a predicate
+(undefined predicate, predicate with multiple definitions,&#X2026;) the
+compiler has to decode the symbol associated with the predicate indicator
+(<a id="hevea_default133"></a>name demangling). For this <a id="hevea_default134"></a><span class="c003">gplc</span> filters each message emitted
+by the linker to locate and decode eventual predicate indicators. This
+filtering can be deactivated specifying <span class="c003">--no-demangling</span> when
+invoking <a id="hevea_default135"></a><span class="c003">gplc</span> (section&#XA0;<a href="#Using-the-compiler">4.4.3</a>).</p><p>This filter is provided as an utility that can be invoked using the
+<a id="hevea_default136"></a><span class="c003">hexgplc</span> command as follows:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015"><span class="c003">% hexgplc </span>[<span class="c004">OPTION</span>]&#X2026;<span class="c003">&#XA0;<span class="c008">FILE</span></span>&#X2026;</td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(the <span class="c003">%</span> symbol is the operating system shell prompt)</td></tr>
+</table></dd></dl><p><span class="c009">Options</span>:</p><table class="c001 cellpading0"><tr><td class="c016"><a id="hevea_default137"></a><span class="c003">--decode</span> or <a id="hevea_default138"></a><span class="c003">--demangling</span></td><td class="c022">decoding mode (this is the default mode) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default139"></a><span class="c003">--encode</span> or <a id="hevea_default140"></a><span class="c003">--mangling</span></td><td class="c022">encoding mode </td></tr>
+<tr><td class="c016">
+<a id="hevea_default141"></a><span class="c003">--relax</span></td><td class="c022">decode also predicate names (not only predicate
+indicators) </td></tr>
+<tr><td class="c016">
+<a id="hevea_default142"></a><span class="c003">--printf</span> <span class="c004">FORMAT</span></td><td class="c022">pass encoded/decoded string to C
+<span class="c003">printf(3)</span> with <span class="c004">FORMAT</span> </td></tr>
+<tr><td class="c016">
+<a id="hevea_default143"></a><span class="c003">--aux-father</span></td><td class="c022">decode an auxiliary predicate as its father </td></tr>
+<tr><td class="c016">
+<a id="hevea_default144"></a><span class="c003">--aux-father2</span></td><td class="c022">decode an auxiliary predicate as its father +
+auxiliary number </td></tr>
+<tr><td class="c016">
+<a id="hevea_default145"></a><span class="c003">--cmd-line</span></td><td class="c022">encode/decode each argument of the command-line </td></tr>
+<tr><td class="c016">
+<a id="hevea_default146"></a><span class="c003">-E</span> or <a id="hevea_default147"></a><span class="c003">-M</span></td><td class="c022">same as: <span class="c003">--cmd-line --encode --relax</span> </td></tr>
+<tr><td class="c016">
+<a id="hevea_default148"></a><span class="c003">-P</span> or <a id="hevea_default149"></a><span class="c003">-D</span></td><td class="c022">same as: <span class="c003">--cmd-line --decode --relax --quote</span> </td></tr>
+<tr><td class="c016">
+<a id="hevea_default150"></a><span class="c003">--help</span></td><td class="c022">print a help and exit </td></tr>
+<tr><td class="c016">
+<a id="hevea_default151"></a><span class="c003">--version</span></td><td class="c022">print version number and exit </td></tr>
+</table><p>It is possible to give a prefix of an option if there is no ambiguity.</p><p>Without arguments <span class="c003">hexgplc</span> runs in decoding mode reading its
+standard input and decoding (demangling) each symbol corresponding to a predicate
+indicator. To use <span class="c003">hexgplc</span> in the encoding (mangling) mode the
+<span class="c003">--encode</span> option must be specified. By default <span class="c003">hexgplc</span> only
+decodes predicate indicators, this can be relaxed using <span class="c003">--relax</span> to
+also take into account simple predicate names (the arity can be omitted). It
+is possible to format the output of an encoded/decoded string using
+<span class="c003">--printf <span class="c008">FORMAT</span></span> in that case each string
+<span class="c004">S</span> is passed to the C <span class="c003">printf(3)</span> function as
+<span class="c003">printf(<span class="c008">FORMAT</span>,<span class="c008">S</span>)</span>.</p><p>Auxiliary predicates are generated by the Prolog to WAM compiler when
+simplifying some control constructs like <span class="c003">&#X2019;;&#X2019;/2</span> present in the body
+of a clause. They are of the form
+<span class="c003">&#X2019;$<span class="c008">NAME</span>/<span class="c008">ARITY</span>_$aux<span class="c008">N</span>&#X2019;</span> where
+<span class="c003"><span class="c008">NAME</span>/<span class="c008">ARITY</span></span> is the predicate indicator of the
+simplified (i.e. father) predicate and <span class="c004">N</span> is a sequential
+number (a predicate can give rise to several auxiliary predicates). It is
+possible to force <span class="c003">hexgplc</span> to decode an auxiliary predicate as its
+father predicate indicator using <span class="c003">--aux-father</span> or as its father
+predicate indicator followed by the sequential number using
+<span class="c003">--aux-father2</span>.</p><p>If no file is specified, <span class="c003">hexgplc</span> processes its standard input
+otherwise each file is treated sequentially. Specifying the
+<span class="c003">--cmd-line</span> option informs <span class="c003">hexgplc</span> that each argument is not
+a file name but a string that must be encoded (or decoded). This is useful to
+encode/decode a particular string. For this reason the option <span class="c003">-E</span>
+(encode) and <span class="c003">-D</span> (decode) are provided as
+shorthand. Then, to obtain the mangling representation of a predicate
+<span class="c004">PRED</span> use:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">% hexgplc -E <span class="c008">PRED</span></span></dd></dl><p>NB: if <span class="c004">PRED</span> is a complex atom it is necessary to quote it 
+(the quotes must be passed to <span class="c003">hexgplc</span>). Here is an example under bash:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">% hexgplc -E \'x+y=z\'/3
+X1_782B793D7A__a3
+</pre>
+</dd></dl><p>Or even more safely (using bash quotes to prevent bash from interpreting special characters):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">% hexgplc -E \''x+y=z'\'/3
+X1_782B793D7A__a3
+</pre>
+</dd></dl>
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog008.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+</body>
+</html>

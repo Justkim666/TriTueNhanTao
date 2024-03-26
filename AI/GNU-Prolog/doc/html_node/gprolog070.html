@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Raising Prolog errors</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog069.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog065.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog071.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec359">10.5&#XA0;&#XA0;Raising Prolog errors</h3>
+<ul>
+<li><a href="gprolog070.html#sec360">Managing the error context</a>
+</li><li><a href="gprolog070.html#sec361">Instantiation error</a>
+</li><li><a href="gprolog070.html#sec362">Uninstantiation error</a>
+</li><li><a href="gprolog070.html#sec363">Type error</a>
+</li><li><a href="gprolog070.html#sec364">Domain error</a>
+</li><li><a href="gprolog070.html#sec365">Existence error</a>
+</li><li><a href="gprolog070.html#sec366">Permission error</a>
+</li><li><a href="gprolog070.html#sec367">Representation error</a>
+</li><li><a href="gprolog070.html#sec368">Evaluation error</a>
+</li><li><a href="gprolog070.html#sec369">Resource error</a>
+</li><li><a href="gprolog070.html#sec370">Syntax error</a>
+</li><li><a href="gprolog070.html#sec371">System error</a>
+</li></ul>
+<p>
+<a id="Raising-Prolog-errors"></a>
+The following functions allows a C function to raise a Prolog error. Refer
+to the section concerning Prolog errors for more information about the
+effect of raising an error (section&#XA0;<a href="gprolog020.html#Errors">6.3</a>).</p>
+<h4 class="subsubsection" id="sec360">10.5.1&#XA0;&#XA0;Managing the error context</h4>
+<p>
+When one of the following error function is invoked it refers to the
+implicit error context (section&#XA0;<a href="gprolog020.html#General-format-and-error-context">6.3.1</a>). This
+context indicates the name and the arity of the concerned predicate. When
+using a <span class="c003">foreign/2</span> declaration this context is set by default to the
+name and arity of the associated Prolog predicate. This can be controlled
+using the <a id="hevea_default1040"></a><span class="c003">bip_name</span> option (section&#XA0;<a href="gprolog068.html#foreign%2F2-directive">10.3.2</a>). In any
+case, the following functions can also be used to modify this context:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">void Pl_Set_C_Bip_Name  (const char *functor, int arity)
+void Pl_Unset_C_Bip_Name(void)
+</pre>
+</dd></dl><p>The function <span class="c003">Pl_Set_C_Bip_Name(functor, arity)</span> initializes the
+context of the error with <span class="c003">functor</span> and <span class="c003">arity</span> (if
+<span class="c003">arity</span>&lt;0 only <span class="c003">functor</span> is significant). The function
+<span class="c003">Pl_Unset_C_Bip_Name()</span> removes such an initialization (the context
+is then reset to the last <span class="c003">Functor</span>/<span class="c003">Arity</span> set by a call to
+<a id="hevea_default1041"></a><span class="c003">set_bip_name/2</span> (section&#XA0;<a href="gprolog046.html#set-bip-name%2F2">8.22.3</a>). This is useful when
+writing a C routine to define a context for errors occurring in this routine
+and, before exiting to restore the previous context.</p>
+<h4 class="subsubsection" id="sec361">10.5.2&#XA0;&#XA0;Instantiation error</h4>
+<p>
+The following function raises an instantiation error (section&#XA0;<a href="gprolog020.html#Instantiation-error">6.3.2</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Instantiation(void)</span></dd></dl>
+<h4 class="subsubsection" id="sec362">10.5.3&#XA0;&#XA0;Uninstantiation error</h4>
+<p>
+The following function raises an uninstantiation error (section&#XA0;<a href="gprolog020.html#Uninstantiation-error">6.3.3</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Uninstantiation( PlTerm culprit)</span></dd></dl>
+<h4 class="subsubsection" id="sec363">10.5.4&#XA0;&#XA0;Type error</h4>
+<p>
+The following function raises a type error (section&#XA0;<a href="gprolog020.html#Type-error">6.3.4</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Type(int atom_type, PlTerm culprit)</span></dd></dl><p><span class="c003">atom_type</span> is (the internal key of) the atom associated with the
+expected type. For each type name <span class="c004">T</span> there is a
+corresponding predefined atom stored in a global variable whose name is of
+the form <span class="c003">pl_type_<span class="c008">T</span></span>. <span class="c003">culprit</span> is the argument which
+caused the error.</p><p><span class="c009">Example</span>: <span class="c003">x</span> is an atom while an integer was expected:
+<span class="c003">Pl_Err_Type(pl_type_integer, x)</span>.</p>
+<h4 class="subsubsection" id="sec364">10.5.5&#XA0;&#XA0;Domain error</h4>
+<p>
+The following function raises a domain error (section&#XA0;<a href="gprolog020.html#Domain-error">6.3.5</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Domain(int atom_domain, PlTerm culprit)</span></dd></dl><p><span class="c003">atom_domain</span> is (the internal key of) the atom associated with the
+expected domain. For each domain name <span class="c004">D</span> there is a
+corresponding predefined atom stored in a global variable whose name is of
+the form <span class="c003">domain_<span class="c008">D</span></span>. <span class="c003">culprit</span> is the argument which
+caused the error.</p><p><span class="c009">Example</span>: <span class="c003">x</span> is &lt; 0 but should be &#X2265; 0:
+<span class="c003">Pl_Err_Domain(pl_domain_not_less_than_zero, x)</span>.</p>
+<h4 class="subsubsection" id="sec365">10.5.6&#XA0;&#XA0;Existence error</h4>
+<p>
+The following function raises an existence error (section&#XA0;<a href="gprolog020.html#Existence-error">6.3.6</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Existence(int atom_object, PlTerm culprit)</span></dd></dl><p><span class="c003">atom_object</span> is (the internal key of) the atom associated with the
+type of the object. For each object name <span class="c004">O</span> there is a
+corresponding predefined atom stored in a global variable whose name is of
+the form <span class="c003">pl_existence_<span class="c008">O</span></span>. <span class="c003">culprit</span> is the argument
+which caused the error.</p><p><span class="c009">Example</span>: <span class="c003">x</span> does not refer to an existing source:
+<span class="c003">Pl_Err_Existence(pl_existence_source_sink, x)</span>.</p>
+<h4 class="subsubsection" id="sec366">10.5.7&#XA0;&#XA0;Permission error</h4>
+<p>
+The following function raises a permission error (section&#XA0;<a href="gprolog020.html#Permission-error">6.3.7</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Permission(int atom_operation, int atom_permission,
+PlTerm culprit)</span></dd></dl><p><span class="c003">atom_operation</span> is (the internal key of) the atom associated with the
+operation which caused the error. For each operation name
+<span class="c004">O</span> there is a corresponding predefined atom stored in a
+global variable whose name is of the form
+<span class="c003">pl_permission_operation_<span class="c008">O</span></span>. <span class="c003">atom_permission</span> is
+(the internal key of) the atom associated with the tried permission. For each
+permission name <span class="c004">P</span> there is a corresponding predefined atom
+stored in a global variable whose name is of the form
+<span class="c003">pl_permission_type_<span class="c008">P</span></span>. <span class="c003">culprit</span> is the argument
+which caused the error.</p><p><span class="c009">Example</span>: reading from an output stream <span class="c003">x</span>:
+<span class="c003">Pl_Err_Permission(pl_permission_operation_input, <br>
+pl_permission_type_stream, x)</span>.</p>
+<h4 class="subsubsection" id="sec367">10.5.8&#XA0;&#XA0;Representation error</h4>
+<p>
+The following function raises a representation error (section&#XA0;<a href="gprolog020.html#Representation-error">6.3.8</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Representation(int atom_limit)</span></dd></dl><p><span class="c003">atom_limit</span> is (the internal key of) the atom associated with the
+reached limit. For each limit name <span class="c004">L</span> there is a
+corresponding predefined atom stored in a global variable whose name is of
+the form <span class="c003">pl_representation_<span class="c008">L</span></span>.</p><p><span class="c009">Example</span>: an arity too big occurs:
+<span class="c003">Pl_Err_Representation(pl_representation_max_arity)</span>.</p>
+<h4 class="subsubsection" id="sec368">10.5.9&#XA0;&#XA0;Evaluation error</h4>
+<p>
+The following function raises an evaluation error (section&#XA0;<a href="gprolog020.html#Evaluation-error">6.3.9</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Evaluation(int atom_error)</span></dd></dl><p><span class="c003">atom_error</span> is (the internal key of) the atom associated with the
+error. For each evaluation error name <span class="c004">E</span> there is a
+corresponding predefined atom stored in a global variable whose name is of
+the form <span class="c003">pl_evaluation_<span class="c008">E</span></span>.</p><p><span class="c009">Example</span>: a division by zero occurs:
+<span class="c003">Pl_Err_Evaluation(pl_evaluation_zero_divisor)</span>.</p>
+<h4 class="subsubsection" id="sec369">10.5.10&#XA0;&#XA0;Resource error</h4>
+<p>
+The following function raises a resource error (section&#XA0;<a href="gprolog020.html#Resource-error">6.3.10</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Resource(int atom_resource)</span></dd></dl><p><span class="c003">atom_resource</span> is (the internal key of) the atom associated with the
+resource. For each resource error name <span class="c004">R</span> there is a
+corresponding predefined atom stored in a global variable whose name is of
+the form <span class="c003">pl_resource_<span class="c008">R</span></span>.</p><p><span class="c009">Example</span>: too many open streams:
+<span class="c003">Pl_Err_Resource(pl_resource_too_many_open_streams)</span>.</p>
+<h4 class="subsubsection" id="sec370">10.5.11&#XA0;&#XA0;Syntax error</h4>
+<p>
+The following function raises a syntax error (section&#XA0;<a href="gprolog020.html#Syntax-error">6.3.11</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_Syntax(int atom_error)</span></dd></dl><p><span class="c003">atom_error</span> is (the internal key of) the atom associated with the
+error. There is no predefined syntax error atoms.</p><p><span class="c009">Example</span>: a <span class="c003">/</span> is expected:
+<span class="c003">Pl_Err_Syntax(Pl_Create_Atom("/ expected"))</span>.</p><p>The following function emits a syntax error according to the value of the
+<a id="hevea_default1042"></a><span class="c003">syntax_error</span> <a id="hevea_default1043"></a>Prolog flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). This
+function can then return (if the value of the flag is either
+<span class="c003">warning</span> or <span class="c003">fail</span>). In that case the calling function should
+fail (e.g. returning <span class="c003">PL_FALSE</span>). This function accepts a file name (the
+empty string C <span class="c003">""</span> can be passed), a line and column number and an
+error message string. Using this function makes it possible to further call
+the built-in predicate <a id="hevea_default1044"></a><span class="c003">syntax_error_info/4</span>
+(section&#XA0;<a href="gprolog038.html#syntax-error-info%2F4">8.14.4</a>):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Emit_Syntax_Error(char *file_name, int line, int column,
+char *message)</span></dd></dl><p><span class="c009">Example</span>: a <span class="c003">/</span> is expected:
+<span class="c003">Pl_Emit_Syntax_Error("data", 10, 30, "/ expected")</span>.</p>
+<h4 class="subsubsection" id="sec371">10.5.12&#XA0;&#XA0;System error</h4>
+<p>
+The following function raises a system error (4.3.11, page *):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Err_System(int atom_error)</span></dd></dl><p><span class="c003">atom_error</span> is (the internal key of) the atom associated with the
+error. There is no predefined system error atoms.</p><p><span class="c009">Example</span>: an invalid pathname is given:
+<span class="c003">Pl_Err_System(Pl_Create_Atom("invalid path name"))</span>.</p><p>The following function emits a system error associated with an operating
+system error according to the value of the <a id="hevea_default1045"></a><span class="c003">os_error</span> <a id="hevea_default1046"></a>Prolog
+flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). This function can then return (if the
+value of the flag is either <span class="c003">warning</span> or <span class="c003">fail</span>). In that case
+the calling function should fail (e.g. returning <span class="c003">PL_FALSE</span>).</p><p>The following function uses the value of the <span class="c003">errno</span> C library
+variable (basically it calls <span class="c003">Pl_Err_System</span> with the result
+of <span class="c003">strerror(errno)</span>).</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">void Pl_Os_Error(void)</span></dd></dl><p><span class="c009">Example</span>: if a call to the C Unix function <span class="c003">chdir(2)</span> returns
+<span class="c003">-1</span> then call <span class="c003">Os_Error()</span>.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog069.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog065.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog071.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

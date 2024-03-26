@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Term input/output</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog037.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog039.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec160">8.14&#XA0;&#XA0;Term input/output</h3>
+<ul>
+<li><a href="gprolog038.html#read-term%2F3"><span class="c003">read_term/3</span>,
+<span class="c003">read_term/2</span>,
+<span class="c003">read/2</span>,
+<span class="c003">read/1</span></a>
+</li><li><a href="gprolog038.html#read-atom%2F2"><span class="c003">read_atom/2</span>,
+<span class="c003">read_atom/1</span>,
+<span class="c003">read_integer/2</span>,
+<span class="c003">read_integer/1</span>, <br>
+ <span class="c003">read_number/2</span>,
+<span class="c003">read_number/1</span></a>
+</li><li><a href="gprolog038.html#read-token%2F2"><span class="c003">read_token/2</span>,
+<span class="c003">read_token/1</span></a>
+</li><li><a href="gprolog038.html#syntax-error-info%2F4"><span class="c003">syntax_error_info/4</span></a>
+</li><li><a href="gprolog038.html#sec165"><span class="c003">last_read_start_line_column/2</span></a>
+</li><li><a href="gprolog038.html#write-term%2F3"><span class="c003">write_term/3</span>,
+<span class="c003">write_term/2</span>,
+<span class="c003">write/2</span>,
+<span class="c003">write/1</span>,
+<span class="c003">writeq/2</span>,
+<span class="c003">writeq/1</span>, <br>
+ <span class="c003">write_canonical/2</span>,
+<span class="c003">write_canonical/1</span>,
+<span class="c003">display/2</span>,
+<span class="c003">display/1</span>,
+<span class="c003">print/2</span>, <br>
+ <span class="c003">print/1</span></a>
+</li><li><a href="gprolog038.html#format%2F3"><span class="c003">format/3</span>,
+<span class="c003">format/2</span></a>
+</li><li><a href="gprolog038.html#portray-clause%2F2"><span class="c003">portray_clause/2</span>,
+<span class="c003">portray_clause/1</span></a>
+</li><li><a href="gprolog038.html#sec169"><span class="c003">get_print_stream/1</span></a>
+</li><li><a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29"><span class="c003">op/3</span></a>
+</li><li><a href="gprolog038.html#sec171"><span class="c003">current_op/3</span></a>
+</li><li><a href="gprolog038.html#char-conversion%2F2"><span class="c003">char_conversion/2</span></a>
+</li><li><a href="gprolog038.html#current-char-conversion%2F2"><span class="c003">current_char_conversion/2</span></a>
+</li></ul>
+<p>
+<a id="Term-input/output"></a>
+These built-in predicates enable a Prolog term to be input from or output to
+a text stream. The atom <span class="c003">end_of_file</span> is returned as term to
+indicate the end-of-file. The syntax of such terms can also be altered by
+changing the operators (section&#XA0;<a href="#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>), and making some
+characters equivalent to others (section&#XA0;<a href="#char-conversion%2F2">8.14.12</a>) if the
+<a id="hevea_default474"></a><span class="c003">char_conversion</span> <a id="hevea_default475"></a>Prolog flag is <span class="c003">on</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). Double quoted tokens will be returned as an atom
+or a character list or a character code list depending on the value of the
+<a id="hevea_default476"></a><span class="c003">double_quotes</span> Prolog flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). Similarly, back quoted tokens are returned depending on the value of the
+<a id="hevea_default477"></a><span class="c003">back_quotes</span> Prolog flag.</p>
+<h4 class="subsubsection" id="read-term/3">8.14.1&#XA0;&#XA0;<a id="hevea_default478"></a><span class="c003">read_term/3</span>,
+<a id="hevea_default479"></a><span class="c003">read_term/2</span>,
+<a id="hevea_default480"></a><span class="c003">read/2</span>,
+<a id="hevea_default481"></a><span class="c003">read/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+read_term(+stream_or_alias, ?term, +read_option_list)<br>
+read_term(?term, +read_option_list)<br>
+read(+stream_or_alias, ?term)<br>
+read(?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">read_term(SorA, Term, Options)</span> is true if
+<span class="c003">Term</span> unifies with the next term read from the stream associated
+with the stream-term or alias <span class="c003">SorA</span> according to the options given by
+<span class="c003">Options</span>.</p><p><span class="c009">Read options</span>: <span class="c003">Options</span> is a list of read options. If this
+list contains contradictory options, the rightmost option is the one which
+applies. Possible options are:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default482"></a><span class="c003">variables(VL)</span>: <span class="c003">VL</span> is unified with the
+list of all variables of the input term, in left-to-right traversal
+order. Anonymous variables are included in the list <span class="c003">VL</span>.</li><li class="li-itemize"><a id="hevea_default483"></a><span class="c003">variable_names(VNL)</span>: <span class="c003">VNL</span> is
+unified with the list of pairs <span class="c003">Name = Var</span> where <span class="c003">Var</span> is a
+named variable of the term and <span class="c003">Name</span> is the atom associated with the
+name of <span class="c003">Var</span>. Anonymous variables are not included in the list
+<span class="c003">VNL</span>. The pairs appear in left-to-right traversal order of their 
+<span class="c003">Var</span> in the term.</li><li class="li-itemize"><a id="hevea_default484"></a><span class="c003">singletons(SL)</span>: <span class="c003">SL</span> is unified with the
+list of pairs <span class="c003">Name = Var</span> where <span class="c003">Var</span> is a named variable
+which occurs only once in the term and <span class="c003">Name</span> is the atom associated
+to the name of <span class="c003">Var</span>. Anonymous variables are not included in the list
+<span class="c003">SL</span>.</li><li class="li-itemize"><a id="hevea_default485"></a><span class="c003">syntax_error(error</span>/<span class="c003">warning</span>/<span class="c003">fail)</span>:
+specifies the effect of a syntax error:<ul class="itemize"><li class="li-itemize"><a id="hevea_default486"></a><span class="c003">error</span>: a <span class="c003">syntax_error</span> is raised.</li><li class="li-itemize"><a id="hevea_default487"></a><span class="c003">warning</span>: a warning message is displayed and the predicate
+fails.</li><li class="li-itemize"><a id="hevea_default488"></a><span class="c003">fail</span>: the predicate quietly fails.</li></ul><p>The default value is the value of the <a id="hevea_default489"></a><span class="c003">syntax_error</span>
+<a id="hevea_default490"></a>Prolog flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>).</p></li><li class="li-itemize"><a id="hevea_default491"></a><span class="c003">end_of_term(dot</span>/<span class="c003">eof)</span>: specifies the
+end-of-term delimiter: <span class="c003">dot</span> is the classical full-stop delimiter (a
+dot followed with a layout character), <span class="c003">eof</span> is the end-of-file
+delimiter. This option is useful for predicates like
+<a id="hevea_default492"></a><span class="c003">read_term_from_atom/3</span> (section&#XA0;<a href="gprolog039.html#read-term-from-atom%2F3">8.15.1</a>) to avoid to add a
+terminal dot at the end of the atom. The default value is <span class="c003">dot</span>.</li></ul><p><span class="c003">read(SorA, Term)</span> is equivalent to
+<span class="c003">read_term(SorA, Term, [])</span>.</p><p><span class="c003">read_term/2</span> and <span class="c003">read/1</span> apply to the current input stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Options)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is neither a
+variable nor a valid read option</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(read_option, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream properties <span class="c003">end_of_stream(past)</span>
+and <span class="c003">eof_action(error)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, past_end_of_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a syntax error occurs and the value of the <span class="c003">syntax_error</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">syntax_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates. The ISO reference raises a
+<span class="c003">representation_error(Flag)</span> where <span class="c003">Flag</span> is
+<span class="c003">max_arity</span>,<span class="c003"> max_integer</span>, or<span class="c003"> min_integer</span> when
+the read term breaches an implementation defined limit specified by
+<span class="c003">Flag</span>. GNU Prolog detects neither <span class="c003">min_integer</span> nor
+<span class="c003">max_integer</span> violation and treats a <span class="c003">max_arity</span> violation
+as a syntax error. The read options <span class="c003">syntax_error</span> and
+<span class="c003">end_of_term</span> are GNU Prolog extensions.</p>
+<h4 class="subsubsection" id="read-atom/2">8.14.2&#XA0;&#XA0;<a id="hevea_default493"></a><span class="c003">read_atom/2</span>,
+<a id="hevea_default494"></a><span class="c003">read_atom/1</span>,
+<a id="hevea_default495"></a><span class="c003">read_integer/2</span>,
+<a id="hevea_default496"></a><span class="c003">read_integer/1</span>, <br>
+ <a id="hevea_default497"></a><span class="c003">read_number/2</span>,
+<a id="hevea_default498"></a><span class="c003">read_number/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+read_atom(+stream_or_alias, ?atom)<br>
+read_atom(?atom)<br>
+read_integer(+stream_or_alias, ?integer)<br>
+read_integer(?integer)<br>
+read_number(+stream_or_alias, ?number)<br>
+read_number(?number)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">read_atom(SorA, Atom)</span> succeeds if <span class="c003">Atom</span>
+unifies with the next atom read from the stream associated with the
+stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c003">read_integer(SorA, Integer)</span> succeeds if
+<span class="c003">Integer</span> unifies with the next integer read from the stream
+associated with the stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c003">read_number(SorA, Number)</span> succeeds if
+<span class="c003">Number</span> unifies with the next number (integer or floating point
+number) read from the stream associated with the stream-term or alias
+<span class="c003">SorA</span>.</p><p><span class="c003">read_atom/1</span>, <span class="c003">read_integer/1</span> and <span class="c003">read_number/1</span>
+apply to the current input stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Integer</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Integer)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Number</span> is neither a variable nor a number</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(number, Number)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream properties <span class="c003">end_of_stream(past)</span>
+and <span class="c003">eof_action(error)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, past_end_of_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a syntax error occurs and the value of the <span class="c003">syntax_error</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">syntax_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="read-token/2">8.14.3&#XA0;&#XA0;<a id="hevea_default499"></a><span class="c003">read_token/2</span>,
+<a id="hevea_default500"></a><span class="c003">read_token/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+read_token(+stream_or_alias, ?nonvar)<br>
+read_token(?nonvar)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">read_token(SorA, Token)</span> succeeds if <span class="c003">Token</span> unifies with
+the encoding of the next Prolog token read from the stream associated with
+stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c009">Token encoding</span>:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default501"></a><span class="c003">var(A)</span>: a variable is read whose name is the atom
+<span class="c003">A</span>.</li><li class="li-itemize">an atom <span class="c003">A</span>: an atom <span class="c003">A</span> is read.</li><li class="li-itemize">integer <span class="c003">N</span>: an integer <span class="c003">N</span> is read.</li><li class="li-itemize">floating point number <span class="c003">N</span>: a floating point number <span class="c003">N</span>
+is read.</li><li class="li-itemize"><a id="hevea_default502"></a><span class="c003">string(A)</span>: a string (double quoted item) is read whose
+characters forms the atom <span class="c003">A</span>.</li><li class="li-itemize"><a id="hevea_default503"></a><span class="c003">punct(P)</span>: a punctuation character <span class="c003">P</span> is read
+(<span class="c003">P</span> is a one-character atom in <span class="c003">()[]{|}</span>, the atom
+<span class="c003">full_stop</span> or the atom <span class="c003">end_of_file</span>).</li><li class="li-itemize"><a id="hevea_default504"></a><span class="c003">back_quotes(A)</span>: a back quoted item is read
+whose characters forms the atom <span class="c003">A</span>.</li><li class="li-itemize"><a id="hevea_default505"></a><span class="c003">extended(A)</span>: an extended character <span class="c003">A</span> (an
+atom) is read.</li></ul><p>As for <span class="c003">read_term/3</span>, the behavior of <span class="c003">read_token/2</span> can be
+affected by some <a id="hevea_default506"></a><span class="c003">Prolog flags</span> (section&#XA0;<a href="#Term-input%2Foutput">8.14</a>).</p><p><span class="c003">read_token/1</span> applies to the current input stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream properties <span class="c003">end_of_stream(past)</span>
+and <span class="c003">eof_action(error)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, past_end_of_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a syntax error occurs and the value of the <span class="c003">syntax_error</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">syntax_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="syntax-error-info/4">8.14.4&#XA0;&#XA0;<a id="hevea_default507"></a><span class="c003">syntax_error_info/4</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+syntax_error_info(?atom, ?integer, ?integer, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">syntax_error_info(FileName, Line, Column, Error)</span> returns the
+information associated with the last syntax error. <span class="c003">Line</span> is the line
+number of the error, <span class="c003">Column</span> is the column number of the error and
+<span class="c003">Error</span> is an atom explaining the error.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">FileName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, FileName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Line</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Line)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Column</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Column)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Error</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Error)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec165">8.14.5&#XA0;&#XA0;<a id="hevea_default508"></a><span class="c003">last_read_start_line_column/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+last_read_start_line_column(?integer, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">last_read_start_line_column(Line, Column)</span> unifies <span class="c003">Line</span>
+and <span class="c003">Column</span> with the line number and the column number associated with
+the start of the last read predicate. This predicate can be used after
+calling one of the following predicates: <a id="hevea_default509"></a><span class="c003">read_term/3</span>,
+<a id="hevea_default510"></a><span class="c003">read_term/2</span>, <a id="hevea_default511"></a><span class="c003">read/2</span>, <a id="hevea_default512"></a><span class="c003">read/1</span>
+(section&#XA0;<a href="#read-term%2F3">8.14.1</a>), <a id="hevea_default513"></a><span class="c003">read_atom/2</span>, <a id="hevea_default514"></a><span class="c003">read_atom/1</span>,
+<a id="hevea_default515"></a><span class="c003">read_integer/2</span>, <a id="hevea_default516"></a><span class="c003">read_integer/1</span>, <a id="hevea_default517"></a><span class="c003">read_number/2</span>,
+<a id="hevea_default518"></a><span class="c003">read_number/1</span> (section&#XA0;<a href="#read-atom%2F2">8.14.2</a>) or <a id="hevea_default519"></a><span class="c003">read_token/2</span>,
+<a id="hevea_default520"></a><span class="c003">read_token/1</span> (section&#XA0;<a href="#read-token%2F2">8.14.3</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Line</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Line)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Column</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Column)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="write-term/3">8.14.6&#XA0;&#XA0;<a id="hevea_default521"></a><span class="c003">write_term/3</span>,
+<a id="hevea_default522"></a><span class="c003">write_term/2</span>,
+<a id="hevea_default523"></a><span class="c003">write/2</span>,
+<a id="hevea_default524"></a><span class="c003">write/1</span>,
+<a id="hevea_default525"></a><span class="c003">writeq/2</span>,
+<a id="hevea_default526"></a><span class="c003">writeq/1</span>, <br>
+ <a id="hevea_default527"></a><span class="c003">write_canonical/2</span>,
+<a id="hevea_default528"></a><span class="c003">write_canonical/1</span>,
+<a id="hevea_default529"></a><span class="c003">display/2</span>,
+<a id="hevea_default530"></a><span class="c003">display/1</span>,
+<a id="hevea_default531"></a><span class="c003">print/2</span>, <br>
+ <a id="hevea_default532"></a><span class="c003">print/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+write_term(+stream_or_alias, ?term, +write_option_list)<br>
+write_term(?term, +write_option_list)<br>
+write(+stream_or_alias, ?term)<br>
+write(?term)<br>
+writeq(+stream_or_alias, ?term)<br>
+writeq(?term)<br>
+write_canonical(+stream_or_alias, ?term)<br>
+write_canonical(?term)<br>
+display(+stream_or_alias, ?term)<br>
+display(?term)<br>
+print(+stream_or_alias, ?term)<br>
+print(?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">write_term(SorA, Term, Options)</span> writes
+<span class="c003">Term</span> to the stream associated with the stream-term or alias
+<span class="c003">SorA</span> according to the options given by <span class="c003">Options</span>.</p><p><span class="c009">Write options</span>: <span class="c003">Options</span> is a list of write options. If this
+list contains contradictory options, the rightmost option is the one which
+applies. Possible options are:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default533"></a><span class="c003">quoted(true</span>/<span class="c003">false)</span>: if <span class="c003">true</span> each
+atom and functor is quoted if this would be necessary for the term to be
+input by <span class="c003">read_term/3</span>. If <span class="c003">false</span> no extra quotes are
+written. The default value is <span class="c003">false</span>.</li><li class="li-itemize"><a id="hevea_default534"></a><span class="c003">ignore_ops(true</span>/<span class="c003">false)</span>: if
+<span class="c003">true</span> each compound term is output in functional notation (neither
+operator notation nor list notation is used). If <span class="c003">false</span> operator and
+list notations are used. The default value is <span class="c003">false</span>.</li><li class="li-itemize"><a id="hevea_default535"></a><span class="c003">numbervars(true</span>/<span class="c003">false)</span>: if
+<span class="c003">true</span> a term of the form <span class="c003">&#X2019;$VAR&#X2019;(N)</span>, where <span class="c003">N</span> is an
+integer, is output as a variable name (see below). If <span class="c003">false</span>
+such a term is output normally (according to the other options). The
+default value is <span class="c003">false</span>.</li><li class="li-itemize"><a id="hevea_default536"></a><span class="c003">namevars(true</span>/<span class="c003">false)</span>: if <span class="c003">true</span> a
+term of the form <span class="c003">&#X2019;$VARNAME&#X2019;(Name)</span>, where <span class="c003">Name</span> is an atom 
+respecting the syntax of variable names, is output as a variable name (see
+below). If <span class="c003">false</span> such a term is output normally (according to the
+other options). The default value is <span class="c003">false</span>.</li><li class="li-itemize"><a id="hevea_default537"></a><span class="c003">variable_names(VNL)</span>: <span class="c003">VNL</span> is
+a list of pairs <span class="c003">Name = Var</span> where <span class="c003">Var</span> is a
+variable and <span class="c003">Name</span> is the atom associated with the
+name of <span class="c003">Var</span>. Each variable <span class="c003">Var</span> is written as the atom
+<span class="c003">Name</span> (with <span class="c003">quoted(false)</span>) iff a term 
+<span class="c003">Name = Var</span> is an element of the list <span class="c003">VNL</span>.
+If several pairs exist for the same variable name the first one applies.</li><li class="li-itemize"><a id="hevea_default538"></a><span class="c003">space_args(true</span>/<span class="c003">false)</span>: if
+<span class="c003">true</span> an extra space character is emitted after each comma
+separating the arguments of a compound term in functional notation or of a
+list. If <span class="c003">false</span> no extra space is emitted. The default value is
+<span class="c003">false</span>.</li><li class="li-itemize"><a id="hevea_default539"></a><span class="c003">portrayed(true</span>/<span class="c003">false)</span>: if <span class="c003">true</span>
+and if there exists a predicate <span class="c003">portray/1</span>, <span class="c003">write_term/3</span>
+acts as follows: if <span class="c003">Term</span> is a variable it is simply written. If
+<span class="c003">Term</span> is non-variable then it is passed to <span class="c003">portray/1</span>. If
+this succeeds then it is assumed that <span class="c003">Term</span> has been output.
+Otherwise <span class="c003">write_term/3</span> outputs the principal functor of
+<span class="c003">Term</span> (<span class="c003">Term</span> itself if it is atomic) according to other
+options and recursively calls <span class="c003">portray/1</span> on the components of
+<span class="c003">Term</span> (if it is a compound term). With <span class="c003">ignore_ops(false)</span> a
+list is first passed to <span class="c003">portray/1</span> and only if this call fails each
+element of the list is passed to <span class="c003">portray/1</span> (thus every sub-list is
+not passed). The default value is <span class="c003">false</span>.</li><li class="li-itemize"><a id="hevea_default540"></a><span class="c003">max_depth(N)</span>: controls the depth of output for
+compound terms. <span class="c003">N</span> is an integer specifying the depth. The output of
+a term whose depth is greater than <span class="c003">N</span> gives rise to the output of
+<span class="c003">...</span> (3 dots). By default there is no depth limit.</li><li class="li-itemize"><a id="hevea_default541"></a><span class="c003">priority(N)</span>: specifies the starting priority
+to output the term. This option controls if <span class="c003">Term</span> should be enclosed
+in brackets. <span class="c003">N</span> is a positive integer &#X2264; 1200. By default
+<span class="c003">N</span> = 1200.</li></ul><p><span class="c009">Variable numbering</span>: when the <span class="c003">numbervars(true)</span> option is
+passed to <span class="c003">write_term/3</span> any term of the form <span class="c003">&#X2019;$VAR&#X2019;(N)</span>
+where <span class="c003">N</span> is an integer is output as a variable name consisting of a
+capital letter possibly followed by an integer. The capital letter is the
+<span class="c003">(I+1)</span><em>th</em> letter of the alphabet and the integer is
+<span class="c003">J</span>, where <span class="c003">I = N mod 26</span> and <span class="c003">J = N // 26</span>. The
+integer <span class="c003">J</span> is omitted if it is zero. For example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015"><span class="c003">&#X2019;$VAR&#X2019;(0)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">is written as <span class="c003">A</span></td></tr>
+<tr><td class="c015"><span class="c003">&#X2019;$VAR&#X2019;(1)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">is written as <span class="c003">B</span></td></tr>
+<tr><td class="c015" colspan=3><span class="c003">...</span> </td></tr>
+<tr><td class="c015"><span class="c003">&#X2019;$VAR&#X2019;(25)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">is written as <span class="c003">Z</span></td></tr>
+<tr><td class="c015"><span class="c003">&#X2019;$VAR&#X2019;(26)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">is written as <span class="c003">A1</span></td></tr>
+<tr><td class="c015"><span class="c003">&#X2019;$VAR&#X2019;(27)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">is written as <span class="c003">B1</span></td></tr>
+</table></dd></dl><p><span class="c009">Variable naming</span>: when the <span class="c003">namevars(true)</span> option is passed
+to <span class="c003">write_term/3</span> any term of the form <span class="c003">&#X2019;$VARNAME&#X2019;(Name)</span>
+where <span class="c003">Name</span> is an atom is output as a variable name consisting of
+the characters <span class="c003">Name</span>. For example: <span class="c003">&#X2019;$VARNAME&#X2019;(&#X2019;A&#X2019;)</span> is
+written as <span class="c003">A</span> (even in the presence of the <span class="c003">quoted(true)</span>
+option).</p><p><span class="c003">write(SorA, Term)</span> is equivalent to
+<span class="c003">write_term(SorA, Term, [numbervars(true), <br>
+namevars(true)])</span>.</p><p><span class="c003">writeq(SorA, Term)</span> is equivalent to
+<span class="c003">write_term(SorA, Term, [quoted(true), <br>
+numbervars(true), namevars(true)])</span>.</p><p><span class="c003">write_canonical(SorA, Term)</span> is equivalent to
+<span class="c003">write_term(SorA, Term, [quoted(true), <br>
+ignore_ops(true), numbervars(false), namevars(false)])</span>.</p><p><span class="c003">display(SorA, Term)</span> is equivalent to
+<span class="c003">write_term(SorA, Term, [ignore_ops(true), <br>
+ numbervars(false), namevars(false)])</span>.</p><p><span class="c003">print(SorA, Term)</span> is equivalent to
+<span class="c003">write_term(SorA, Term, [numbervars(false), <br>
+portrayed(true)])</span>.</p><p><span class="c003">write_term/2</span>, <span class="c003">write/1</span>, <span class="c003">writeq/1</span>,
+<span class="c003">write_canonical/1</span>, <span class="c003">display/1</span> and <span class="c003">print/1</span> apply
+to the current output stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Options)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is neither a
+variable nor a valid write-option</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(write_option, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates except <span class="c003">display/1-2</span> and <span class="c003">print/1-2</span> that
+are GNU Prolog predicates. <span class="c003">namevars</span>, <span class="c003">variable_names</span> <span class="c003">space_args</span>,
+<span class="c003">portrayed</span>, <span class="c003">max_depth</span> and <span class="c003">priority</span>
+options are GNU Prolog extensions.</p>
+<h4 class="subsubsection" id="format/3">8.14.7&#XA0;&#XA0;<a id="hevea_default542"></a><span class="c003">format/3</span>,
+<a id="hevea_default543"></a><span class="c003">format/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+format(+stream_or_alias, +character_code_list_or_atom,
++list)<br>
+format(+character_code_list_or_atom, +list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">format(SorA, Format, Arguments)</span> writes the <span class="c003">Format</span> string
+replacing each format control sequence <span class="c003">F</span> by the corresponding
+element of <span class="c003">Arguments</span> (formatted according to <span class="c003">F</span>) to the
+stream associated with the stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c009">Format control sequences</span>: the general format of a control sequence
+is <span class="c003">&#X2019;~NC&#X2019;</span>. The character <span class="c003">C</span> determines the type of
+the control sequence. <span class="c003">N</span> is an optional numeric argument. An
+alternative form of <span class="c003">N</span> is <span class="c003">&#X2019;*&#X2019;</span>. <span class="c003">&#X2019;*&#X2019;</span> implies
+that the next argument <span class="c003">Arg</span> in <span class="c003">Arguments</span> should be
+used as a numeric argument in the control sequence. The use of C
+<span class="c003">printf()</span> formatting sequence (beginning by the character
+<span class="c003">%</span>) is also allowed. The following control sequences are
+available:</p><table class="c000 cellpadding1" border=1><tr><td class="c017"><div class="center">
+Format sequence</div></td><td class="c017"><div class="center">type of the argument</div></td><td class="c020">Description </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~Na</span></div></td><td class="c017"><div class="center">atom</div></td><td class="c020">print the atom without quoting. <span class="c003">N</span> is minimal number of characters to print using spaces on the right if needed (default: the length of the atom) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~Nc</span></div></td><td class="c017"><div class="center">character code</div></td><td class="c020">print the character associated with the
+code. <span class="c003">N</span> is the number of times to print the character (default: 1)</td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003"> ~Nf</span>
+<br>
+<span class="c003">~Ne ~NE ~Ng ~NG</span></div></td><td class="c017"><div class="center">float expression</div></td><td class="c020">pass the argument <span class="c003">Arg</span> and
+<span class="c003">N</span> to the C <span class="c003">printf()</span>
+function as:
+<br>
+if <span class="c003">N</span> is not specified
+<span class="c003">printf("%f",Arg)</span> else
+<span class="c003">printf("%.Nf",Arg)</span>.
+<br>
+Similarly for <span class="c003">~Ne</span>, <span class="c003">~NE</span>, <span class="c003">~Ng</span> and <span class="c003">~NG</span> </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~Nd</span></div></td><td class="c017"><div class="center">integer expression</div></td><td class="c020">print the argument. <span class="c003">N</span> is the
+number of digits after the decimal point. If <span class="c003">N</span> is 0 no
+decimal point is printed (default: 0)</td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~ND</span></div></td><td class="c017"><div class="center">integer expression</div></td><td class="c020">identical to <span class="c003">~Nd</span> except
+that <span class="c003">&#X2019;,&#X2019;</span> separates groups of three digits to the left of the
+decimal point </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~Nr</span></div></td><td class="c017"><div class="center">integer expression</div></td><td class="c020">print the argument according to the
+radix <span class="c003">N</span>. 2 &#X2264; <span class="c003">N</span> &#X2264; 36 (default: 8). The letters
+<span class="c003">a-z</span> denote digits &gt; 9 </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~NR</span></div></td><td class="c017"><div class="center">integer expression</div></td><td class="c020">identical to <span class="c003">~Nr</span> except
+that the letters <span class="c003">A-Z</span> denote digits &gt; 9 </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~Ns</span></div></td><td class="c017"><div class="center">character code list</div></td><td class="c020">print exactly <span class="c003">N</span> characters
+(default: the length of the list) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~NS</span></div></td><td class="c017"><div class="center">character list</div></td><td class="c020">print exactly <span class="c003">N</span> characters
+(default: the length of the list) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~i</span></div></td><td class="c017"><div class="center">term</div></td><td class="c020">ignore the current argument </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~k</span></div></td><td class="c017"><div class="center">term</div></td><td class="c020">pass the argument to
+<a id="hevea_default544"></a><span class="c003">write_canonical/1</span> (section&#XA0;<a href="#write-term%2F3">8.14.6</a>) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~p</span></div></td><td class="c017"><div class="center">term</div></td><td class="c020">pass the argument to <a id="hevea_default545"></a><span class="c003">print/1</span>
+(section&#XA0;<a href="#write-term%2F3">8.14.6</a>) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~q</span></div></td><td class="c017"><div class="center">term</div></td><td class="c020">pass the argument to <a id="hevea_default546"></a><span class="c003">writeq/1</span>
+(section&#XA0;<a href="#write-term%2F3">8.14.6</a>) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~w</span></div></td><td class="c017"><div class="center">term</div></td><td class="c020">pass the argument to <a id="hevea_default547"></a><span class="c003">write/1</span>
+(section&#XA0;<a href="#write-term%2F3">8.14.6</a>) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~~</span></div></td><td class="c017"><div class="center">none</div></td><td class="c020">print the character <span class="c003">&#X2019;~&#X2019;</span> </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~Nn</span></div></td><td class="c017"><div class="center">none</div></td><td class="c020">print <span class="c003">N</span> new-line characters (default: 1) </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~N</span></div></td><td class="c017"><div class="center">none</div></td><td class="c020">print a new-line character if not at the beginning
+of a line </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">~?</span></div></td><td class="c017"><div class="center">atom</div></td><td class="c020">use the argument as a nested format string </td></tr>
+<tr><td class="c017"><div class="center">
+<span class="c003">%F</span></div></td><td class="c017"><div class="center">atom, integer or float expression</div></td><td class="c020">interface to the C
+function <span class="c003">printf(3)</span> for outputting atoms (C string), integers and
+floating point numbers. <span class="c003">*</span> are also allowed. </td></tr>
+</table><p><span class="c003">format/2</span> applies to the current output stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Format</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arguments</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Format</span> is neither a partial list nor a list or an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Format)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arguments</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Arguments)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Format</span> list is neither a
+variable nor a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of Format is not a valid format control
+sequence</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(format_control_sequence, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+the <span class="c003">Arguments</span> list does not contain sufficient elements</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(non_empty_list, [])</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Arguments</span> list is a variable
+while a non-variable term was expected</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Arguments</span> list is neither
+variable nor an atom while an atom was expected</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Arguments</span> cannot be evaluated
+as an arithmetic expression while an integer or a floating point number was
+expected</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">an arithmetic error (section&#XA0;<a href="gprolog030.html#Evaluation-of-an-arithmetic-expression">8.6.1</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Arguments</span> list is neither
+variable nor character code while a character code was expected</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="portray-clause/2">8.14.8&#XA0;&#XA0;<a id="hevea_default548"></a><span class="c003">portray_clause/2</span>,
+<a id="hevea_default549"></a><span class="c003">portray_clause/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+portray_clause(+stream_or_alias, +clause)<br>
+portray_clause(+clause)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">portray_clause(SorA, Clause)</span> pretty prints
+<span class="c003">Clause</span> to the stream associated with the stream-term or alias
+<span class="c003">SorA</span>.
+<span class="c003">portray_clause/2</span> uses the variable binding predicates
+<a id="hevea_default550"></a><span class="c003">name_singleton_vars/1</span> (section&#XA0;<a href="gprolog029.html#name-singleton-vars%2F1">8.5.1</a>) and
+<a id="hevea_default551"></a><span class="c003">numbervars/1</span> (section&#XA0;<a href="gprolog029.html#bind-variables%2F2">8.5.3</a>). This predicate is
+used by <a id="hevea_default552"></a><span class="c003">listing/1</span> (section&#XA0;<a href="gprolog047.html#listing%2F1">8.23.3</a>).</p><p><span class="c003">portray_clause/1</span> applies to the current output stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Clause</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Clause</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Clause)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec169">8.14.9&#XA0;&#XA0;<a id="hevea_default553"></a><span class="c003">get_print_stream/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+get_print_stream(?stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">get_print_stream(Stream)</span> unifies <span class="c003">Stream</span> with the
+stream-term associated with the output stream used by <a id="hevea_default554"></a><span class="c003">print/2</span>
+(section&#XA0;<a href="#write-term%2F3">8.14.6</a>). The purpose of this predicate is to allow a
+user-defined <a id="hevea_default555"></a><span class="c003">portray/1</span> predicate to identify the output stream in
+use.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream-term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="op/3:(Term-input/output)">8.14.10&#XA0;&#XA0;<a id="hevea_default556"></a><span class="c003">op/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+op(+integer, +operator_specifier, +atom_or_atom_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">op(Priority, OpSpecifier, Operator)</span> alters the operator table.
+<span class="c003">Operator</span> is declared as an operator with properties defined by
+specifier <span class="c003">OpSpecifier</span> and <span class="c003">Priority</span>. <span class="c003">Priority</span> must
+be an integer &#X2265; 0 and &#X2264; 1200. If <span class="c003">Priority</span> is 0 then the
+operator properties of <span class="c003">Operator</span> (if any) are canceled.
+<span class="c003">Operator</span> may also be a list of atoms in which case all of them are
+declared to be operators. In general, operators can be removed from
+the operator table and their priority or specifier can be changed. However,
+it is an error to attempt to change the <span class="c003">&#X2019;,&#X2019;</span> operator from its
+initial status. An atom can have multiple operator definitions (e.g.
+prefix and infix like <span class="c003">+</span>) however an atom cannot have both an
+infix and a postfix operator definitions.</p><p><span class="c009">Operator specifiers</span>: the following specifiers are available:</p><table class="c000 cellpadding1" border=1><tr><td class="c012">
+Specifier</td><td class="c012">Type</td><td class="c012">Associativity </td></tr>
+<tr><td class="c012">
+<span class="c003">fx</span></td><td class="c012">prefix</td><td class="c012">no </td></tr>
+<tr><td class="c012">
+<span class="c003">fy</span></td><td class="c012">prefix</td><td class="c012">yes </td></tr>
+<tr><td class="c012">
+<span class="c003">xf</span></td><td class="c012">postfix</td><td class="c012">no </td></tr>
+<tr><td class="c012">
+<span class="c003">yf</span></td><td class="c012">postfix</td><td class="c012">yes </td></tr>
+<tr><td class="c012">
+<span class="c003">xfx</span></td><td class="c012">infix</td><td class="c012">no </td></tr>
+<tr><td class="c012">
+<span class="c003">yfx</span></td><td class="c012">infix</td><td class="c012">left </td></tr>
+<tr><td class="c012">
+<span class="c003">xfy</span></td><td class="c012">infix</td><td class="c012">right </td></tr>
+</table><p><span class="c009">Prolog predefined operators</span>:</p><table class="c000 cellpadding1" border=1><tr><td class="c023">
+Priority</td><td class="c018">Specifier</td><td class="c017"><div class="flushleft">Operators </div></td></tr>
+<tr><td class="c023">
+<span class="c003">1200</span></td><td class="c018"><span class="c003">xfx</span></td><td class="c017"><div class="flushleft"><span class="c003">:- &#XA0;--&gt;</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">1200</span></td><td class="c018"><span class="c003">fx</span></td><td class="c017"><div class="flushleft"><span class="c003">:-</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">1105</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">|</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">1100</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">;</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">1050</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">-&gt; *-&gt;</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">1000</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">,</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">900</span></td><td class="c018"><span class="c003">fy</span></td><td class="c017"><div class="flushleft"><span class="c003">\+</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">700</span></td><td class="c018"><span class="c003">xfx</span></td><td class="c017"><div class="flushleft"><span class="c003">= &#XA0;\= &#XA0;=.. &#XA0;== &#XA0;\== &#XA0;@&lt;
+&#XA0;@=&lt; &#XA0;@&gt; &#XA0;@&gt;= &#XA0;is &#XA0;=:= &#XA0;=\= &#XA0;&lt; &#XA0;=&lt; &#XA0;&gt; &#XA0;&gt;=</span>
+</div></td></tr>
+<tr><td class="c023">
+<span class="c003">600</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">:</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">500</span></td><td class="c018"><span class="c003">yfx</span></td><td class="c017"><div class="flushleft"><span class="c003">+ &#XA0;- &#XA0;/\ &#XA0;\/</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">400</span></td><td class="c018"><span class="c003">yfx</span></td><td class="c017"><div class="flushleft"><span class="c003">* &#XA0;/ &#XA0;// &#XA0;rem &#XA0;mod &#XA0;div &#XA0;&lt;&lt;
+&#XA0;&gt;&gt;</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">200</span></td><td class="c018"><span class="c003">xfx</span></td><td class="c017"><div class="flushleft"><span class="c003">** &#XA0;^</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">200</span></td><td class="c018"><span class="c003">fy</span></td><td class="c017"><div class="flushleft"><span class="c003">+ &#XA0;- &#XA0;\</span> </div></td></tr>
+</table><p><span class="c009">FD predefined operators</span>:</p><table class="c000 cellpadding1" border=1><tr><td class="c023">
+Priority</td><td class="c018">Specifier</td><td class="c017"><div class="flushleft">Operators </div></td></tr>
+<tr><td class="c023">
+<span class="c003">750</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">#&lt;=&gt; &#XA0;#\&lt;=&gt;</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">740</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">#==&gt; &#XA0;#\==&gt;</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">730</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">## &#XA0;#\/ &#XA0;#\\/</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">720</span></td><td class="c018"><span class="c003">yfx</span></td><td class="c017"><div class="flushleft"><span class="c003">#/\ &#XA0;#\/\</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">710</span></td><td class="c018"><span class="c003">fy</span></td><td class="c017"><div class="flushleft"><span class="c003">#\</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">700</span></td><td class="c018"><span class="c003">xfx</span></td><td class="c017"><div class="flushleft"><span class="c003">#= &#XA0;#\= &#XA0;#&lt; &#XA0;#=&lt;
+&#XA0;#&gt; &#XA0;#&gt;= &#XA0;#=# &#XA0;#\=# &#XA0;#&lt;# &#XA0;#=&lt;# &#XA0;#&gt;#
+&#XA0;#&gt;=#</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">500</span></td><td class="c018"><span class="c003">yfx</span></td><td class="c017"><div class="flushleft"><span class="c003">+ &#XA0;-</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">400</span></td><td class="c018"><span class="c003">yfx</span></td><td class="c017"><div class="flushleft"><span class="c003">* &#XA0;/ &#XA0;// &#XA0;rem</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">200</span></td><td class="c018"><span class="c003">xfy</span></td><td class="c017"><div class="flushleft"><span class="c003">**</span> </div></td></tr>
+<tr><td class="c023">
+<span class="c003">200</span></td><td class="c018"><span class="c003">fy</span></td><td class="c017"><div class="flushleft"><span class="c003">+ &#XA0;-</span> </div></td></tr>
+</table><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Priority</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OpSpecifier</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Operator</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Priority</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Priority)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OpSpecifier</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, OpSpecifier)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Operator</span> is neither a partial list nor a list nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Operator)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Operator</span> list is neither a
+variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Priority</span> is an integer not &#X2265; 0 and &#X2264; 1200</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(operator_priority, Priority)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OpSpecifier</span> is not a valid operator specifier</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(operator_specifier, OpSpecifier)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Operator</span> (or an element of the
+<span class="c003">Operator</span> list) is <span class="c003">&#X2019;,&#X2019;</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, operator, &#X2019;,&#X2019;)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OpSpecifier</span> is a specifier such that <span class="c003">Operator</span>
+would have a postfix and an infix definition. </td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(create, operator, Operator)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Operator</span> (or an element of the <span class="c003">Operator</span> list) is
+<span class="c003">|</span> and it would have a prefix or a postfix definition or its
+<span class="c003">Priority</span> would be &#X2264; 1100.</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(create, operator, &#X2019;|&#X2019;)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Operator</span> (or an element of the <span class="c003">Operator</span> list) is
+<span class="c003">[]</span> or <span class="c003">{}</span>.</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(create, operator, Operator)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p><p>The ISO reference implies that if a program calls <span class="c003">current_op/3</span>,
+then modifies an operator definition by calling <span class="c003">op/3</span> and backtracks
+into the call to <span class="c003">current_op/3</span>, then the changes are guaranteed not
+to affect that <span class="c003">current_op/3</span> goal. This is not guaranteed by
+GNU Prolog.</p>
+<h4 class="subsubsection" id="sec171">8.14.11&#XA0;&#XA0;<a id="hevea_default557"></a><span class="c003">current_op/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_op(?integer, ?operator_specifier, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_op(Priority, OpSpecifier, Operator)</span> succeeds if
+<span class="c003">Operator</span> is an operator with properties defined by specifier
+<span class="c003">OpSpecifier</span> and <span class="c003">Priority</span>. This predicate is re-executable
+on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Priority</span> is neither a variable nor an operator priority</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(operator_priority, Priority)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OpSpecifier</span> is neither a variable nor an operator
+specifier</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(operator_specifier, OpSpecifier)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Operator</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Operator)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="char-conversion/2">8.14.12&#XA0;&#XA0;<a id="hevea_default558"></a><span class="c003">char_conversion/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+char_conversion(+character, +character)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">char_conversion(InChar, OutChar)</span> alters the character-conversion
+mapping. This mapping is used by the following read predicates:
+<a id="hevea_default559"></a><span class="c003">read_term/3</span> (section&#XA0;<a href="#read-term%2F3">8.14.1</a>), <a id="hevea_default560"></a><span class="c003">read_atom/2</span>,
+<a id="hevea_default561"></a><span class="c003">read_integer/2</span>, <a id="hevea_default562"></a><span class="c003">read_number/2</span> (section&#XA0;<a href="#read-atom%2F2">8.14.2</a>) and
+<a id="hevea_default563"></a><span class="c003">read_token/2</span> (section&#XA0;<a href="#read-token%2F2">8.14.3</a>) to replace any occurrence of a
+character <span class="c003">InChar</span> by <span class="c003">OutChar</span>. However the conversion
+mechanism should have been previously activated by switching on the
+<a id="hevea_default564"></a><span class="c003">char_conversion</span> <a id="hevea_default565"></a>Prolog flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). When
+<span class="c003">InChar</span> and <span class="c003">OutChar</span> are the same, the effect is to remove
+any conversion of a character <span class="c003">InChar</span>.</p><p>Note that the single character read predicates (e.g. <span class="c003">get_char/2</span>)
+never do character conversion. If such behavior is required, it must be
+explicitly done using <span class="c003">current_char_conversion/2</span>
+(section&#XA0;<a href="#current-char-conversion%2F2">8.14.13</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">InChar</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OutChar</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">InChar</span> is neither a variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, InChar)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OutChar</span> is neither a variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, OutChar)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate. The <span class="c003">type_error(character,&#X2026;)</span> is a GNU Prolog
+behavior, the ISO reference instead defines a
+<span class="c003">representation_error(character)</span> in this case. This seems to be an
+error of the ISO reference since, for many other built-in predicates
+accepting a character (e.g. <span class="c003">char_code/2</span>, <span class="c003">put_char/2</span>), a
+<span class="c003">type_error</span> is raised.</p><p>The ISO reference implies that if a program calls
+<span class="c003">current_char_conversion/2</span>, then modifies the character mapping by
+calling <span class="c003">char_conversion/2</span>, and backtracks into the call to
+<span class="c003">current_char_conversion/2</span> then the changes are guaranteed not to
+affect that <span class="c003">current_char_conversion/2</span> goal. This is not guaranteed
+by GNU Prolog.</p>
+<h4 class="subsubsection" id="current-char-conversion/2">8.14.13&#XA0;&#XA0;<a id="hevea_default566"></a><span class="c003">current_char_conversion/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_char_conversion(?character, ?character)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_char_conversion(InChar, OutChar)</span> succeeds if the
+conversion of <span class="c003">InChar</span> is <span class="c003">OutChar</span> according to the
+character-conversion mapping. In that case, <span class="c003">InChar</span> and
+<span class="c003">OutChar</span> are different. This predicate is re-executable on
+backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">InChar</span> is neither a variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, InChar)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">OutChar</span> is neither a variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, OutChar)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate. Same remark as for char_conversion/2
+(section&#XA0;<a href="#char-conversion%2F2">8.14.12</a>).</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog037.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog039.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

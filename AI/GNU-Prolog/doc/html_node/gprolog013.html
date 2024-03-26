@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Debugging predicates</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog012.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog010.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog014.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec25">5.3&#XA0;&#XA0;Debugging predicates</h3>
+<ul>
+<li><a href="gprolog013.html#Running-and-stopping-the-debugger">Running and stopping the debugger </a>
+</li><li><a href="gprolog013.html#Leashing-ports">Leashing ports </a>
+</li><li><a href="gprolog013.html#Spy-points">Spy-points </a>
+</li></ul>
+<h4 class="subsubsection" id="Running-and-stopping-the-debugger">5.3.1&#XA0;&#XA0;<a id="hevea_default154"></a><a id="hevea_default155"></a><a id="hevea_default156"></a><a id="hevea_default157"></a><a id="hevea_default158"></a><a id="hevea_default159"></a>Running and stopping the debugger </h4>
+<p><span class="c003">trace/0</span> activates the debugger. The next invocation of a predicate
+will be traced.</p><p><span class="c003">debug/0</span> activates the debugger. The next invocation of a predicate
+on which a spy-point has been set will be traced.</p><p>It is important to understand that the information associated with the control
+flow is only available when the debugger is on. For efficiency reasons, when
+the debugger is off the information concerning the control flow (i.e. the
+boxes) is not retained. So, if the debugger is activated in the middle of a
+computation (by a call to <span class="c003">debug/0</span> or <span class="c003">trace/0</span> in the
+program or after the interrupt key sequence (<span class="c003">Ctl-C</span>) by choosing
+<span class="c003">trace</span> or <span class="c003">debug</span>), information prior to this point is not
+available.</p><p><span class="c003">debugging/0</span>: prints onto the terminal information about the current
+debugging state (whether the debugger is switched on, what are the leashed
+ports, spy-points defined,&#X2026;).</p><p><span class="c003">notrace/0</span> or <span class="c003">nodebug/0</span> switches the debugger off.</p><p><span class="c003">wam_debug/0</span> invokes the sub-debugger devoted to the WAM data
+structures (section&#XA0;<a href="gprolog016.html#The-WAM-debugger">5.6</a>). It can be also invoked using the
+<span class="c003">W</span> debugger command (section&#XA0;<a href="gprolog015.html#Debugger-commands">5.5</a>).</p>
+<h4 class="subsubsection" id="Leashing-ports">5.3.2&#XA0;&#XA0;<a id="hevea_default160"></a>Leashing ports </h4>
+<p><span class="c003">leash(Ports)</span> requests the debugger to prompt the user, as
+he creeps through the program, for every port defined in the <span class="c003">Ports</span>
+list. Each element of <span class="c003">Ports</span> is an atom in <span class="c003">call</span>,
+<span class="c003">exit</span>, <span class="c003">redo</span>, <span class="c003">fail</span>, <span class="c003">exception</span>.
+<span class="c003">Ports</span> can also be an atom defining a shorthand:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default161"></a><span class="c003">full</span>: equivalent to <span class="c003">[call, exit, redo, fail,
+exception]</span></li><li class="li-itemize"><a id="hevea_default162"></a><span class="c003">half</span>: equivalent to <span class="c003">[call, redo]</span></li><li class="li-itemize"><a id="hevea_default163"></a><span class="c003">loose</span>: equivalent to <span class="c003">[call]</span></li><li class="li-itemize"><a id="hevea_default164"></a><span class="c003">none</span>: equivalent to <span class="c003">[]</span></li><li class="li-itemize"><a id="hevea_default165"></a><span class="c003">tight</span>: equivalent to <span class="c003">[call, redo, fail,
+exception]</span></li></ul><p>When an unleashed port is encountered the debugger continues to show the
+associated goal but does not stop the execution to prompt the user.</p>
+<h4 class="subsubsection" id="Spy-points">5.3.3&#XA0;&#XA0;<a id="hevea_default166"></a><a id="hevea_default167"></a><a id="hevea_default168"></a><a id="hevea_default169"></a>Spy-points </h4>
+<p>When dealing with big sources it is not very practical to creep through the
+entire program. It is preferable to define a set of spy-points on
+interesting predicates to be prompted when the debugger reaches one of these
+predicates. Spy-points can be added either using <span class="c003">spy/1</span> (or
+<span class="c003">spypoint_condition/3</span>) or dynamically when prompted by the debugger
+using the <span class="c003">+</span> (or <span class="c003">*</span>) debugger command
+(section&#XA0;<a href="gprolog015.html#Debugger-commands">5.5</a>). The current mode of leashing does not
+affect spy-points in the sense that user interaction is requested on
+every port.</p><p><span class="c003">spy(PredSpec)</span> sets a spy-point on all the predicates given by
+<span class="c003">PredSpec</span>. <span class="c003">PredSpec</span> defines one or several predicates and
+has one of the following forms:</p><ul class="itemize"><li class="li-itemize"><span class="c003">[PredSpec1, PredSpec2,&#X2026;]</span>: set a spy-point for each
+element of the list.</li><li class="li-itemize"><span class="c003">Name</span>: set a spy-point for any predicate whose name is
+<span class="c003">Name</span> (whatever the arity).</li><li class="li-itemize"><span class="c003">Name/Arity</span>: set a spy-point for the predicate whose name is
+<span class="c003">Name</span> and arity is <span class="c003">Arity</span>.</li><li class="li-itemize"><span class="c003">Name/A1-A2</span>: set a spy-point for the each predicate whose name
+is <span class="c003">Name</span> and arity is between <span class="c003">A1</span> and <span class="c003">A2</span>.</li></ul><p>It is not possible to set a spy-point on an undefined predicate.</p><p>The following predicate is used to remove one or several spy-points:</p><p><span class="c003">nospy(PredSpec)</span> removes the spy-points from the specified
+predicates.</p><p><span class="c003">nospyall/0</span> removes all spy-points:</p><p>It is also possible to define conditional spy-points.</p><p><span class="c003">spypoint_condition(Goal, Port, Test)</span> sets a
+conditional spy-point on the predicate for <span class="c003">Goal</span>. When the debugger
+reaches a conditional spy-point it only shows the associated goal if the
+following conditions are verified:</p><ul class="itemize"><li class="li-itemize">the actual goal unifies with <span class="c003">Goal</span>.</li><li class="li-itemize">the actual port unifies with <span class="c003">Port</span>.</li><li class="li-itemize">the Prolog goal <span class="c003">Test</span> succeeds.</li></ul>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog012.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog010.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog014.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

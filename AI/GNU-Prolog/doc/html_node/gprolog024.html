@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Prolog built-in predicates</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog021.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="index.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog054.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h2 class="section" id="sec70">8&#XA0;&#XA0;Prolog built-in predicates</h2>
+<ul>
+<li><a href="gprolog025.html">Type testing</a>
+<ul>
+<li><a href="gprolog025.html#var%2F1"><span class="c003">var/1</span>, 
+<span class="c003">nonvar/1</span>,
+<span class="c003">atom/1</span>,
+<span class="c003">integer/1</span>,
+<span class="c003">float/1</span>,
+<span class="c003">number/1</span>,
+<span class="c003">atomic/1</span>, <br>
+ <span class="c003">compound/1</span>,
+<span class="c003">callable/1</span>,
+<span class="c003">ground/1</span>,
+<span class="c003">is_list/1</span>,
+<span class="c003">list/1</span>, <br>
+ <span class="c003">partial_list/1</span>,
+<span class="c003">list_or_partial_list/1</span></a>
+</li></ul>
+</li><li><a href="gprolog026.html">Term unification</a>
+<ul>
+<li><a href="gprolog026.html#sec74"><span class="c003">(=)/2</span> - Prolog unification</a>
+</li><li><a href="gprolog026.html#sec75"><span class="c003">unify_with_occurs_check/2</span></a>
+</li><li><a href="gprolog026.html#sec76"><span class="c003">(</span><span class="c003">\</span><span class="c003">=)/2</span> - not Prolog unifiable</a>
+</li></ul>
+</li><li><a href="gprolog027.html">Term comparison</a>
+<ul>
+<li><a href="gprolog027.html#sec78">Standard total ordering of terms</a>
+</li><li><a href="gprolog027.html#%28%3D%3D%29%2F2"><span class="c003">(==)/2</span> - term identical, 
+<span class="c003">(</span><span class="c003">\</span><span class="c003">==)/2</span> - term not identical, <br>
+  
+
+
+<span class="c003">(@</span><span class="c003">&lt;</span><span class="c003">)/2</span> - term less than,
+<span class="c003">(@=</span><span class="c003">&lt;</span><span class="c003">)/2</span> - term less than or equal to, <br>
+ <span class="c003">(@</span><span class="c003">&gt;</span><span class="c003">)/2</span> - term greater than,
+<span class="c003">(@</span><span class="c003">&gt;</span><span class="c003">=)/2</span> - term greater than or equal to</a>
+</li><li><a href="gprolog027.html#compare%2F3"><span class="c003">compare/3</span> </a>
+</li></ul>
+</li><li><a href="gprolog028.html">Term processing</a>
+<ul>
+<li><a href="gprolog028.html#functor%2F3"><span class="c003">functor/3</span> </a>
+</li><li><a href="gprolog028.html#arg%2F3"><span class="c003">arg/3</span> </a>
+</li><li><a href="gprolog028.html#%28%3D..%29%2F2"><span class="c003">(=..)/2</span> - univ </a>
+</li><li><a href="gprolog028.html#sec85"><span class="c003">copy_term/2</span></a>
+</li><li><a href="gprolog028.html#sec86"><span class="c003">term_variables/2</span>,
+		<span class="c003">term_variables/3</span></a>
+</li><li><a href="gprolog028.html#sec87"><span class="c003">subsumes_term/2</span></a>
+</li><li><a href="gprolog028.html#sec88"><span class="c003">acyclic_term/1</span></a>
+</li><li><a href="gprolog028.html#term-hash%2F4"><span class="c003">term_hash/4</span>,
+<span class="c003">term_hash/2</span></a>
+</li><li><a href="gprolog028.html#sec90"><span class="c003">setarg/4</span>,
+<span class="c003">setarg/3</span></a>
+</li></ul>
+</li><li><a href="gprolog029.html">Variable naming/numbering</a>
+<ul>
+<li><a href="gprolog029.html#name-singleton-vars%2F1"><span class="c003">name_singleton_vars/1</span></a>
+</li><li><a href="gprolog029.html#name-query-vars%2F2"><span class="c003">name_query_vars/2</span></a>
+</li><li><a href="gprolog029.html#bind-variables%2F2"><span class="c003">bind_variables/2</span>,
+<span class="c003">numbervars/3</span>,
+<span class="c003">numbervars/1</span></a>
+</li><li><a href="gprolog029.html#sec95"><span class="c003">term_ref/2</span></a>
+</li></ul>
+</li><li><a href="gprolog030.html">Arithmetic</a>
+<ul>
+<li><a href="gprolog030.html#sec97">Evaluation of an arithmetic expression</a>
+</li><li><a href="gprolog030.html#sec98"><span class="c003">(is)/2</span> - evaluate expression</a>
+</li><li><a href="gprolog030.html#%28%3D%3A%3D%29%2F2"><span class="c003">(=:=)/2</span> - arithmetic equal, 
+<span class="c003">(=</span><span class="c003">\</span><span class="c003">=)/2</span> - arithmetic not equal, <br>
+ <span class="c003">(</span><span class="c003">&lt;</span><span class="c003">)/2</span> - arithmetic less than,
+<span class="c003">(=</span><span class="c003">&lt;</span><span class="c003">)/2</span> - arithmetic less than or equal to, <br>
+ <span class="c003">(</span><span class="c003">&gt;</span><span class="c003">)/2</span> - arithmetic greater than,
+<span class="c003">(</span><span class="c003">&gt;</span><span class="c003">=)/2</span> - arithmetic greater than or equal to</a>
+</li><li><a href="gprolog030.html#sec100"><span class="c003">succ/2</span></a>
+</li></ul>
+</li><li><a href="gprolog031.html">Dynamic clause management</a>
+<ul>
+<li><a href="gprolog031.html#sec102">Introduction</a>
+</li><li><a href="gprolog031.html#sec103"><span class="c003">asserta/1</span>,
+<span class="c003">assertz/1</span></a>
+</li><li><a href="gprolog031.html#sec104"><span class="c003">retract/1</span></a>
+</li><li><a href="gprolog031.html#sec105"><span class="c003">retractall/1</span></a>
+</li><li><a href="gprolog031.html#sec106"><span class="c003">clause/2</span></a>
+</li><li><a href="gprolog031.html#abolish%2F1"><span class="c003">abolish/1</span></a>
+</li></ul>
+</li><li><a href="gprolog032.html">Predicate information</a>
+<ul>
+<li><a href="gprolog032.html#current-predicate%2F1"><span class="c003">current_predicate/1</span></a>
+</li><li><a href="gprolog032.html#predicate-property%2F2"><span class="c003">predicate_property/2</span></a>
+</li></ul>
+</li><li><a href="gprolog033.html">All solutions</a>
+<ul>
+<li><a href="gprolog033.html#sec112">Introduction</a>
+</li><li><a href="gprolog033.html#sec113"><span class="c003">findall/4</span>, <span class="c003">findall/3</span></a>
+</li><li><a href="gprolog033.html#sec114"><span class="c003">bagof/3</span>,
+<span class="c003">setof/3</span></a>
+</li></ul>
+</li><li><a href="gprolog034.html">Streams</a>
+<ul>
+<li><a href="gprolog034.html#sec116">Introduction</a>
+</li><li><a href="gprolog034.html#sec117"><span class="c003">current_input/1</span></a>
+</li><li><a href="gprolog034.html#sec118"><span class="c003">current_output/1</span></a>
+</li><li><a href="gprolog034.html#set-input%2F1"><span class="c003">set_input/1</span></a>
+</li><li><a href="gprolog034.html#set-output%2F1"><span class="c003">set_output/1</span></a>
+</li><li><a href="gprolog034.html#open%2F4"><span class="c003">open/4</span>,
+<span class="c003">open/3</span></a>
+</li><li><a href="gprolog034.html#close%2F2"><span class="c003">close/2</span>,
+<span class="c003">close/1</span></a>
+</li><li><a href="gprolog034.html#flush-output%2F1"><span class="c003">flush_output/1</span>,
+<span class="c003">flush_output/0</span></a>
+</li><li><a href="gprolog034.html#current-stream%2F1"><span class="c003">current_stream/1</span></a>
+</li><li><a href="gprolog034.html#stream-property%2F2"><span class="c003">stream_property/2</span></a>
+</li><li><a href="gprolog034.html#sec126"><span class="c003">at_end_of_stream/1</span>,
+<span class="c003">at_end_of_stream/0</span></a>
+</li><li><a href="gprolog034.html#stream-position%2F2"><span class="c003">stream_position/2</span></a>
+</li><li><a href="gprolog034.html#set-stream-position%2F2"><span class="c003">set_stream_position/2</span></a>
+</li><li><a href="gprolog034.html#sec129"><span class="c003">seek/4</span></a>
+</li><li><a href="gprolog034.html#sec130"><span class="c003">character_count/2</span></a>
+</li><li><a href="gprolog034.html#line-count%2F2"><span class="c003">line_count/2</span></a>
+</li><li><a href="gprolog034.html#line-position%2F2"><span class="c003">line_position/2</span></a>
+</li><li><a href="gprolog034.html#sec133"><span class="c003">stream_line_column/3</span></a>
+</li><li><a href="gprolog034.html#sec134"><span class="c003">set_stream_line_column/3</span></a>
+</li><li><a href="gprolog034.html#add-stream-alias%2F2"><span class="c003">add_stream_alias/2</span></a>
+</li><li><a href="gprolog034.html#sec136"><span class="c003">current_alias/2</span></a>
+</li><li><a href="gprolog034.html#add-stream-mirror%2F2"><span class="c003">add_stream_mirror/2</span></a>
+</li><li><a href="gprolog034.html#remove-stream-mirror%2F2"><span class="c003">remove_stream_mirror/2</span></a>
+</li><li><a href="gprolog034.html#sec139"><span class="c003">current_mirror/2</span></a>
+</li><li><a href="gprolog034.html#set-stream-type%2F2"><span class="c003">set_stream_type/2</span></a>
+</li><li><a href="gprolog034.html#sec141"><span class="c003">set_stream_eof_action/2</span></a>
+</li><li><a href="gprolog034.html#set-stream-buffering%2F2"><span class="c003">set_stream_buffering/2</span></a>
+</li></ul>
+</li><li><a href="gprolog035.html">Constant term streams</a>
+<ul>
+<li><a href="gprolog035.html#sec144">Introduction</a>
+</li><li><a href="gprolog035.html#sec145"><span class="c003">open_input_atom_stream/2</span>,
+<span class="c003">open_input_chars_stream/2</span>, <br>
+ <span class="c003">open_input_codes_stream/2</span></a>
+</li><li><a href="gprolog035.html#sec146"><span class="c003">close_input_atom_stream/1</span>,
+<span class="c003">close_input_chars_stream/1</span>, <br>
+ <span class="c003">close_input_codes_stream/1</span></a>
+</li><li><a href="gprolog035.html#open-output-atom-stream%2F1"><span class="c003">open_output_atom_stream/1</span>,
+<span class="c003">open_output_chars_stream/1</span>, <br>
+ <span class="c003">open_output_codes_stream/1</span></a>
+</li><li><a href="gprolog035.html#close-output-atom-stream%2F2"><span class="c003">close_output_atom_stream/2</span>,
+<span class="c003">close_output_chars_stream/2</span>, <br>
+ <span class="c003">close_output_codes_stream/2</span></a>
+</li></ul>
+</li><li><a href="gprolog036.html">Character input/output</a>
+<ul>
+<li><a href="gprolog036.html#get-char%2F2"><span class="c003">get_char/2</span>,
+<span class="c003">get_char/1</span>,
+<span class="c003">get_code/1</span>,
+<span class="c003">get_code/2</span></a>
+</li><li><a href="gprolog036.html#sec151"><span class="c003">get_key/2</span>,
+<span class="c003">get_key/1</span>
+	 <span class="c003">get_key_no_echo/2</span>,
+<span class="c003">get_key_no_echo/1</span></a>
+</li><li><a href="gprolog036.html#sec152"><span class="c003">peek_char/2</span>,
+<span class="c003">peek_char/1</span>,
+<span class="c003">peek_code/1</span>,
+<span class="c003">peek_code/2</span></a>
+</li><li><a href="gprolog036.html#sec153"><span class="c003">unget_char/2</span>,
+<span class="c003">unget_char/1</span>,
+<span class="c003">unget_code/2</span>,
+<span class="c003">unget_code/1</span></a>
+</li><li><a href="gprolog036.html#put-char%2F2"><span class="c003">put_char/2</span>,
+<span class="c003">put_char/1</span>,
+<span class="c003">put_code/1</span>,
+<span class="c003">put_code/2</span>,
+<span class="c003">nl/1</span>,
+<span class="c003">nl/0</span></a>
+</li></ul>
+</li><li><a href="gprolog037.html">Byte input/output</a>
+<ul>
+<li><a href="gprolog037.html#sec156"><span class="c003">get_byte/2</span>,
+<span class="c003">get_byte/1</span></a>
+</li><li><a href="gprolog037.html#sec157"><span class="c003">peek_byte/2</span>,
+<span class="c003">peek_byte/1</span></a>
+</li><li><a href="gprolog037.html#sec158"><span class="c003">unget_byte/2</span>,
+<span class="c003">unget_byte/1</span></a>
+</li><li><a href="gprolog037.html#sec159"><span class="c003">put_byte/2</span>,
+<span class="c003">put_byte/1</span></a>
+</li></ul>
+</li><li><a href="gprolog038.html">Term input/output</a>
+<ul>
+<li><a href="gprolog038.html#read-term%2F3"><span class="c003">read_term/3</span>,
+<span class="c003">read_term/2</span>,
+<span class="c003">read/2</span>,
+<span class="c003">read/1</span></a>
+</li><li><a href="gprolog038.html#read-atom%2F2"><span class="c003">read_atom/2</span>,
+<span class="c003">read_atom/1</span>,
+<span class="c003">read_integer/2</span>,
+<span class="c003">read_integer/1</span>, <br>
+ <span class="c003">read_number/2</span>,
+<span class="c003">read_number/1</span></a>
+</li><li><a href="gprolog038.html#read-token%2F2"><span class="c003">read_token/2</span>,
+<span class="c003">read_token/1</span></a>
+</li><li><a href="gprolog038.html#syntax-error-info%2F4"><span class="c003">syntax_error_info/4</span></a>
+</li><li><a href="gprolog038.html#sec165"><span class="c003">last_read_start_line_column/2</span></a>
+</li><li><a href="gprolog038.html#write-term%2F3"><span class="c003">write_term/3</span>,
+<span class="c003">write_term/2</span>,
+<span class="c003">write/2</span>,
+<span class="c003">write/1</span>,
+<span class="c003">writeq/2</span>,
+<span class="c003">writeq/1</span>, <br>
+ <span class="c003">write_canonical/2</span>,
+<span class="c003">write_canonical/1</span>,
+<span class="c003">display/2</span>,
+<span class="c003">display/1</span>,
+<span class="c003">print/2</span>, <br>
+ <span class="c003">print/1</span></a>
+</li><li><a href="gprolog038.html#format%2F3"><span class="c003">format/3</span>,
+<span class="c003">format/2</span></a>
+</li><li><a href="gprolog038.html#portray-clause%2F2"><span class="c003">portray_clause/2</span>,
+<span class="c003">portray_clause/1</span></a>
+</li><li><a href="gprolog038.html#sec169"><span class="c003">get_print_stream/1</span></a>
+</li><li><a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29"><span class="c003">op/3</span></a>
+</li><li><a href="gprolog038.html#sec171"><span class="c003">current_op/3</span></a>
+</li><li><a href="gprolog038.html#char-conversion%2F2"><span class="c003">char_conversion/2</span></a>
+</li><li><a href="gprolog038.html#current-char-conversion%2F2"><span class="c003">current_char_conversion/2</span></a>
+</li></ul>
+</li><li><a href="gprolog039.html">Input/output from/to constant terms</a>
+<ul>
+<li><a href="gprolog039.html#read-term-from-atom%2F3"><span class="c003">read_term_from_atom/3</span>,
+<span class="c003">read_from_atom/2</span>,
+<span class="c003">read_token_from_atom/2</span></a>
+</li><li><a href="gprolog039.html#sec176"><span class="c003">read_term_from_chars/3</span>,
+<span class="c003">read_from_chars/2</span>,
+<span class="c003">read_token_from_chars/2</span></a>
+</li><li><a href="gprolog039.html#sec177"><span class="c003">read_term_from_codes/3</span>,
+<span class="c003">read_from_codes/2</span>,
+<span class="c003">read_token_from_codes/2</span></a>
+</li><li><a href="gprolog039.html#sec178"><span class="c003">write_term_to_atom/3</span>,
+<span class="c003">write_to_atom/2</span>,
+<span class="c003">writeq_to_atom/2</span>, <br>
+ <span class="c003">write_canonical_to_atom/2</span>,
+<span class="c003">display_to_atom/2</span>,
+<span class="c003">print_to_atom/2</span>, <br>
+ <span class="c003">format_to_atom/3</span></a>
+</li><li><a href="gprolog039.html#sec179"><span class="c003">write_term_to_chars/3</span>,
+<span class="c003">write_to_chars/2</span>,
+<span class="c003">writeq_to_chars/2</span>, <br>
+ <span class="c003">write_canonical_to_chars/2</span>,
+<span class="c003">display_to_chars/2</span>,
+<span class="c003">print_to_chars/2</span>, <br>
+ <span class="c003">format_to_chars/3</span></a>
+</li><li><a href="gprolog039.html#sec180"><span class="c003">write_term_to_codes/3</span>,
+<span class="c003">write_to_codes/2</span>,
+<span class="c003">writeq_to_codes/2</span>, <br>
+ <span class="c003">write_canonical_to_codes/2</span>,
+<span class="c003">display_to_codes/2</span>,
+<span class="c003">print_to_codes/2</span>, <br>
+ <span class="c003">format_to_codes/3</span></a>
+</li></ul>
+</li><li><a href="gprolog040.html">DEC-10 compatibility input/output</a>
+<ul>
+<li><a href="gprolog040.html#sec182">Introduction</a>
+</li><li><a href="gprolog040.html#sec183"><span class="c003">see/1</span>,
+<span class="c003">tell/1</span>,
+<span class="c003">append/1</span></a>
+</li><li><a href="gprolog040.html#sec184"><span class="c003">seeing/1</span>,
+<span class="c003">telling/1</span></a>
+</li><li><a href="gprolog040.html#sec185"><span class="c003">seen/0</span>,
+<span class="c003">told/0</span></a>
+</li><li><a href="gprolog040.html#sec186"><span class="c003">get0/1</span>,
+<span class="c003">get/1</span>,
+<span class="c003">skip/1</span></a>
+</li><li><a href="gprolog040.html#sec187"><span class="c003">put/1</span>,
+<span class="c003">tab/1</span></a>
+</li></ul>
+</li><li><a href="gprolog041.html">Term expansion</a>
+<ul>
+<li><a href="gprolog041.html#sec189">Definite clause grammars</a>
+</li><li><a href="gprolog041.html#expand-term%2F2"><span class="c003">expand_term/2</span>,
+<span class="c003">term_expansion/2</span></a>
+</li><li><a href="gprolog041.html#sec191"><span class="c003">phrase/3</span>,
+<span class="c003">phrase/2</span></a>
+</li></ul>
+</li><li><a href="gprolog042.html">Logic, control and exceptions</a>
+<ul>
+<li><a href="gprolog042.html#abort%2F0"><span class="c003">abort/0</span>,
+<span class="c003">stop/0</span>,
+<span class="c003">top_level/0</span>,
+<span class="c003">break/0</span>,
+<span class="c003">halt/1</span>,
+<span class="c003">halt/0</span></a>
+</li><li><a href="gprolog042.html#sec194"><span class="c003">false/0</span>, <span class="c003">once/1</span>, <span class="c003">(</span><span class="c003">\</span><span class="c003">+)/1</span> - not provable,
+<span class="c003">call/2-11</span>,
+	 <span class="c003">call_with_args/1-11</span>, <span class="c003">call_det/2</span>, <span class="c003">forall/2</span></a>
+</li><li><a href="gprolog042.html#sec195"><span class="c003">repeat/0</span></a>
+</li><li><a href="gprolog042.html#sec196"><span class="c003">between/3</span>, <span class="c003">for/3</span></a>
+</li></ul>
+</li><li><a href="gprolog043.html">Atomic term processing</a>
+<ul>
+<li><a href="gprolog043.html#sec198"><span class="c003">atom_length/2</span></a>
+</li><li><a href="gprolog043.html#sec199"><span class="c003">atom_concat/3</span></a>
+</li><li><a href="gprolog043.html#sec200"><span class="c003">sub_atom/5</span></a>
+</li><li><a href="gprolog043.html#char-code%2F2"><span class="c003">char_code/2</span></a>
+</li><li><a href="gprolog043.html#sec202"><span class="c003">lower_upper/2</span></a>
+</li><li><a href="gprolog043.html#atom-chars%2F2"><span class="c003">atom_chars/2</span>,
+<span class="c003">atom_codes/2</span></a>
+</li><li><a href="gprolog043.html#number-atom%2F2"><span class="c003">number_atom/2</span>,
+<span class="c003">number_chars/2</span>,
+<span class="c003">number_codes/2</span></a>
+</li><li><a href="gprolog043.html#sec205"><span class="c003">name/2</span></a>
+</li><li><a href="gprolog043.html#sec206"><span class="c003">new_atom/2</span>,
+<span class="c003">new_atom/1</span></a>
+</li><li><a href="gprolog043.html#current-atom%2F2"><span class="c003">current_atom/1</span></a>
+</li><li><a href="gprolog043.html#atom-property%2F2"><span class="c003">atom_property/2</span></a>
+</li></ul>
+</li><li><a href="gprolog044.html">List processing</a>
+<ul>
+<li><a href="gprolog044.html#sec210"><span class="c003">append/3</span></a>
+</li><li><a href="gprolog044.html#member%2F2"><span class="c003">member/2</span>, 
+<span class="c003">memberchk/2</span></a>
+</li><li><a href="gprolog044.html#sec212"><span class="c003">reverse/2</span></a>
+</li><li><a href="gprolog044.html#sec213"><span class="c003">delete/3</span>,
+<span class="c003">select/3</span></a>
+</li><li><a href="gprolog044.html#sec214"><span class="c003">subtract/3</span></a>
+</li><li><a href="gprolog044.html#sec215"><span class="c003">permutation/2</span></a>
+</li><li><a href="gprolog044.html#sec216"><span class="c003">prefix/2</span>,
+<span class="c003">suffix/2</span></a>
+</li><li><a href="gprolog044.html#sec217"><span class="c003">sublist/2</span></a>
+</li><li><a href="gprolog044.html#sec218"><span class="c003">last/2</span></a>
+</li><li><a href="gprolog044.html#sec219"><span class="c003">flatten/2</span></a>
+</li><li><a href="gprolog044.html#sec220"><span class="c003">length/2</span></a>
+</li><li><a href="gprolog044.html#sec221"><span class="c003">nth/3</span></a>
+</li><li><a href="gprolog044.html#sec222"><span class="c003">max_list/2</span>,
+<span class="c003">min_list/2</span>,
+<span class="c003">sum_list/2</span></a>
+</li><li><a href="gprolog044.html#sec223"><span class="c003">maplist/2-8</span></a>
+</li><li><a href="gprolog044.html#sort%2F2"><span class="c003">sort/2</span>,
+<span class="c003">msort/2</span>,
+<span class="c003">keysort/2</span>
+<span class="c003">sort/1</span>,
+<span class="c003">msort/1</span>,
+<span class="c003">keysort/1</span></a>
+</li></ul>
+</li><li><a href="gprolog045.html">Global variables</a>
+<ul>
+<li><a href="gprolog045.html#sec226">Introduction</a>
+</li><li><a href="gprolog045.html#g-assign%2F2"><span class="c003">g_assign/2</span>,
+<span class="c003">g_assignb/2</span>,
+<span class="c003">g_link/2</span></a>
+</li><li><a href="gprolog045.html#sec228"><span class="c003">g_read/2</span></a>
+</li><li><a href="gprolog045.html#sec229"><span class="c003">g_array_size/2</span></a>
+</li><li><a href="gprolog045.html#sec230"><span class="c003">g_inc/3</span>,
+<span class="c003">g_inc/2</span>,
+<span class="c003">g_inco/2</span>,
+<span class="c003">g_inc/1</span>,
+<span class="c003">g_dec/3</span>,
+<span class="c003">g_dec/2</span>,
+<span class="c003">g_deco/2</span>,
+<span class="c003">g_dec/1</span></a>
+</li><li><a href="gprolog045.html#sec231"><span class="c003">g_set_bit/2</span>,
+<span class="c003">g_reset_bit/2</span>,
+<span class="c003">g_test_set_bit/2</span>,
+<span class="c003">g_test_reset_bit/2</span></a>
+</li><li><a href="gprolog045.html#sec232">Examples</a>
+</li></ul>
+</li><li><a href="gprolog046.html">Prolog state</a>
+<ul>
+<li><a href="gprolog046.html#set-prolog-flag%2F2"><span class="c003">set_prolog_flag/2</span></a>
+</li><li><a href="gprolog046.html#current-prolog-flag%2F2"><span class="c003">current_prolog_flag/2</span></a>
+</li><li><a href="gprolog046.html#set-bip-name%2F2"><span class="c003">set_bip_name/2</span></a>
+</li><li><a href="gprolog046.html#current-bip-name%2F2"><span class="c003">current_bip_name/2</span></a>
+</li><li><a href="gprolog046.html#write-pl-state-file%2F1"><span class="c003">write_pl_state_file/1</span>,
+<span class="c003">read_pl_state_file/1</span></a>
+</li></ul>
+</li><li><a href="gprolog047.html">Program state</a>
+<ul>
+<li><a href="gprolog047.html#consult%2F1"><span class="c003">consult/1</span>,
+<span class="c003">&#X2019;.&#X2019;/2</span> - program consult</a>
+</li><li><a href="gprolog047.html#load%2F1"><span class="c003">load/1</span></a>
+</li><li><a href="gprolog047.html#listing%2F1"><span class="c003">listing/1</span>,
+<span class="c003">listing/0</span></a>
+</li></ul>
+</li><li><a href="gprolog048.html">System statistics</a>
+<ul>
+<li><a href="gprolog048.html#statistics%2F2"><span class="c003">statistics/0</span>,
+<span class="c003">statistics/2</span></a>
+</li><li><a href="gprolog048.html#user-time%2F1"><span class="c003">user_time/1</span>,
+<span class="c003">system_time/1</span>,
+<span class="c003">cpu_time/1</span>,
+<span class="c003">real_time/1</span></a>
+</li></ul>
+</li><li><a href="gprolog049.html">Random number generator</a>
+<ul>
+<li><a href="gprolog049.html#sec247"><span class="c003">set_seed/1</span>,
+<span class="c003">randomize/0</span></a>
+</li><li><a href="gprolog049.html#sec248"><span class="c003">get_seed/1</span></a>
+</li><li><a href="gprolog049.html#sec249"><span class="c003">random/1</span></a>
+</li><li><a href="gprolog049.html#sec250"><span class="c003">random/3</span></a>
+</li></ul>
+</li><li><a href="gprolog050.html">File name processing</a>
+<ul>
+<li><a href="gprolog050.html#absolute-file-name%2F2"><span class="c003">absolute_file_name/2</span></a>
+</li><li><a href="gprolog050.html#sec253"><span class="c003">is_absolute_file_name/1</span>,
+<span class="c003">is_relative_file_name/1</span></a>
+</li><li><a href="gprolog050.html#sec254"><span class="c003">decompose_file_name/4</span></a>
+</li><li><a href="gprolog050.html#prolog-file-name%2F2"><span class="c003">prolog_file_name/2</span></a>
+</li></ul>
+</li><li><a href="gprolog051.html">Operating system interface</a>
+<ul>
+<li><a href="gprolog051.html#argument-counter%2F1"><span class="c003">argument_counter/1</span></a>
+</li><li><a href="gprolog051.html#argument-value%2F2"><span class="c003">argument_value/2</span></a>
+</li><li><a href="gprolog051.html#argument-list%2F1"><span class="c003">argument_list/1</span></a>
+</li><li><a href="gprolog051.html#sec260"><span class="c003">environ/2</span></a>
+</li><li><a href="gprolog051.html#sec261"><span class="c003">make_directory/1</span>,
+<span class="c003">delete_directory/1</span>,
+<span class="c003">change_directory/1</span></a>
+</li><li><a href="gprolog051.html#sec262"><span class="c003">working_directory/1</span></a>
+</li><li><a href="gprolog051.html#sec263"><span class="c003">directory_files/2</span></a>
+</li><li><a href="gprolog051.html#sec264"><span class="c003">rename_file/2</span></a>
+</li><li><a href="gprolog051.html#sec265"><span class="c003">delete_file/1</span>,
+<span class="c003">unlink/1</span></a>
+</li><li><a href="gprolog051.html#file-permission%2F2"><span class="c003">file_permission/2</span>,
+<span class="c003">file_exists/1</span></a>
+</li><li><a href="gprolog051.html#file-property%2F2"><span class="c003">file_property/2</span></a>
+</li><li><a href="gprolog051.html#sec268"><span class="c003">temporary_name/2</span></a>
+</li><li><a href="gprolog051.html#sec269"><span class="c003">temporary_file/3</span></a>
+</li><li><a href="gprolog051.html#date-time%2F1"><span class="c003">date_time/1</span></a>
+</li><li><a href="gprolog051.html#sec271"><span class="c003">host_name/1</span></a>
+</li><li><a href="gprolog051.html#sec272"><span class="c003">os_version/1</span></a>
+</li><li><a href="gprolog051.html#sec273"><span class="c003">architecture/1</span></a>
+</li><li><a href="gprolog051.html#sec274"><span class="c003">shell/2</span>,
+<span class="c003">shell/1</span>,
+<span class="c003">shell/0</span></a>
+</li><li><a href="gprolog051.html#sec275"><span class="c003">system/2</span>,
+<span class="c003">system/1</span></a>
+</li><li><a href="gprolog051.html#sec276"><span class="c003">spawn/3</span>,
+<span class="c003">spawn/2</span></a>
+</li><li><a href="gprolog051.html#popen%2F3"><span class="c003">popen/3</span></a>
+</li><li><a href="gprolog051.html#sec278"><span class="c003">exec/5</span>,
+<span class="c003">exec/4</span></a>
+</li><li><a href="gprolog051.html#sec279"><span class="c003">fork_prolog/1</span></a>
+</li><li><a href="gprolog051.html#sec280"><span class="c003">create_pipe/2</span></a>
+</li><li><a href="gprolog051.html#wait%2F2"><span class="c003">wait/2</span></a>
+</li><li><a href="gprolog051.html#sec282"><span class="c003">prolog_pid/1</span></a>
+</li><li><a href="gprolog051.html#sec283"><span class="c003">send_signal/2</span></a>
+</li><li><a href="gprolog051.html#sec284"><span class="c003">sleep/1</span></a>
+</li><li><a href="gprolog051.html#select%2F5"><span class="c003">select/5</span></a>
+</li></ul>
+</li><li><a href="gprolog052.html">Sockets input/output</a>
+<ul>
+<li><a href="gprolog052.html#sec287">Introduction</a>
+</li><li><a href="gprolog052.html#sec288"><span class="c003">socket/2</span></a>
+</li><li><a href="gprolog052.html#sec289"><span class="c003">socket_close/1</span></a>
+</li><li><a href="gprolog052.html#sec290"><span class="c003">socket_bind/2</span></a>
+</li><li><a href="gprolog052.html#socket-connect%2F4"><span class="c003">socket_connect/4</span></a>
+</li><li><a href="gprolog052.html#sec292"><span class="c003">socket_listen/2</span></a>
+</li><li><a href="gprolog052.html#sec293"><span class="c003">socket_accept/4</span>,
+<span class="c003">socket_accept/3</span></a>
+</li><li><a href="gprolog052.html#sec294"><span class="c003">hostname_address/2</span></a>
+</li></ul>
+</li><li><a href="gprolog053.html">Linedit management</a>
+<ul>
+<li><a href="gprolog053.html#sec296"><span class="c003">get_linedit_prompt/1</span></a>
+</li><li><a href="gprolog053.html#sec297"><span class="c003">set_linedit_prompt/1</span></a>
+</li><li><a href="gprolog053.html#sec298"><span class="c003">add_linedit_completion/1</span></a>
+</li><li><a href="gprolog053.html#sec299"><span class="c003">find_linedit_completion/2</span></a>
+</li></ul>
+</li></ul>
+
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog021.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="index.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog054.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

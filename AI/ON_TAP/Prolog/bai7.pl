@@ -1,0 +1,1 @@
+indanhsach(L, H, T) :- L = [H|T].

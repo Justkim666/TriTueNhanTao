@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>FD variable information</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog058.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog060.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec312">9.5&#XA0;&#XA0;FD variable information</h3>
+<ul>
+<li><a href="gprolog059.html#sec313"><span class="c003">fd_min/2</span>,
+<span class="c003">fd_max/2</span>,
+<span class="c003">fd_size/2</span>,
+<span class="c003">fd_dom/2</span></a>
+</li><li><a href="gprolog059.html#sec314"><span class="c003">fd_has_extra_cstr/1</span>,
+<span class="c003">fd_has_vector/1</span>,
+<span class="c003">fd_use_vector/1</span></a>
+</li></ul>
+<p>
+These predicate allow the user to get some information about FD variables.
+They are not constraints, they only return the current state of a variable.</p>
+<h4 class="subsubsection" id="sec313">9.5.1&#XA0;&#XA0;<a id="hevea_default953"></a><span class="c003">fd_min/2</span>,
+<a id="hevea_default954"></a><span class="c003">fd_max/2</span>,
+<a id="hevea_default955"></a><span class="c003">fd_size/2</span>,
+<a id="hevea_default956"></a><span class="c003">fd_dom/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_min(+fd_variable, ?integer)<br>
+fd_max(+fd_variable, ?integer)<br>
+fd_size(+fd_variable, ?integer)<br>
+fd_dom(+fd_variable, ?integer_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_min(X, N)</span> succeeds if <span class="c003">N</span> is the minimal value of the
+current domain of <span class="c003">X</span>.</p><p><span class="c003">fd_max(X, N)</span> succeeds if <span class="c003">N</span> is the maximal value of the
+current domain of <span class="c003">X</span>.</p><p><span class="c003">fd_size(X, N)</span> succeeds if <span class="c003">N</span> is the number of elements of
+the current domain of <span class="c003">X</span>.</p><p><span class="c003">fd_dom(X, Values)</span> succeeds if <span class="c003">Values</span> is the list of
+values of the current domain of <span class="c003">X</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is neither an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Vars</span> list is neither a
+variable nor an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Values</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Values)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec314">9.5.2&#XA0;&#XA0;<a id="hevea_default957"></a><span class="c003">fd_has_extra_cstr/1</span>,
+<a id="hevea_default958"></a><span class="c003">fd_has_vector/1</span>,
+<a id="hevea_default959"></a><span class="c003">fd_use_vector/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_has_extra_cstr(+fd_variable)<br>
+fd_has_vector(+fd_variable)<br>
+fd_use_vector(+fd_variable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_has_extra_cstr(X)</span> succeeds if the <a id="hevea_default960"></a><span class="c003">extra_cstr</span>
+of <span class="c003">X</span> is currently on (section&#XA0;<a href="gprolog055.html#Intro-FD">9.1</a>).</p><p><span class="c003">fd_has_vector(X)</span> succeeds if the current domain of <span class="c003">X</span>
+uses a sparse representation (section&#XA0;<a href="gprolog055.html#Intro-FD">9.1</a>).</p><p><span class="c003">fd_use_vector(X)</span> enforces a sparse representation for the domain
+of <span class="c003">X</span> (section&#XA0;<a href="gprolog055.html#Intro-FD">9.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is neither an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog058.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog060.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

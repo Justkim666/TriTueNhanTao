@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Adjusting the size of Prolog data</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog007.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog009.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec14">4.3&#XA0;&#XA0;Adjusting the size of Prolog data</h3>
+<p>
+<a id="Adjusting-the-size-of-Prolog-stacks"></a>
+GNU Prolog uses several stacks to execute a Prolog program. Each stack has a
+static size and cannot be dynamically increased during the execution. For
+each stack there is a default size but the user can define a new size by
+setting an environment variable. When a GNU Prolog program is run it first
+consults these variables and if they are not defined uses the default sizes.
+The following table presents each stack of GNU Prolog with its default size
+and the name of its associated environment variable:</p><p>Since version 1.4.2, the size of the atom table (the table recording all atoms) 
+is managed similarly to stacks. It is then included in the following table
+(even if actually it is not a stack but an hash table).
+In this table, the associated name is <span class="c003">atoms</span> which is the key used in statistics 
+(section&#XA0;<a href="gprolog048.html#statistics%2F2">8.24.1</a>). The environment variable name is derived from the corresponding Prolog flag 
+<span class="c003">max_atom</span>, see (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>).</p><table class="c000 cellpadding1" border=1><tr><td class="c012">
+Stack</td><td class="c012">Default</td><td class="c012">Environment</td><td class="c014">Description </td></tr>
+<tr><td class="c012">name</td><td class="c012">size (Kb)</td><td class="c012">variable</td><td class="c014">&nbsp;</td></tr>
+<tr><td class="c012">
+<span class="c003">local</span></td><td class="c012">16384</td><td class="c012"><span class="c003">LOCALSZ</span></td><td class="c014">control stack (environments
+and choice-points) </td></tr>
+<tr><td class="c012">
+<span class="c003">global</span></td><td class="c012">32768</td><td class="c012"><span class="c003">GLOBALSZ</span></td><td class="c014">heap (compound terms) </td></tr>
+<tr><td class="c012">
+<span class="c003">trail</span></td><td class="c012">16384</td><td class="c012"><span class="c003">TRAILSZ</span></td><td class="c014">conditional bindings (bindings
+to undo at backtracking) </td></tr>
+<tr><td class="c012">
+<span class="c003">cstr</span></td><td class="c012">16384</td><td class="c012"><span class="c003">CSTRSZ</span></td><td class="c014">finite domain constraint stack
+(FD variables and constraints) </td></tr>
+<tr><td class="c012">
+<span class="c003">atoms</span></td><td class="c012">32768</td><td class="c012"><span class="c003">MAX_ATOM</span></td><td class="c014">atom table </td></tr>
+</table><p>In addition, under Windows (since version 1.4.0), registry keys are consulted
+(key names are the same as environment names). The keys are stored in
+<span class="c003">HKEY_CURRENT_USER\Software\GnuProlog\</span>.</p><p>If the size of a stack is too small an overflow will occur during the
+execution. In that case GNU Prolog emits the following error message before
+stopping:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003"><span class="c008">S</span> stack overflow (size:&#XA0;<span class="c008">N</span> Kb, environment variable used:&#XA0;<span class="c008">E</span>)</span></dd></dl><p>where <span class="c004">S</span> is the name of the stack, <span class="c004">N</span> is
+the current stack size in Kb and <span class="c004">E</span> the name of the
+associated environment variable. When such a message occurs it is possible
+to (re)define the variable <span class="c004">E</span> with the new size. For
+instance to allocate Kb to the local stack under a Unix shell use:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><table class="c001 cellpading0"><tr><td class="c015"><span class="c003">LOCALSZ=32768; export LOCALSZ</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(under <span class="c003">sh</span> or <span class="c003">bash</span>)</td></tr>
+<tr><td class="c015"><span class="c003">setenv LOCALSZ 32768</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c015">(under <span class="c003">csh</span> or <span class="c003">tcsh</span>)</td></tr>
+</table></dd></dl><p>This method allows the user to adjust the size of Prolog stacks. However, in
+some cases it is preferable not to allow the user to modify these sizes. For
+instance, when providing a stand alone executable whose behavior should be
+independent of the environment in which it is run. In that case the program
+should not consult environment variables and the programmer should be able
+to define new default stack sizes. The GNU Prolog compiler offers this
+facilities via several command-line options such as <a id="hevea_default41"></a><span class="c003">--local-size</span> or
+<a id="hevea_default42"></a><span class="c003">--fixed-sizes</span> (section&#XA0;<a href="gprolog009.html#Using-the-compiler">4.4.3</a>).</p><p>Finally note that GNU Prolog stacks are virtually allocated (i.e. use virtual
+memory). This means that a physical memory page is allocated only when needed
+(i.e. when an attempt to read/write it occurs). Thus it is possible to define
+very large stacks. At the execution, only the needed amount of space will be
+physically allocated.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog007.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog005.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog009.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

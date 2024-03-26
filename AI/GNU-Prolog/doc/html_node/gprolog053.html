@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Linedit management</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog052.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<hr>
+<h3 class="subsection" id="sec295">8.29&#XA0;&#XA0;Linedit management</h3>
+<ul>
+<li><a href="gprolog053.html#sec296"><span class="c003">get_linedit_prompt/1</span></a>
+</li><li><a href="gprolog053.html#sec297"><span class="c003">set_linedit_prompt/1</span></a>
+</li><li><a href="gprolog053.html#sec298"><span class="c003">add_linedit_completion/1</span></a>
+</li><li><a href="gprolog053.html#sec299"><span class="c003">find_linedit_completion/2</span></a>
+</li></ul>
+<p>
+The following predicates are only available if the <a id="hevea_default919"></a><span class="c003">linedit</span> part of
+GNU Prolog has been installed.</p>
+<h4 class="subsubsection" id="sec296">8.29.1&#XA0;&#XA0;<a id="hevea_default920"></a><span class="c003">get_linedit_prompt/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+get_linedit_prompt(?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">get_linedit_prompt(Prompt)</span> succeeds if <span class="c003">Prompt</span> is the
+current <a id="hevea_default921"></a><span class="c003">linedit</span> prompt, e.g. the <a id="hevea_default922"></a>top-level prompt is
+<span class="c003">&#X2019;| ?-&#X2019;</span>. By default all other reads have an empty prompt.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prompt</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec297">8.29.2&#XA0;&#XA0;<a id="hevea_default923"></a><span class="c003">set_linedit_prompt/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_linedit_prompt(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_linedit_prompt(Prompt)</span> sets the current <a id="hevea_default924"></a><span class="c003">linedit</span>
+prompt to <span class="c003">Prompt</span>. This prompt will be displayed for reads from a
+terminal (except for <a id="hevea_default925"></a>top-level reads).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prompt</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prompt</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec298">8.29.3&#XA0;&#XA0;<a id="hevea_default926"></a><span class="c003">add_linedit_completion/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+add_linedit_completion(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">add_linedit_completion(Word)</span> adds <span class="c003">Word</span> in the list of
+<a id="hevea_default927"></a>completion words maintained by <a id="hevea_default928"></a><span class="c003">linedit</span>
+(section&#XA0;<a href="gprolog007.html#The-line-editor">4.2.6</a>). Only words containing letters, digits and
+the underscore character are added (if <span class="c003">Word</span> does not respect
+this restriction the predicate fails).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Word</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Word</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Word)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec299">8.29.4&#XA0;&#XA0;<a id="hevea_default929"></a><span class="c003">find_linedit_completion/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+find_linedit_completion(+atom, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">find_linedit_completion(Prefix, Word)</span> succeeds if <span class="c003">Word</span>
+is a word beginning by <span class="c003">Prefix</span> and belongs to the list of
+<a id="hevea_default930"></a>completion words maintained by <a id="hevea_default931"></a><span class="c003">linedit</span>
+(section&#XA0;<a href="gprolog007.html#The-line-editor">4.2.6</a>). This predicate is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prefix</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prefix</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Prefix)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Word</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Word)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog052.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+</body>
+</html>

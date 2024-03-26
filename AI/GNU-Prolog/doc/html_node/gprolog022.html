@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Prolog directives</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog021.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog023.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec49">7.1&#XA0;&#XA0;Prolog directives</h3>
+<ul>
+<li><a href="gprolog022.html#sec50">Introduction</a>
+</li><li><a href="gprolog022.html#dynamic%2F1"><span class="c003">dynamic/1</span> </a>
+</li><li><a href="gprolog022.html#public%2F1"><span class="c003">public/1</span> </a>
+</li><li><a href="gprolog022.html#sec53"><span class="c003">multifile/1</span></a>
+</li><li><a href="gprolog022.html#sec54"><span class="c003">discontiguous/1</span></a>
+</li><li><a href="gprolog022.html#sec55"><span class="c003">ensure_linked/1</span></a>
+</li><li><a href="gprolog022.html#sec56"><span class="c003">built_in/0</span>,
+<span class="c003">built_in/1</span>,
+<span class="c003">built_in_fd/0</span>,
+<span class="c003">built_in_fd/1</span></a>
+</li><li><a href="gprolog022.html#sec57"><span class="c003">include/1</span></a>
+</li><li><a href="gprolog022.html#sec58"><span class="c003">if/1</span>, <span class="c003">else/0</span>, <span class="c003">endif/0</span>, <span class="c003">elif/1</span> </a>
+</li><li><a href="gprolog022.html#sec59"><span class="c003">ensure_loaded/1</span></a>
+</li><li><a href="gprolog022.html#op%2F3"><span class="c003">op/3</span> </a>
+</li><li><a href="gprolog022.html#sec61"><span class="c003">char_conversion/2</span></a>
+</li><li><a href="gprolog022.html#sec62"><span class="c003">set_prolog_flag/2</span></a>
+</li><li><a href="gprolog022.html#initialization%2F1"><span class="c003">initialization/1</span> </a>
+</li><li><a href="gprolog022.html#foreign%2F2"><span class="c003">foreign/2</span>,
+<span class="c003">foreign/1</span> </a>
+</li></ul>
+<h4 class="subsubsection" id="sec50">7.1.1&#XA0;&#XA0;Introduction</h4>
+<p>
+Prolog directives are annotations inserted in Prolog source files for the
+compiler. A Prolog directive is used to specify:</p><ul class="itemize"><li class="li-itemize">the properties of some procedures defined in the source file.</li><li class="li-itemize">the format and the syntax for read-terms in the source file (using
+changeable Prolog flags).</li><li class="li-itemize">included source files.</li><li class="li-itemize">a goal to be executed at run-time.</li></ul>
+<h4 class="subsubsection" id="dynamic/1">7.1.2&#XA0;&#XA0;<a id="hevea_default189"></a><span class="c003">dynamic/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+dynamic(+predicate_indicator)<br>
+dynamic(+predicate_indicator_list)<br>
+dynamic(+predicate_indicator_sequence)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">dynamic(Pred)</span> specifies that the procedure whose
+predicate indicator is <span class="c003">Pred</span> is a dynamic procedure. This directive
+makes it possible to alter the definition of <span class="c003">Pred</span> by adding or
+removing clauses. For more information refer to the section about dynamic
+clause management (section&#XA0;<a href="gprolog031.html#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>).</p><p>This directive shall precede the definition of <span class="c003">Pred</span> in the source
+file.</p><p>If there is no clause for <span class="c003">Pred</span> in the source file, <span class="c003">Pred</span>
+exists however as an empty predicate (this means that
+<span class="c003">current_predicate(Pred)</span> succeeds).</p><p>In order to allow multiple definitions, <span class="c003">Pred</span> can also be a list of
+predicate indicators or a sequence of predicate indicators using
+<span class="c003">&#X2019;,&#X2019;/2</span> as separator.</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="public/1">7.1.3&#XA0;&#XA0;<a id="hevea_default190"></a><span class="c003">public/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+public(+predicate_indicator)<br>
+public(+predicate_indicator_list)<br>
+public(+predicate_indicator_sequence)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">public(Pred)</span> specifies that the procedure whose predicate indicator
+is <span class="c003">Pred</span> is a public procedure. This directive makes it possible to
+inspect the clauses of <span class="c003">Pred</span>. For more information refer to the
+section about dynamic clause management (section&#XA0;<a href="gprolog031.html#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>).</p><p>This directive shall precede the definition of <span class="c003">Pred</span> in the source
+file. Since a dynamic procedure is also public. It is useless (but correct)
+to define a public directive for a predicate already declared as dynamic.</p><p>In order to allow multiple definitions, <span class="c003">Pred</span> can also be a list of
+predicate indicators or a sequence of predicate indicators using
+<span class="c003">&#X2019;,&#X2019;/2</span> as separator.</p><p><span class="c009">Portability</span></p><p>GNU Prolog directive. The ISO reference does not define any directive to
+declare a predicate public but it does distinguish public predicates. It is
+worth noting that in most Prolog systems the <span class="c003">public/1</span> directive is
+as a visibility declaration. Indeed, declaring a predicate as public makes
+it visible from any predicate defined in any other file (otherwise the
+predicate is only visible from predicates defined in the same source file as
+itself). When a module system is incorporated in GNU Prolog a more general
+visibility declaration shall be provided conforming to the ISO reference.</p>
+<h4 class="subsubsection" id="sec53">7.1.4&#XA0;&#XA0;<a id="hevea_default191"></a><span class="c003">multifile/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+multifile(+predicate_indicator)<br>
+multifile(+predicate_indicator_list)<br>
+multifile(+predicate_indicator_sequence)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">multifile(Pred)</span> specifies that the procedure whose predicate
+indicator is <span class="c003">Pred</span> is a multifle procedure (the clauses of
+<span class="c003">Pred</span> can reside in several source files). This directive is only
+supported by GNU Prolog since version 1.4.0.</p><p>The native compilation scheme of GNU Prolog requires that each Prolog source
+file refering to a multifile predicate <span class="c003">Pred</span> must include a
+<span class="c003">multifile(Pred)</span> directive even if no clause are defined in this file
+for <span class="c003">Pred</span> (i.e. <span class="c003">Pred</span> is only called by other predicates in
+this source file).</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="sec54">7.1.5&#XA0;&#XA0;<a id="hevea_default192"></a><span class="c003">discontiguous/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+discontiguous(+predicate_indicator)<br>
+discontiguous(+predicate_indicator_list)<br>
+discontiguous(+predicate_indicator_sequence)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">discontiguous(Pred)</span> specifies that the procedure whose predicate
+indicator is <span class="c003">Pred</span> is a discontiguous procedure. Namely, the clauses
+defining <span class="c003">Pred</span> are not restricted to be consecutive but can appear
+anywhere in the source file.</p><p>This directive shall precede the definition of <span class="c003">Pred</span> in the source
+file.</p><p>In order to allow multiple definitions, <span class="c003">Pred</span> can also be a list of
+predicate indicators or a sequence of predicate indicators using
+<span class="c003">&#X2019;,&#X2019;/2</span> as separator.</p><p>A multifile predicate (declared with a <a id="hevea_default193"></a><span class="c003">multifile/1</span> directive) cannot
+be directly called from a file where it is not declared as multifile (the
+native compiler must know the called predicate is multifile). Workarounds:
+either call it via a meta-call (e.g. using <span class="c003">call/1</span>) or declare it as
+multifile in the calling source file). A good habit is to encapsulate a
+multifile predicate in a monofile predicate which invokes it (external call
+only invoke the monofile wrapper predicate).</p><p><span class="c009">Portability</span></p><p>ISO directive. </p>
+<h4 class="subsubsection" id="sec55">7.1.6&#XA0;&#XA0;<a id="hevea_default194"></a><span class="c003">ensure_linked/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+ensure_linked(+predicate_indicator)<br>
+ensure_linked(+predicate_indicator_list)<br>
+ensure_linked(+predicate_indicator_sequence)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">ensure_linked(Pred)</span> specifies that the procedure
+whose predicate indicator is <span class="c003">Pred</span> must be included by the linker.
+This directive is useful when compiling to native code to force the linker to
+include the code of a given predicate. Indeed, if the <span class="c003">gplc</span> is
+invoked with an option to reduce the size of the executable
+(section&#XA0;<a href="gprolog009.html#Using-the-compiler">4.4.3</a>), the linker only includes the code of predicates
+that are statically referenced. However, the linker cannot detect dynamically
+referenced predicates (used as data passed to a meta-call predicate). The use
+of this directive prevents it to exclude the code of such predicates.</p><p>In order to allow multiple definitions, <span class="c003">Pred</span> can also be a list of
+predicate indicators or a sequence of predicate indicators using
+<span class="c003">&#X2019;,&#X2019;/2</span> as separator.</p><p><span class="c009">Portability</span></p><p>GNU Prolog directive.</p>
+<h4 class="subsubsection" id="sec56">7.1.7&#XA0;&#XA0;<a id="hevea_default195"></a><span class="c003">built_in/0</span>,
+<a id="hevea_default196"></a><span class="c003">built_in/1</span>,
+<a id="hevea_default197"></a><span class="c003">built_in_fd/0</span>,
+<a id="hevea_default198"></a><span class="c003">built_in_fd/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+built_in<br>
+built_in(+predicate_indicator)<br>
+built_in(+predicate_indicator_list)<br>
+built_in(+predicate_indicator_sequence)<br>
+built_in_fd<br>
+built_in_fd(+predicate_indicator)<br>
+built_in_fd(+predicate_indicator_list)<br>
+built_in_fd(+predicate_indicator_sequence)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">built_in</span> specifies that the procedures defined from
+now have the <a id="hevea_default199"></a><span class="c003">built_in</span> property (section&#XA0;<a href="gprolog032.html#predicate-property%2F2">8.8.2</a>).</p><p><span class="c003">built_in(Pred)</span> is similar to <span class="c003">built_in/0</span> but
+only affects the procedure whose predicate indicator is <span class="c003">Pred</span>.</p><p>This directive shall precede the definition of <span class="c003">Pred</span> in the source
+file.</p><p>In order to allow multiple definitions, <span class="c003">Pred</span> can also be a list of
+predicate indicators or a sequence of predicate indicators using
+<span class="c003">&#X2019;,&#X2019;/2</span> as separator.</p><p><span class="c003">built_in_fd</span> (resp.
+<span class="c003">built_in_fd(Pred)</span>) is similar to
+<span class="c003">built_in</span> (resp. <span class="c003">built_in(Pred)</span>) but sets the
+<a id="hevea_default200"></a><span class="c003">built_in_fd</span> predicate property (section&#XA0;<a href="gprolog032.html#predicate-property%2F2">8.8.2</a>).</p><p><span class="c009">Portability</span></p><p>GNU Prolog directives.</p>
+<h4 class="subsubsection" id="sec57">7.1.8&#XA0;&#XA0;<a id="hevea_default201"></a><span class="c003">include/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+include(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">include(File)</span> specifies that the content of the Prolog source
+<span class="c003">File</span> shall be inserted. The resulting Prolog text is identical to
+the Prolog text obtained by replacing the directive by the content of the
+Prolog source <span class="c003">File</span>.</p><p>In case of <span class="c003">File</span> is a relative file name, it is searched in the
+current directory. If it is not found it is then searched in each directory
+of parent includers.</p><p>See <a id="hevea_default202"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">File</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="sec58">7.1.9&#XA0;&#XA0;<a id="hevea_default203"></a><span class="c003">if/1</span>, <a id="hevea_default204"></a><span class="c003">else/0</span>, <a id="hevea_default205"></a><span class="c003">endif/0</span>, <a id="hevea_default206"></a><span class="c003">elif/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+if(+callable_term) <br>
+else<br>
+endif<br>
+elif(+callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p>These directives are for conditional compilation.</p><p><span class="c003">if(Goal)</span> compile subsequent code only if <span class="c003">Goal</span>
+succeeds. <span class="c003">Goal</span> is first processed by <span class="c003">expand_term/2</span>
+(section&#XA0;<a href="gprolog041.html#expand-term%2F2">8.17.2</a>). If <span class="c003">Goal</span> raises an exception it is printed
+and <span class="c003">Goal</span> fails.</p><p><span class="c003">else</span> introduces the <span class="c008">else</span> part.</p><p><span class="c003">endif</span> terminates a conditional compilation part.</p><p><span class="c003">elif(Goal)</span> is a shorthand for <span class="c003">:- else. :- if(Goal). </span>&#X2026;<span class="c003"> :- endif</span>.</p><p><span class="c009">Portability</span></p><p>GNU Prolog directive. Also in SWI and YAP.</p>
+<h4 class="subsubsection" id="sec59">7.1.10&#XA0;&#XA0;<a id="hevea_default207"></a><span class="c003">ensure_loaded/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+ensure_loaded(+atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">ensure_loaded(File)</span> is not supported by GNU Prolog. When such a
+directive is encountered it is simply ignored.</p><p><span class="c009">Portability</span></p><p>ISO directive. Not supported.</p>
+<h4 class="subsubsection" id="op/3">7.1.11&#XA0;&#XA0;<a id="hevea_default208"></a><span class="c003">op/3</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+op(+integer, +operator_specifier, +atom_or_atom_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">op(Priority, OpSpecifier, Operator)</span> alters the operator table. This
+directive is executed as soon as it is encountered by calling the built-in
+predicate <a id="hevea_default209"></a><span class="c003">op/3</span> (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>). A system
+directive is also generated to reflect the effect of this directive at
+run-time (section&#XA0;<a href="gprolog009.html#Running-an-executable">4.4.4</a>).</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="sec61">7.1.12&#XA0;&#XA0;<a id="hevea_default210"></a><span class="c003">char_conversion/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+char_conversion(+character, +character)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">char_conversion(InChar, OutChar)</span> alters the character-conversion
+mapping. This directive is executed as soon as it is encountered by a call
+to the built-in predicate <a id="hevea_default211"></a><span class="c003">char_conversion/2</span>
+(section&#XA0;<a href="gprolog038.html#char-conversion%2F2">8.14.12</a>). A system directive is also generated to reflect
+the effect of this directive at run-time (section&#XA0;<a href="gprolog009.html#Running-an-executable">4.4.4</a>).</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="sec62">7.1.13&#XA0;&#XA0;<a id="hevea_default212"></a><span class="c003">set_prolog_flag/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_prolog_flag(+flag, +term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_prolog_flag(Flag, Value)</span> sets the value of the
+<a id="hevea_default213"></a>Prolog flag <span class="c003">Flag</span> to <span class="c003">Value</span>. This directive is
+executed as soon as it is encountered by a call to the built-in predicate
+<a id="hevea_default214"></a><span class="c003">set_prolog_flag/2</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). A system directive
+is also generated to reflect the effect of this directive at run-time
+(section&#XA0;<a href="gprolog009.html#Running-an-executable">4.4.4</a>).</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="initialization/1">7.1.14&#XA0;&#XA0;<a id="hevea_default215"></a><span class="c003">initialization/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+initialization(+callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">initialization(Goal)</span> adds <span class="c003">Goal</span> to the set of goal which
+shall be executed at run-time. A user directive is generated to execute
+<span class="c003">Goal</span> at run-time. If several initialization directives appear in
+the same file they are executed in the order of appearance
+(section&#XA0;<a href="gprolog009.html#Running-an-executable">4.4.4</a>).</p><p><span class="c009">Portability</span></p><p>ISO directive.</p>
+<h4 class="subsubsection" id="foreign/2">7.1.15&#XA0;&#XA0;<a id="hevea_default216"></a><span class="c003">foreign/2</span>,
+<a id="hevea_default217"></a><span class="c003">foreign/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+foreign(+callable_term, +foreign_option_list)<br>
+foreign(+callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">foreign(Template, Options)</span> defines an interface predicate whose
+prototype is <span class="c003">Template</span> according to the options given by
+<span class="c003">Options</span>. Refer to the foreign code interface for more information
+(section&#XA0;<a href="gprolog068.html#Calling-C-from-Prolog">10.3</a>).</p><p><span class="c003">foreign(Template)</span> is equivalent to <span class="c003">foreign(Template, [])</span>.</p><p><span class="c009">Portability</span></p><p>GNU Prolog directive.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog021.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog023.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

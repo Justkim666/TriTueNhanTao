@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Types and modes</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog018.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog017.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog020.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec34">6.2&#XA0;&#XA0;Types and modes</h3>
+<p>
+<a id="Types-and-modes"></a>
+The templates part defines, for each argument of the concerned built-in
+predicate, its mode and type. The mode specifies whether or not the argument
+must be instantiated when the built-in predicate is called. The mode is
+encoded with a symbol just before the type. Possible modes are:</p><ul class="itemize"><li class="li-itemize"><span class="c003">+</span>: the argument must be instantiated.</li><li class="li-itemize"><span class="c003">-</span>: the argument must be a variable (will be instantiated if
+the built-in predicate succeeds).</li><li class="li-itemize"><span class="c003">?</span>: the argument can be instantiated or a variable.</li></ul><p>The type of an argument is defined by the following table:</p><table class="c000 cellpadding1" border=1><tr><td class="c021">
+Type</td><td class="c020">Description </td></tr>
+<tr><td class="c021">
+<span class="c003"><span class="c008">TYPE</span>_list</span></td><td class="c020">a list whose the type of each element is
+<span class="c004">TYPE</span> </td></tr>
+<tr><td class="c021">
+<span class="c003"><span class="c008">TYPE1</span>_or_<span class="c008">TYPE2</span></span></td><td class="c020">a term whose type is either
+<span class="c004">TYPE1</span> or <span class="c004">TYPE2</span> </td></tr>
+<tr><td class="c021">
+<span class="c003">atom</span></td><td class="c020">an atom </td></tr>
+<tr><td class="c021">
+<span class="c003">atom_property</span></td><td class="c020">an atom property (section&#XA0;<a href="gprolog043.html#atom-property%2F2">8.19.11</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">boolean</span></td><td class="c020">the atom <span class="c003">true</span> or <span class="c003">false</span> </td></tr>
+<tr><td class="c021">
+<span class="c003">byte</span></td><td class="c020">an integer &#X2265; 0 and &#X2264; 255 </td></tr>
+<tr><td class="c021">
+<span class="c003">callable_term</span></td><td class="c020">an atom or a compound term </td></tr>
+<tr><td class="c021">
+<span class="c003">character</span></td><td class="c020">a single character atom </td></tr>
+<tr><td class="c021">
+<span class="c003">character_code</span></td><td class="c020">an integer &#X2265; 1 and &#X2264; 255 </td></tr>
+<tr><td class="c021">
+<span class="c003">clause</span></td><td class="c020">a clause (fact or rule) </td></tr>
+<tr><td class="c021">
+<span class="c003">close_option</span></td><td class="c020">a close option (section&#XA0;<a href="gprolog034.html#close%2F2">8.10.7</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">compound_term</span></td><td class="c020">a compound term </td></tr>
+<tr><td class="c021">
+<span class="c003">evaluable</span></td><td class="c020">an arithmetic expression (section&#XA0;<a href="gprolog030.html#Evaluation-of-an-arithmetic-expression">8.6.1</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">fd_bool_evaluable</span></td><td class="c020">a boolean FD expression (section&#XA0;<a href="gprolog061.html#Boolean-FD-expressions">9.7.1</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">fd_labeling_option</span></td><td class="c020">an FD labeling option (section&#XA0;<a href="gprolog063.html#fd-labeling%2F2">9.9.1</a>)
+</td></tr>
+<tr><td class="c021">
+<span class="c003">fd_evaluable</span></td><td class="c020">an arithmetic FD expression (section&#XA0;<a href="gprolog060.html#FD-arithmetic-expressions">9.6.1</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">fd_variable</span></td><td class="c020">an FD variable </td></tr>
+<tr><td class="c021">
+<span class="c003">flag</span></td><td class="c020">a <a id="hevea_default182"></a>Prolog flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">float</span></td><td class="c020">a floating point number </td></tr>
+<tr><td class="c021">
+<span class="c003">head</span></td><td class="c020">a head of a clause (atom or compound term) </td></tr>
+<tr><td class="c021">
+<span class="c003">integer</span></td><td class="c020">an integer </td></tr>
+<tr><td class="c021">
+<span class="c003">in_byte</span></td><td class="c020">an integer &#X2265; 0 and &#X2264; 255 or <span class="c003">-1</span> (for
+the end-of-file) </td></tr>
+<tr><td class="c021">
+<span class="c003">in_character</span></td><td class="c020">a single character atom or the atom
+<span class="c003">end_of_file</span> (for the end-of-file) </td></tr>
+<tr><td class="c021">
+<span class="c003">in_character_code</span></td><td class="c020">an integer &#X2265; 1 and &#X2264; 255 or
+<span class="c003">-1</span> (for the end-of-file) </td></tr>
+<tr><td class="c021">
+<span class="c003">io_mode</span></td><td class="c020">an atom in: <span class="c003">read</span>, <span class="c003">write</span> or
+<span class="c003">append</span> </td></tr>
+<tr><td class="c021">
+<span class="c003">list</span></td><td class="c020">the empty list <span class="c003">[]</span> or a non-empty list
+<span class="c003">[_|_]</span> </td></tr>
+<tr><td class="c021">
+<span class="c003">nonvar</span></td><td class="c020">any term that is not a variable </td></tr>
+<tr><td class="c021">
+<span class="c003">number</span></td><td class="c020">an integer or a floating point number </td></tr>
+<tr><td class="c021">
+<span class="c003">operator_specifier</span></td><td class="c020">an operator specifier (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">os_file_property</span></td><td class="c020">an operating system file property (section&#XA0;<a href="gprolog051.html#file-property%2F2">8.27.11</a>)
+</td></tr>
+<tr><td class="c021">
+<span class="c003">predicate_indicator</span></td><td class="c020">a term <span class="c003">Name/Arity</span> where
+<span class="c003">Name</span> is an atom and <span class="c003">Arity</span> an integer &#X2265; 0. A callable
+term can be given if the <a id="hevea_default183"></a><span class="c003">strict_iso</span> <a id="hevea_default184"></a>Prolog flag is switched
+off (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">predicate_property</span></td><td class="c020">a predicate property
+(section&#XA0;<a href="gprolog032.html#predicate-property%2F2">8.8.2</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">read_option</span></td><td class="c020">a read option (section&#XA0;<a href="gprolog038.html#read-term%2F3">8.14.1</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">socket_address</span></td><td class="c020">a term of the form <span class="c003">&#X2019;AF_UNIX&#X2019;(A)</span> or
+<span class="c003">&#X2019;AF_INET&#X2019;(A,N)</span> where <span class="c003">A</span> is an atom and <span class="c003">N</span> an
+integer </td></tr>
+<tr><td class="c021">
+<span class="c003">socket_domain</span></td><td class="c020">an atom in: <span class="c003">&#X2019;AF_UNIX&#X2019;</span> or
+<span class="c003">&#X2019;AF_INET&#X2019;</span> </td></tr>
+<tr><td class="c021">
+<span class="c003">source_sink</span></td><td class="c020">an atom identifying a source or a sink </td></tr>
+<tr><td class="c021">
+<span class="c003">stream</span></td><td class="c020">a stream-term: a term of the form <span class="c003">&#X2019;$stream&#X2019;(N)</span>
+where <span class="c003">N</span> is an integer &#X2265; 0 </td></tr>
+<tr><td class="c021">
+<span class="c003">stream_option</span></td><td class="c020">a stream option (section&#XA0;<a href="gprolog034.html#open%2F4">8.10.6</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">stream_or_alias</span></td><td class="c020">a stream-term or an alias (atom) </td></tr>
+<tr><td class="c021">
+<span class="c003">stream_position</span></td><td class="c020">a stream position: a term
+<span class="c003">&#X2019;$stream_position&#X2019;(I1, I2, I3, I4)</span> where
+<span class="c003">I1</span>, <span class="c003">I2</span>, <span class="c003">I3</span> and <span class="c003">I4</span> are integers </td></tr>
+<tr><td class="c021">
+<span class="c003">stream_property</span></td><td class="c020">a stream property (section&#XA0;<a href="gprolog034.html#stream-property%2F2">8.10.10</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">stream_seek_method</span></td><td class="c020">an atom in: <span class="c003">bof</span>, <span class="c003">current</span>
+or <span class="c003">eof</span> </td></tr>
+<tr><td class="c021">
+<span class="c003">term</span></td><td class="c020">any term </td></tr>
+<tr><td class="c021">
+<span class="c003">var_binding_option</span></td><td class="c020">a variable binding option
+(section&#XA0;<a href="gprolog029.html#bind-variables%2F2">8.5.3</a>) </td></tr>
+<tr><td class="c021">
+<span class="c003">write_option</span></td><td class="c020">a write option (section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>) </td></tr>
+</table>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog018.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog017.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog020.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Arithmetic</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog029.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog031.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec96">8.6&#XA0;&#XA0;Arithmetic</h3>
+<ul>
+<li><a href="gprolog030.html#sec97">Evaluation of an arithmetic expression</a>
+</li><li><a href="gprolog030.html#sec98"><span class="c003">(is)/2</span> - evaluate expression</a>
+</li><li><a href="gprolog030.html#%28%3D%3A%3D%29%2F2"><span class="c003">(=:=)/2</span> - arithmetic equal, 
+<span class="c003">(=</span><span class="c003">\</span><span class="c003">=)/2</span> - arithmetic not equal, <br>
+ <span class="c003">(</span><span class="c003">&lt;</span><span class="c003">)/2</span> - arithmetic less than,
+<span class="c003">(=</span><span class="c003">&lt;</span><span class="c003">)/2</span> - arithmetic less than or equal to, <br>
+ <span class="c003">(</span><span class="c003">&gt;</span><span class="c003">)/2</span> - arithmetic greater than,
+<span class="c003">(</span><span class="c003">&gt;</span><span class="c003">=)/2</span> - arithmetic greater than or equal to</a>
+</li><li><a href="gprolog030.html#sec100"><span class="c003">succ/2</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec97">8.6.1&#XA0;&#XA0;Evaluation of an arithmetic expression</h4>
+<p>
+<a id="Evaluation-of-an-arithmetic-expression"></a>
+An arithmetic expression is a Prolog term built from numbers,
+variables, and functors (or operators) that represent arithmetic functions.
+When an expression is evaluated each variable must be bound to a
+non-variable expression. An expression evaluates to a number, which may be
+an integer or a floating point number. The following table details the
+components of an arithmetic expression, how they are evaluated, the types
+expected/returned and if they are ISO or an extension:</p><blockquote class="table"><div class="center"><hr class="c024"></div><table class="c000 cellpadding1" border=1><tr><td class="c021">Expression</td><td class="c017"><div class="flushleft">Result = <span class="c008">eval</span>(Expression)</div></td><td class="c018">Signature</td><td class="c018">ISO </td></tr>
+<tr><td class="c021">a variable</td><td class="c017"><div class="flushleft">bound to an expression <span class="c003">E</span>, result is <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+an integer number</td><td class="c017"><div class="flushleft">this number</div></td><td class="c018">I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+a floating point number</td><td class="c017"><div class="flushleft">this number</div></td><td class="c018">F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">pi</span></td><td class="c017"><div class="flushleft">the value of &#X3C0; = 3.141592...</div></td><td class="c018">F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">e</span></td><td class="c017"><div class="flushleft">the value of <span class="c008">e</span> = 2.718281...</div></td><td class="c018">F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">epsilon</span></td><td class="c017"><div class="flushleft">difference between 1.0 and minimum float &gt; 1.0</div></td><td class="c018">F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">+ E</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">- E</span></td><td class="c017"><div class="flushleft">- <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">inc(E)</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E</span>) + 1</div></td><td class="c018">IF &#X2192; IF</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">dec(E)</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E</span>) - 1</div></td><td class="c018">IF &#X2192; IF</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 + E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) + <span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 - E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) - <span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 * E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) * <span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 / E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) / <span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 // E2</span></td><td class="c017"><div class="flushleft"><span class="c008">rnd</span>(<span class="c008">eval</span>(<span class="c003">E1</span>) /
+<span class="c008">eval</span>(<span class="c003">E2</span>))</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 rem E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) -
+(<span class="c008">rnd</span>(<span class="c008">eval</span>(<span class="c003">E1</span>) /
+<span class="c008">eval</span>(<span class="c003">E2</span>)) * <span class="c008">eval</span>(<span class="c003">E2</span>))</div></td><td class="c018">I, I &#X2192;
+I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 div E2</span></td><td class="c017"><div class="flushleft">&#X230A;(<span class="c008">eval</span>(<span class="c003">E1</span>) -
+<span class="c008">eval</span>(<span class="c003">E1</span>) <span class="c003">mod</span> <span class="c008">eval</span>(<span class="c003">E2</span>)) /
+<span class="c008">eval</span>(<span class="c003">E2</span>)&#X230B;</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 mod E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) -
+(&#X230A;<span class="c008">eval</span>(<span class="c003">E1</span>) / <span class="c008">eval</span>(<span class="c003">E2</span>)&#X230B;
+* <span class="c008">eval</span>(<span class="c003">E2</span>))</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 /\ E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) bitwise_and
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 \/ E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) bitwise_or
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">xor(E1,E2)</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) bitwise_xor
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">\ E</span></td><td class="c017"><div class="flushleft">bitwise_not <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">I &#X2192;
+I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 &lt;&lt; E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) integer_shift_left
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 &gt;&gt; E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) integer_shift_right
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">lsb(E)</span></td><td class="c017"><div class="flushleft">least significant bit (from 0) of <span class="c008">eval</span>(<span class="c003">E</span>) or -1</div></td><td class="c018">I
+&#X2192; I</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">msb(E)</span></td><td class="c017"><div class="flushleft">most significant bit (from 0) of <span class="c008">eval</span>(<span class="c003">E</span>) or -1</div></td><td class="c018">I
+&#X2192; I</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">popcount(E)</span></td><td class="c017"><div class="flushleft">number of 1-bits in <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">I
+&#X2192; I</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">abs(E)</span></td><td class="c017"><div class="flushleft">absolute value of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">sign(E)</span></td><td class="c017"><div class="flushleft">sign of <span class="c008">eval</span>(<span class="c003">E</span>) (-1 if &lt; 0, 0 if = 0,
++1 if &gt; 0)</div></td><td class="c018">IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">min(E1,E2)</span></td><td class="c017"><div class="flushleft">minimal value between <span class="c008">eval</span>(<span class="c003">E1</span>) and
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; ?</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">max(E1,E2)</span></td><td class="c017"><div class="flushleft">maximal value between <span class="c008">eval</span>(<span class="c003">E1</span>) and
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; ?</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">gcd(E1,E2)</span></td><td class="c017"><div class="flushleft">greatest common divisor of <span class="c008">eval</span>(<span class="c003">E1</span>) and
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">I, I &#X2192; I</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 ^ E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) raised to the power of
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; IF</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">E1 ** E2</span></td><td class="c017"><div class="flushleft"><span class="c008">eval</span>(<span class="c003">E1</span>) raised to the power of
+<span class="c008">eval</span>(<span class="c003">E2</span>)</div></td><td class="c018">IF, IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">sqrt(E)</span></td><td class="c017"><div class="flushleft">square root of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">tan(E)</span></td><td class="c017"><div class="flushleft">tangent of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">atan(E)</span></td><td class="c017"><div class="flushleft">arc tangent of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">atan2(Y,X)</span></td><td class="c017"><div class="flushleft">principal value of arc tangent
+of <span class="c008">eval</span>(<span class="c003">Y</span>) / <span class="c008">eval</span>(<span class="c003">X</span>) using both signs for the quadrant</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">cos(E)</span></td><td class="c017"><div class="flushleft">cosine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">acos(E)</span></td><td class="c017"><div class="flushleft">arc cosine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF, IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">sin(E)</span></td><td class="c017"><div class="flushleft">sine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">asin(E)</span></td><td class="c017"><div class="flushleft">arc sine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">tanh(E)</span></td><td class="c017"><div class="flushleft">hyperbolic tangent of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">atanh(E)</span></td><td class="c017"><div class="flushleft">hyperbolic arc tangent of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">cosh(E)</span></td><td class="c017"><div class="flushleft">hyperbolic cosine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">acosh(E)</span></td><td class="c017"><div class="flushleft">hyperbolic arc cosine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF, IF &#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">sinh(E)</span></td><td class="c017"><div class="flushleft">hyperbolic sine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">asinh(E)</span></td><td class="c017"><div class="flushleft">hyperbolic arc sine of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">exp(E)</span></td><td class="c017"><div class="flushleft"><span class="c008">e</span> raised to the power of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">log(E)</span></td><td class="c017"><div class="flushleft">natural logarithm of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">log10(E)</span></td><td class="c017"><div class="flushleft">base 10 logarithm of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF
+&#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">log(R, E)</span></td><td class="c017"><div class="flushleft">base <span class="c008">eval</span>(<span class="c003">R</span>) logarithm of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">F, IF
+&#X2192; F</td><td class="c018">N </td></tr>
+<tr><td class="c021">
+<span class="c003">float(E)</span></td><td class="c017"><div class="flushleft">the floating point number equal to
+<span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">IF &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">ceiling(E)</span></td><td class="c017"><div class="flushleft">rounds <span class="c008">eval</span>(<span class="c003">E</span>) upward to the
+nearest integer</div></td><td class="c018">F &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">floor(E)</span></td><td class="c017"><div class="flushleft">rounds <span class="c008">eval</span>(<span class="c003">E</span>) downward to the
+nearest integer</div></td><td class="c018">F &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">round(E)</span></td><td class="c017"><div class="flushleft">rounds <span class="c008">eval</span>(<span class="c003">E</span>) to the nearest integer</div></td><td class="c018">F &#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">truncate(E)</span></td><td class="c017"><div class="flushleft">the integer value of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">F
+&#X2192; I</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">float_fractional_part(E)</span></td><td class="c017"><div class="flushleft">the float equal to the fractional part
+of <span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">F &#X2192; F</td><td class="c018">Y </td></tr>
+<tr><td class="c021">
+<span class="c003">float_integer_part(E)</span></td><td class="c017"><div class="flushleft">the float equal to the integer part of
+<span class="c008">eval</span>(<span class="c003">E</span>)</div></td><td class="c018">F &#X2192; F</td><td class="c018">Y </td></tr>
+</table><div class="center"><hr class="c024"></div></blockquote><p>The meaning of the signature field is as follows:</p><ul class="itemize"><li class="li-itemize">I &#X2192; I: unary function, the operand must be an integer and
+the result is an integer.</li><li class="li-itemize">F &#X2192; F: unary function, the operand must be a floating
+point number and the result is a floating point number.</li><li class="li-itemize">F &#X2192; I: unary function, the operand must be a floating
+point number and the result is an integer.</li><li class="li-itemize">IF &#X2192; F: unary function, the operand can be an integer or a
+floating point number and the result is a floating point number.</li><li class="li-itemize">IF &#X2192; IF: unary function, the operand can be an integer or
+a floating point number and the result has the same type as the operand.</li><li class="li-itemize">I, I &#X2192; I: binary function: each operand must be an integer
+and the result is an integer.</li><li class="li-itemize">IF, IF &#X2192; IF: binary function: each operand can be an
+integer or a floating point number and the result is a floating point number
+if at least one operand is a floating point number, an integer otherwise.</li><li class="li-itemize">IF, IF &#X2192; ?: binary function: each operand can be an
+integer or a floating point number and the result has the same type as the
+selected operand. This is used for <span class="c003">min</span> and <span class="c003">max</span>. Note that
+in case of equality between an integer and a floating point number the
+result is an integer.</li></ul><p><span class="c003">is</span>, <span class="c003">+</span>, <span class="c003">-</span>, <span class="c003">*</span>, <span class="c003">/</span>, <span class="c003">//</span>,
+<span class="c003">div</span>, <span class="c003">rem</span>, <span class="c003">mod</span>, <span class="c003">/\</span>, <span class="c003">\/</span>,
+<span class="c003">&lt;&lt;</span>, <span class="c003">&gt;&gt;</span>, <span class="c003">**</span> and <span class="c003">^</span> are predefined infix
+operators. <span class="c003">+</span>, <span class="c003">-</span> and <span class="c003">\</span>, are predefined prefix
+operators (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Integer division rounding function</span>: the integer division rounding
+function <span class="c003"><span class="c008">rnd</span>(X)</span> rounds the floating point number
+<span class="c003">X</span> to an integer. There are two possible definitions (depending on
+the target machine) for this function which differ on negative numbers:</p><ul class="itemize"><li class="li-itemize"><span class="c003"><span class="c008">rnd</span>(X)</span> = integer part of <span class="c003">X</span>, e.g.
+<span class="c003"><span class="c008">rnd</span>(-1.5)</span> = <span class="c003">-1</span> (round toward 0)</li><li class="li-itemize"><span class="c003"><span class="c008">rnd</span>(X)</span> = &#X230A;<span class="c003">X</span>&#X230B;, e.g.
+<span class="c003"><span class="c008">rnd</span>(-1.5)</span> = <span class="c003">-2</span> (round toward &#X2212;&#X221E;)</li></ul><p>The definition of this function determines the definition of the integer
+division and remainder (<span class="c003">(//)/2</span> and <span class="c003">(rem)/2</span>). It is
+possible to test the value (<span class="c003">toward_zero</span> or <span class="c003">down</span>) of the
+<a id="hevea_default283"></a><span class="c003">integer_rounding_function</span> <a id="hevea_default284"></a>Prolog flag to determine which
+function being used (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>). Since rounding toward zero is
+the most common case, two additional evaluable functors (<span class="c003">(div)/2</span> and
+<span class="c003">(mod)/2</span>) are available which consider rounding toward &#X2212;&#X221E;.</p><p><span class="c009">Fast mathematical mode</span>: in order to speed-up integer computations,
+the GNU Prolog compiler can generate faster code when invoked with the
+<a id="hevea_default285"></a><span class="c003">--fast-math</span> option (section&#XA0;<a href="gprolog009.html#Using-the-compiler">4.4.3</a>). In this mode only
+integer operations are allowed and a variable in an expression must be bound
+at evaluation time to an integer. No type checking is done.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a sub-expression <span class="c003">E</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a sub-expression <span class="c003">E</span> is neither a number nor an evaluable
+functor</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(evaluable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a sub-expression <span class="c003">E</span> is a floating point number while an
+integer is expected</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a sub-expression <span class="c003">E</span> is an integer while a floating point
+number is expected</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(float, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+a division by zero occurs</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">evaluation_error(zero_divisor)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>Refer to the above table to determine which evaluable functors are ISO
+and which are GNU Prolog extensions. For efficiency reasons, GNU
+Prolog does not detect the following ISO arithmetic errors:
+<span class="c003">float_overflow</span>,
+<span class="c003">int_overflow, int_underflow</span>, and <span class="c003">undefined</span>.</p>
+<h4 class="subsubsection" id="sec98">8.6.2&#XA0;&#XA0;<a id="hevea_default286"></a><span class="c003">(is)/2</span> - evaluate expression</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+is(?term, +evaluable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">Result is Expression</span> succeeds if <span class="c003">Result</span> can be
+unified with <span class="c008">eval</span>(<span class="c003">Expression</span>). Refer to the
+evaluation of an arithmetic expression for the definition of the
+<span class="c008">eval</span> function
+(section&#XA0;<a href="#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</p><p><span class="c003">is</span> is a predefined infix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><p>Refer to the evaluation of an arithmetic expression for possible errors
+(section&#XA0;<a href="#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</p><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="(=:=)/2">8.6.3&#XA0;&#XA0;<a id="hevea_default287"></a><span class="c003">(=:=)/2</span> - arithmetic equal, 
+<a id="hevea_default288"></a><span class="c003">(=\=)/2</span> - arithmetic not equal, <br>
+ <a id="hevea_default289"></a><span class="c003">(&lt;)/2</span> - arithmetic less than,
+<a id="hevea_default290"></a><span class="c003">(=&lt;)/2</span> - arithmetic less than or equal to, <br>
+ <a id="hevea_default291"></a><span class="c003">(&gt;)/2</span> - arithmetic greater than,
+<a id="hevea_default292"></a><span class="c003">(&gt;=)/2</span> - arithmetic greater than or equal to</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+=:=(+evaluable, +evaluable)<br>
+=\=(+evaluable, +evaluable)<br>
+&lt;(+evaluable, +evaluable)<br>
+=&lt;(+evaluable, +evaluable)<br>
+&gt;(+evaluable, +evaluable)<br>
+&gt;=(+evaluable, +evaluable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">Expr1 =:= Expr2</span> succeeds if <span class="c008">eval</span>(<span class="c003">Expr1</span>) =
+<span class="c008">eval</span>(<span class="c003">Expr2</span>).</p><p><span class="c003">Expr1 =\= Expr2</span> succeeds if <span class="c008">eval</span>(<span class="c003">Expr1</span>)
+&#X2260; <span class="c008">eval</span>(<span class="c003">Expr2</span>).</p><p><span class="c003">Expr1 &lt; Expr2</span> succeeds if <span class="c008">eval</span>(<span class="c003">Expr1</span>) &lt;
+<span class="c008">eval</span>(<span class="c003">Expr2</span>).</p><p><span class="c003">Expr1 =&lt; Expr2</span> succeeds if <span class="c008">eval</span>(<span class="c003">Expr1</span>)
+&#X2264; <span class="c008">eval</span>(<span class="c003">Expr2</span>).</p><p><span class="c003">Expr1 &gt; Expr2</span> succeeds if <span class="c008">eval</span>(<span class="c003">Expr1</span>) &gt;
+<span class="c008">eval</span>(<span class="c003">Expr2</span>).</p><p><span class="c003">Expr1 &gt;= Expr2</span> succeeds if <span class="c008">eval</span>(<span class="c003">Expr1</span>)
+&#X2265; <span class="c008">eval</span>(<span class="c003">Expr2</span>).</p><p>Refer to the evaluation of an arithmetic expression for the definition of
+the <span class="c008">eval</span> function (section&#XA0;<a href="#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</p><p><span class="c003">=:=</span>, <span class="c003">=\=</span>, <span class="c003">&lt;</span>, <span class="c003">=&lt;</span>,
+<span class="c003">&gt;</span> and <span class="c003">&gt;=</span> are predefined infix operators
+(section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><p>Refer to the evaluation of an arithmetic expression for possible errors
+(section&#XA0;<a href="#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</p><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+<h4 class="subsubsection" id="sec100">8.6.4&#XA0;&#XA0;<a id="hevea_default293"></a><span class="c003">succ/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+succ(+integer, ?integer) <br>
+succ(-integer, +integer) </span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">succ(X, Y)</span> is true iff <span class="c003">Y</span> is the successor of the non-negative integer <span class="c003">X</span>. </p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> and <span class="c003">Y</span> are both variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Y</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Y)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Y</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Y)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog029.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog031.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

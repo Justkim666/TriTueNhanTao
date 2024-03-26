@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>FD variable parameters</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog055.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog057.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec303">9.2&#XA0;&#XA0;FD variable parameters</h3>
+<ul>
+<li><a href="gprolog056.html#fd-max-integer%2F1"><span class="c003">fd_max_integer/1</span></a>
+</li><li><a href="gprolog056.html#sec305"><span class="c003">fd_vector_max/1</span></a>
+</li><li><a href="gprolog056.html#fd-set-vector-max%2F1"><span class="c003">fd_set_vector_max/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="fd-max-integer/1">9.2.1&#XA0;&#XA0;<a id="hevea_default940"></a><span class="c003">fd_max_integer/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_max_integer(?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_max_integer(N)</span> succeeds if <span class="c003">N</span> is the current value of
+<a id="hevea_default941"></a><span class="c003">fd_max_integer</span> (section&#XA0;<a href="gprolog055.html#Intro-FD">9.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec305">9.2.2&#XA0;&#XA0;<a id="hevea_default942"></a><span class="c003">fd_vector_max/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_vector_max(?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_vector_max(N)</span> succeeds if <span class="c003">N</span> is the current value of
+<a id="hevea_default943"></a><span class="c003">vector_max</span> (section&#XA0;<a href="gprolog055.html#Intro-FD">9.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="fd-set-vector-max/1">9.2.3&#XA0;&#XA0;<a id="hevea_default944"></a><span class="c003">fd_set_vector_max/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_set_vector_max(+integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_set_vector_max(N)</span> initializes <a id="hevea_default945"></a><span class="c003">vector_max</span> based on
+the value <span class="c003">N</span> (section&#XA0;<a href="gprolog055.html#Intro-FD">9.1</a>). More precisely, on 32 bit
+machines, <span class="c003">vector_max</span> is set to the smallest value of
+<span class="c003">(32*k)-</span>1 which is &#X2265; <span class="c003">N</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog055.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog057.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

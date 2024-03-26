@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Program state</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog046.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog048.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec239">8.23&#XA0;&#XA0;Program state</h3>
+<ul>
+<li><a href="gprolog047.html#consult%2F1"><span class="c003">consult/1</span>,
+<span class="c003">&#X2019;.&#X2019;/2</span> - program consult</a>
+</li><li><a href="gprolog047.html#load%2F1"><span class="c003">load/1</span></a>
+</li><li><a href="gprolog047.html#listing%2F1"><span class="c003">listing/1</span>,
+<span class="c003">listing/0</span></a>
+</li></ul>
+<h4 class="subsubsection" id="consult/1">8.23.1&#XA0;&#XA0;<a id="hevea_default807"></a><span class="c003">consult/1</span>,
+<a id="hevea_default808"></a><span class="c003">&#X2019;.&#X2019;/2</span> - program consult</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+consult(+atom_or_atom_list)<br>
+&#X2019;.&#X2019;(+atom, +atom_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">consult(Files)</span> compiles and loads into memory each file
+of the list <span class="c003">Files</span>. Each file is compiled for byte-code using the
+GNU Prolog compiler (section&#XA0;<a href="gprolog009.html#The-GNU-Prolog-compiler">4.4</a>) then loaded using
+<span class="c003">load/1</span> (section&#XA0;<a href="#load%2F1">8.23.2</a>). It is possible to specify <a id="hevea_default809"></a><span class="c003">user</span> as a
+file name to directly enter the program from the terminal. <span class="c003">Files</span> can
+be also a single file name (i.e. an atom). Refer to the section concerning
+the consult of a Prolog program for more information
+(section&#XA0;<a href="gprolog007.html#Consulting-a-Prolog-program">4.2.3</a>).</p><p>The final file name of a file is computed using the predicates
+<a id="hevea_default810"></a><span class="c003">prolog_file_name/2</span> (section&#XA0;<a href="gprolog050.html#prolog-file-name%2F2">8.26.4</a>) and
+<a id="hevea_default811"></a><span class="c003">absolute_file_name/2</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c003">[ File | Files ]</span>, i.e. <span class="c003">&#X2019;.&#X2019;(File, Files)</span> is
+equivalent to <span class="c003">consult([ File | Files ])</span>.</p><p>Since version 1.4.0, with the introduction of <a id="hevea_default812"></a>shebang support,
+<span class="c003">consult/1</span> ignores the first line of a Prolog source file which
+directly begins with <span class="c003">#</span>. See
+(section&#XA0;<a href="gprolog007.html#Scripting-Prolog">4.2.4</a>) for more information about
+shebang support and <a id="hevea_default813"></a>PrologScript.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Files</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Files</span> is neither a partial list nor a list nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Files)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Files</span> list is neither a
+variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Files</span> list is an atom but not
+a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Files</span> list is a valid
+pathname but does not correspond to an existing source</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(source_sink, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an error occurs executing a directive</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">see <span class="c003">call/1</span> errors (section&#XA0;<a href="gprolog023.html#call%2F1">7.2.3</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="load/1">8.23.2&#XA0;&#XA0;<a id="hevea_default814"></a><span class="c003">load/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+load(+atom_or_atom_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">load(Files)</span> loads into memory each file of the list
+<span class="c003">Files</span>. Each file must have been previously compiled for byte-code
+using the GNU Prolog compiler (section&#XA0;<a href="gprolog009.html#The-GNU-Prolog-compiler">4.4</a>).
+<span class="c003">Files</span> can be also a single file name (i.e. an atom).</p><p>The final file name of a file is computed using the predicates
+<a id="hevea_default815"></a><span class="c003">absolute_file_name/2</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>). If no
+suffix is given <span class="c003">&#X2019;.wbc&#X2019;</span> is appended to the file name.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Files</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Files</span> is neither a partial list nor a list nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Files)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Files</span> list is neither a
+variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Files</span> list is an atom but not
+a valid pathname</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(os_path, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Files</span> list is a valid
+pathname but does not correspond to an existing source</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(source_sink, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an error occurs executing a directive</td><td class="c013">&#XA0;&#XA0;</td><td class="c019">see <span class="c003">call/1</span> errors (section&#XA0;<a href="gprolog023.html#call%2F1">7.2.3</a>) </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="listing/1">8.23.3&#XA0;&#XA0;<a id="hevea_default816"></a><span class="c003">listing/1</span>,
+<a id="hevea_default817"></a><span class="c003">listing/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+listing(+predicate_indicator)<br>
+listing(+atom)<br>
+listing</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">listing(Pred)</span> lists the clauses of the consulted predicate whose
+predicate indicator is <span class="c003">Pred</span>. <span class="c003">Pred</span> can also be a single
+atom in which case all predicates whose name is <span class="c003">Pred</span> are listed (of
+any arity). This predicate uses <a id="hevea_default818"></a><span class="c003">portray_clause/2</span>
+(section&#XA0;<a href="gprolog038.html#portray-clause%2F2">8.14.8</a>) to output the clauses.</p><p><span class="c003">listing</span> lists all clauses of all consulted predicates.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is neither a variable nor predicate indicator or an
+atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(predicate_indicator, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog046.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog048.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

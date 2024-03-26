@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>All solutions</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog032.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog034.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec111">8.9&#XA0;&#XA0;All solutions</h3>
+<ul>
+<li><a href="gprolog033.html#sec112">Introduction</a>
+</li><li><a href="gprolog033.html#sec113"><span class="c003">findall/4</span>, <span class="c003">findall/3</span></a>
+</li><li><a href="gprolog033.html#sec114"><span class="c003">bagof/3</span>,
+<span class="c003">setof/3</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec112">8.9.1&#XA0;&#XA0;Introduction</h4>
+<p>
+<a id="Introduction:(All-solutions)"></a>
+It is sometimes useful to collect all solutions for a goal. This can be done
+by repeatedly backtracking and gradually building the list of solutions. The
+following built-in predicates are provided to automate this process.</p><p>The built-in predicates described in this section invoke <span class="c003">call/1</span>
+(section&#XA0;<a href="gprolog023.html#call%2F1">7.2.3</a>) on the argument <span class="c003">Goal</span>. When efficiency is crucial
+and <span class="c003">Goal</span> is complex it is better to define an auxiliary predicate
+which can then be compiled, and have <span class="c003">Goal</span> call this predicate.</p>
+<h4 class="subsubsection" id="sec113">8.9.2&#XA0;&#XA0;<a id="hevea_default321"></a><span class="c003">findall/4</span>, <a id="hevea_default322"></a><span class="c003">findall/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+findall(?term, +callable_term, ?list, ?term)
+findall(?term, +callable_term, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">findall(Template, Goal, Instances)</span> succeeds if <span class="c003">Instances</span>
+unifies with the list of values to which a variable <span class="c003">X</span> not occurring
+in <span class="c003">Template</span> or <span class="c003">Goal</span> would be instantiated by successive
+re-executions of <span class="c003">call(Goal), X = Template</span> after systematic
+replacement of all variables in <span class="c003">X</span> by new variables. Thus, the order
+of the list <span class="c003">Instances</span> corresponds to the order in which the proofs
+are found.</p><p><span class="c003">findall(Template, Goal, Instances, Tail)</span> is the difference list
+version of <span class="c003">findall/3</span>. The result is the difference list
+<span class="c003">Instances</span>-<span class="c003">Tail</span>. Thus <span class="c003">findall(Template, Goal,
+Instances)</span> is equivalent to <span class="c003">findall(Template, Goal, Instances,
+[])</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Goal</span> does not
+correspond to an existing procedure and the value of the <span class="c003">unknown</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Instances</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Instances)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Tail</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Tail)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p><span class="c003">findall/3</span> is an ISO predicate. <span class="c003">findall/4</span> is a GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec114">8.9.3&#XA0;&#XA0;<a id="hevea_default323"></a><span class="c003">bagof/3</span>,
+<a id="hevea_default324"></a><span class="c003">setof/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+bagof(?term, +callable_term, ?list)<br>
+setof(?term, +callable_term, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">bagof(Template, Goal, Instances)</span> assembles as a list the
+set of solutions of <span class="c003">Goal</span> for each different instantiation of the
+free variables in <span class="c003">Goal</span>. The elements of each list are in order of
+solution, but the order in which each list is found is undefined.
+This predicate is re-executable on backtracking.</p><p><span class="c009">Free variable set</span>: <span class="c003">bagof/3</span> groups the solutions of
+<span class="c003">Goal</span> according to the free variables in <span class="c003">Goal</span>. This set
+corresponds to all variables occurring in <span class="c003">Goal</span> but not in
+<span class="c003">Template</span>. It is sometimes useful to exclude some additional
+variables of <span class="c003">Goal</span>. For that, <span class="c003">bagof/3</span> recognizes a goal of
+the form <span class="c003">T^Goal</span> and exclude all variables occurring in <span class="c003">T</span>
+from the free variable set. <span class="c003">(^)/2</span> can be viewed as an
+<em>existential quantifier</em> (the logical reading of <span class="c003">X^Goal</span>
+being &#X201C;there exists an <span class="c003">X</span> such that <span class="c003">Goal</span> is true&#X201D;). The
+use of this existential qualifier is superfluous outside <span class="c003">bagof/3</span>
+(and <span class="c003">setof/3</span>) and then is not recognized.</p><p><span class="c003">(^)/2</span> is a predefined infix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c003">setof(Template, Goal, Instances)</span> is equivalent to
+<span class="c003">bagof(Template,Goal,I), sort(I,Instances)</span>. Each list is then a
+sorted list (duplicate elements are removed).</p><p>From the implementation point of view <span class="c003">setof/3</span> is as fast as
+<span class="c003">bagof/3</span>. Both predicates use an in-place (i.e. destructive) sort
+(section&#XA0;<a href="gprolog044.html#sort%2F2">8.20.15</a>) and require the same amount of memory.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Goal</span> does not
+correspond to an existing procedure and the value of the <span class="c003">unknown</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Instances</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Instances)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog032.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog034.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

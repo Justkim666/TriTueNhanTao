@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Debugging messages</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog013.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog010.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog015.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec29">5.4&#XA0;&#XA0;Debugging messages</h3>
+<p>
+We here described which information is displayed by the debugger when it
+shows a goal. The basic format is as follows:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003"><span class="c008">S N M Port</span>:&#XA0;<span class="c008">Goal</span> ?</span></dd></dl><p><span class="c004">S</span> is a spy-point indicator: if there is a spy-point on the
+current goal the <span class="c003">+</span> symbol is displayed else a space is displayed.
+<span class="c004">N</span> is the invocation number. This unique number can be used
+to correlate the trace messages for the various ports, since it is unique
+for every invocation. <span class="c004">M</span> is an index number which
+represents the number of direct ancestors of the goal (i.e. the current
+depth of the goal). <span class="c004">Port</span> specifies the particular port
+(<span class="c003">call</span>, <span class="c003">exit</span>, <span class="c003">fail</span>, <span class="c003">redo</span>,
+<span class="c003">exception</span>). <span class="c004">Goal</span> is the current goal (it is then
+possible to inspect its current instantiation) which is displayed using
+<a id="hevea_default170"></a><span class="c003">write_term/3</span> with <span class="c003">quoted(true)</span> and
+<span class="c003">max_depth(<span class="c008">D</span>)</span> options (section&#XA0;<a href="gprolog038.html#write-term%2F3">8.14.6</a>). Initially
+<span class="c004">D</span> (the print depth) is set to 10 but can be redefined
+using the <span class="c003">&lt;</span> debugger command (section&#XA0;<a href="gprolog015.html#Debugger-commands">5.5</a>). The
+<span class="c003">?</span> symbol is displayed when the debugger is waiting a command from
+the user. (i.e. <span class="c003">Port</span> is a leashed port). If the port is unleashed,
+this symbol is not displayed and the debugger continues the execution
+displaying the next goal.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog013.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog010.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog015.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

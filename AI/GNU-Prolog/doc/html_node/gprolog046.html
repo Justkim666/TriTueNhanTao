@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Prolog state</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog045.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog047.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec233">8.22&#XA0;&#XA0;Prolog state</h3>
+<ul>
+<li><a href="gprolog046.html#set-prolog-flag%2F2"><span class="c003">set_prolog_flag/2</span></a>
+</li><li><a href="gprolog046.html#current-prolog-flag%2F2"><span class="c003">current_prolog_flag/2</span></a>
+</li><li><a href="gprolog046.html#set-bip-name%2F2"><span class="c003">set_bip_name/2</span></a>
+</li><li><a href="gprolog046.html#current-bip-name%2F2"><span class="c003">current_bip_name/2</span></a>
+</li><li><a href="gprolog046.html#write-pl-state-file%2F1"><span class="c003">write_pl_state_file/1</span>,
+<span class="c003">read_pl_state_file/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="set-prolog-flag/2">8.22.1&#XA0;&#XA0;<a id="hevea_default748"></a><span class="c003">set_prolog_flag/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_prolog_flag(+flag, +term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_prolog_flag(Flag, Value)</span> sets the value
+of the <a id="hevea_default749"></a>Prolog flag <span class="c003">Flag</span> to <span class="c003">Value</span>.</p><p><a id="hevea_default750"></a>
+<span class="c009">Prolog flags</span>: a Prolog flag is an atom
+which is associated with a value that is either implementation defined
+or defined by the user. Each flag has a permitted range of values; any
+other value is a <span class="c003">domain_error</span>. The following two tables
+present available flags, the possible values, a description and if
+they are ISO or an extension. The first table presents unchangeable
+flags while the second one the changeable flags. For flags whose
+default values is machine independent, this value is
+<U>underlined</U>.</p><p><span class="c009">Unchangeable flags</span>:</p><table class="c000 cellpadding1" border=1><tr><td class="c017"><div class="flushleft">
+Flag</div></td><td class="c017"><div class="center">Values</div></td><td class="c017"><div class="flushleft">Description</div></td><td class="c017"><div class="center">ISO </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default751"></a><span class="c003">prolog_name</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">name of the Prolog system</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default752"></a><span class="c003">prolog_version</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">version number of the Prolog system</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default753"></a><span class="c003">prolog_date</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">date of the Prolog system</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default754"></a><span class="c003">prolog_copyright</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">copyright message of the Prolog system</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default755"></a><span class="c003">dialect</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">fixed to <span class="c003">gprolog</span></div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default756"></a><span class="c003">version</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft"><span class="c008">Major</span> * 10000 + <span class="c008">Minor</span> * 100 + <span class="c008">Patch</span></div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default757"></a><span class="c003">version_data</span></div></td><td class="c017"><div class="center">a structure</div></td><td class="c017"><div class="flushleft"><span class="c003">gprolog(Major,Minor,Patch,Extra)</span></div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default758"></a><span class="c003">bounded</span></div></td><td class="c017"><div class="center"><span class="c003"><U>true</U></span> / <span class="c003">false</span></div></td><td class="c017"><div class="flushleft">are integers bounded ?</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default759"></a><span class="c003">max_integer</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft">greatest integer</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default760"></a><span class="c003">min_integer</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft">smallest integer</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default761"></a><span class="c003">integer_rounding_function</span></div></td><td class="c017"><div class="center"><span class="c003">toward_zero</span>
+<br>
+<span class="c003">down</span></div></td><td class="c017"><div class="flushleft"> <span class="c003"><span class="c008">rnd</span>(X)</span> = integer part of <span class="c003">X</span>
+<br>
+<span class="c003"><span class="c008">rnd</span>(X)</span> = &#X230A;<span class="c003">X</span>&#X230B;
+(section&#XA0;<a href="gprolog030.html#Evaluation-of-an-arithmetic-expression">8.6.1</a>)</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default762"></a><span class="c003">max_arity</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft">maximum arity for compound terms (255)</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default763"></a><span class="c003">max_atom</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft">maximum number of atoms</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default764"></a><span class="c003">max_unget</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft">maximum number of successive ungets</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default765"></a><span class="c003">home</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">GNU Prolog home directory</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default766"></a><span class="c003">host_os</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">Operating System identifier</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default767"></a><span class="c003">host_vendor</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">Operating System vendor</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default768"></a><span class="c003">host_cpu</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">processor identifier</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default769"></a><span class="c003">host</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">a combination of the OS-vendor-cpu</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default770"></a><span class="c003">arch</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">a combination of the OS-cpu</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default771"></a><span class="c003">address_bits</span></div></td><td class="c017"><div class="center">an integer</div></td><td class="c017"><div class="flushleft">address size of the machine (32 or 64)</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default772"></a><span class="c003">unix</span></div></td><td class="c017"><div class="center"><span class="c003">on</span>/<span class="c003">off</span></div></td><td class="c017"><div class="flushleft">is the architecture an Unix-like OS ?</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default773"></a><span class="c003">compiled_at</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">compilation date using <span class="c003">__DATE__</span> and <span class="c003">__TIME__</span> C compiler macros</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default774"></a><span class="c003">c_cc</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft">C compiler used to compile GNU Prolog (<span class="c003">gcc</span>, <span class="c003">cc</span>, <span class="c003">clang</span>, <span class="c003">cl</span>,...)</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default775"></a><span class="c003">c_cc_version_data</span></div></td><td class="c017"><div class="center">a structure</div></td><td class="c017"><div class="flushleft"><span class="c003"><span class="c008">c_cc</span>(Major,Minor,Patch,Extra)</span></div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default776"></a><span class="c003">c_cflags</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft"><span class="c003">CFLAGS</span> used to compile GNU Prolog</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default777"></a><span class="c003">c_ldflags</span></div></td><td class="c017"><div class="center">an atom</div></td><td class="c017"><div class="flushleft"><span class="c003">LDFLAGS</span> used to compile GNU Prolog</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default778"></a><span class="c003">argv</span></div></td><td class="c017"><div class="center">a list of atoms</div></td><td class="c017"><div class="flushleft">list of command-line arguments</div></td><td class="c017"><div class="center">N </div></td></tr>
+</table><p><span class="c009">Changeable flags</span>:</p><table class="c000 cellpadding1" border=1><tr><td class="c017"><div class="flushleft">
+Flag</div></td><td class="c017"><div class="center">Values</div></td><td class="c017"><div class="flushleft">Description</div></td><td class="c017"><div class="center">ISO </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default779"></a><span class="c003">char_conversion</span></div></td><td class="c017"><div class="center"><span class="c003">on</span> / <span class="c003"><U>off</U></span></div></td><td class="c017"><div class="flushleft">is
+character conversion activated ?</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default780"></a><span class="c003">singleton_warning</span></div></td><td class="c017"><div class="center"><span class="c003"><U>on</U></span> / <span class="c003">off</span></div></td><td class="c017"><div class="flushleft">warn about named singleton variables ?</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default781"></a><span class="c003">suspicious_warning</span></div></td><td class="c017"><div class="center"><span class="c003"><U>on</U></span> / <span class="c003">off</span></div></td><td class="c017"><div class="flushleft">warn about suspicious predicate ?</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default782"></a><span class="c003">multifile_warning</span></div></td><td class="c017"><div class="center"><span class="c003"><U>on</U></span> / <span class="c003">off</span></div></td><td class="c017"><div class="flushleft">warn about unsupported multifile directive ?</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default783"></a><span class="c003">strict_iso</span></div></td><td class="c017"><div class="center"><span class="c003"><U>on</U></span> / <span class="c003">off</span></div></td><td class="c017"><div class="flushleft">strict ISO behavior ?</div></td><td class="c017"><div class="center">N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+<a id="hevea_default784"></a><span class="c003">debug</span></div></td><td class="c017"><div class="center"><span class="c003">on</span> / <span class="c003"><U>off</U></span></div></td><td class="c017"><div class="flushleft">is the debugger activated ?</div></td><td class="c017"><div class="center">Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+&#XA0;
+<br>
+<a id="hevea_default785"></a><span class="c003">double_quotes</span></div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+<span class="c003">atom</span>
+<br>
+<span class="c003">chars</span>
+<br>
+<span class="c003"><U>codes</U></span>
+<br>
+<span class="c003">atom_no_escape</span>
+<br>
+<span class="c003">chars_no_escape</span>
+<br>
+<span class="c003">codes_no_escape</span></div></td><td class="c017"><div class="flushleft"> a double quoted constant is returned as:
+<br>
+an atom
+<br>
+a list of characters
+<br>
+a list of character codes
+<br>
+as <span class="c003">atom</span> but ignore <a id="hevea_default786"></a>escape sequences
+<br>
+as <span class="c003">chars</span> but ignore escape sequences
+<br>
+as <span class="c003">code</span> but ignore escape sequences</div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+Y
+<br>
+&#XA0;
+<br>
+&#XA0;
+<br>
+N
+</div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+&#XA0;
+<br>
+<a id="hevea_default787"></a><span class="c003">back_quotes</span></div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+<span class="c003">atom</span>
+<br>
+<span class="c003">chars</span>
+<br>
+<span class="c003">codes</span>
+<br>
+<span class="c003"><U>atom_no_escape</U></span>
+<br>
+<span class="c003">chars_no_escape</span>
+<br>
+<span class="c003">codes_no_escape</span></div></td><td class="c017"><div class="flushleft"> a back quoted constant is returned as:
+<br>
+an atom
+<br>
+a list of characters
+<br>
+a list of character codes
+<br>
+as <span class="c003">atom</span> but ignore escape sequences
+<br>
+as <span class="c003">chars</span> but ignore escape sequences
+<br>
+as <span class="c003">code</span> but ignore escape sequences</div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+N
+</div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+&#XA0;
+<br>
+<a id="hevea_default788"></a><span class="c003">unknown</span></div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+<span class="c003"><U>error</U></span>
+<br>
+<span class="c003">warning</span>
+<br>
+<span class="c003">fail</span></div></td><td class="c017"><div class="flushleft"> a predicate calls an unknown procedure:
+<br>
+an <span class="c003">existence_error</span> is raised
+<br>
+a message is displayed then fails
+<br>
+quietly fails</div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+Y </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+&#XA0;
+<br>
+<a id="hevea_default789"></a><span class="c003">syntax_error</span></div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+<span class="c003"><U>error</U></span>
+<br>
+<span class="c003">warning</span>
+<br>
+<span class="c003">fail</span></div></td><td class="c017"><div class="flushleft"> a predicate causes a syntax error:
+<br>
+a <span class="c003">syntax_error</span> is raised
+<br>
+a message is displayed then fails
+<br>
+quietly fails</div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+N </div></td></tr>
+<tr><td class="c017"><div class="flushleft">
+&#XA0;
+<br>
+<a id="hevea_default790"></a><span class="c003">os_error</span></div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+<span class="c003"><U>error</U></span>
+<br>
+<span class="c003">warning</span>
+<br>
+<span class="c003">fail</span></div></td><td class="c017"><div class="flushleft"> a predicate causes an O.S. error:
+<br>
+a <span class="c003">system_error</span> is raised
+<br>
+a message is displayed then fails
+<br>
+quietly fails</div></td><td class="c017"><div class="center"> &#XA0;
+<br>
+N </div></td></tr>
+</table><p>The <span class="c003">strict_iso</span> flag is introduced to allow a compatibility with
+other Prolog systems. When turned off the following relaxations apply:</p><ul class="itemize"><li class="li-itemize">built-in predicates are found by <span class="c003">current_predicate/1</span>
+(section&#XA0;<a href="gprolog032.html#current-predicate%2F1">8.8.1</a>).</li><li class="li-itemize">the term parser (<span class="c003">read/1</span> and friends) is more indulgent, e.g. <span class="c003">0&#X2019;&#X2019;</span> is
+accepted and returns 39, the <a id="hevea_default791"></a>escape sequence <span class="c003">\s</span> (space) and
+<span class="c003">\e</span> (escape) are accepted.</li><li class="li-itemize">the following arithmetic rounding functions: <span class="c003">ceiling</span>, <span class="c003">floor</span>, <span class="c003">round</span>, <span class="c003">truncate</span> also accept integers (section&#XA0;<a href="gprolog030.html#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Flag</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Value</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Flag</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Flag)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Flag</span> is an atom but not a valid flag</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(prolog_flag, Flag)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Value</span> is inappropriate for Flag</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(flag_value, Flag+Value)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Value</span> is appropriate for <span class="c003">Flag</span> but flag
+<span class="c003">Flag</span> is not modifiable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, flag, Flag)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate. All ISO flags are implemented.</p>
+<h4 class="subsubsection" id="current-prolog-flag/2">8.22.2&#XA0;&#XA0;<a id="hevea_default792"></a><span class="c003">current_prolog_flag/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_prolog_flag(?flag, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_prolog_flag(Flag, Value)</span>
+succeeds if there exists a <a id="hevea_default793"></a>Prolog flag that unifies with
+<span class="c003">Flag</span> and whose value unifies with <span class="c003">Value</span>. This predicate
+is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Flag</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Flag)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Flag</span> is an atom but not a valid flag</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(prolog_flag, Flag)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="set-bip-name/2">8.22.3&#XA0;&#XA0;<a id="hevea_default794"></a><span class="c003">set_bip_name/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_bip_name(+atom, +arity)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_bip_name(Functor, Arity)</span> initializes the context of the error
+(section&#XA0;<a href="gprolog020.html#General-format-and-error-context">6.3.1</a>) with <span class="c003">Functor</span> and
+<span class="c003">Arity</span> (if <span class="c003">Arity</span> &lt; 0 only <span class="c003">Functor</span> is
+significant).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Functor</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arity</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Functor</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Functor)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arity</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="current-bip-name/2">8.22.4&#XA0;&#XA0;<a id="hevea_default795"></a><span class="c003">current_bip_name/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_bip_name(?atom, ?arity)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_bip_name(Functor, Arity)</span> succeeds if <span class="c003">Functor</span> and
+<span class="c003">Arity</span> correspond to the context of the error (section&#XA0;<a href="gprolog020.html#General-format-and-error-context">6.3.1</a>) (if <span class="c003">Arity</span> &lt; 0 only <span class="c003">Functor</span> is
+significant).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Functor</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Functor)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Arity</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="write-pl-state-file/1">8.22.5&#XA0;&#XA0;<a id="hevea_default796"></a><span class="c003">write_pl_state_file/1</span>,
+<a id="hevea_default797"></a><span class="c003">read_pl_state_file/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+write_pl_state_file(+source_sink)<br>
+read_pl_state_file(+source_sink)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">write_pl_state_file(FileName)</span> writes onto <span class="c003">FileName</span> all
+information that influences the parsing of a term (section&#XA0;<a href="gprolog038.html#Term-input%2Foutput">8.14</a>). This allows a sub-process written in Prolog to read this
+file and then process any Prolog term as done by the parent process. This
+file can also be passed as argument of the <a id="hevea_default798"></a><span class="c003">--pl-state</span> option when
+invoking <a id="hevea_default799"></a><span class="c003">gplc</span> (section&#XA0;<a href="gprolog009.html#Using-the-compiler">4.4.3</a>). More precisely the
+following elements are saved:</p><ul class="itemize"><li class="li-itemize">all operator definitions (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</li><li class="li-itemize">the character conversion table (section&#XA0;<a href="gprolog038.html#char-conversion%2F2">8.14.12</a>).</li><li class="li-itemize">the value of <a id="hevea_default800"></a><span class="c003">char_conversion</span>, <a id="hevea_default801"></a><span class="c003">double_quotes</span>, <a id="hevea_default802"></a><span class="c003">back_quotes</span>, <a id="hevea_default803"></a><span class="c003">singleton_warning</span>, <a id="hevea_default804"></a><span class="c003">suspicious_warning</span> and <a id="hevea_default805"></a><span class="c003">multifile_warning</span> <a id="hevea_default806"></a>Prolog flags
+(section&#XA0;<a href="#set-prolog-flag%2F2">8.22.1</a>).</li></ul><p><span class="c003">read_pl_state_file(FileName)</span> reads (restores) from
+<span class="c003">FileName</span> all information previously saved by
+<span class="c003">write_pl_state_file/1.</span></p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">FileName</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">FileName</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, FileName)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an operating system error occurs and the value of the
+<span class="c003">os_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog045.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog047.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

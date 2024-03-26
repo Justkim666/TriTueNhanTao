@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Symbolic constraints</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog061.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog063.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec325">9.8&#XA0;&#XA0;Symbolic constraints</h3>
+<ul>
+<li><a href="gprolog062.html#sec326"><span class="c003">fd_all_different/1</span></a>
+</li><li><a href="gprolog062.html#fd-element%2F3"><span class="c003">fd_element/3</span></a>
+</li><li><a href="gprolog062.html#sec328"><span class="c003">fd_element_var/3</span></a>
+</li><li><a href="gprolog062.html#sec329"><span class="c003">fd_atmost/3</span>,
+<span class="c003">fd_atleast/3</span>,
+<span class="c003">fd_exactly/3</span></a>
+</li><li><a href="gprolog062.html#sec330"><span class="c003">fd_relation/2</span>,
+<span class="c003">fd_relationc/2</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec326">9.8.1&#XA0;&#XA0;<a id="hevea_default992"></a><span class="c003">fd_all_different/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_all_different(+fd_variable_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_all_different(List)</span> constrains all variables in <span class="c003">List</span>
+to take distinct values. This is equivalent to posting an inequality
+constraint for each pair of variables. This constraint is triggered when a
+variable becomes ground, removing its value from the domain of the other
+variables.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">List</span> list is neither a
+variable nor an integer nor an FD variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="fd-element/3">9.8.2&#XA0;&#XA0;<a id="hevea_default993"></a><span class="c003">fd_element/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_element(?fd_variable, +integer_list, ?fd_variable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_element(I, List, X)</span> constraints <span class="c003">X</span> to be equal to the
+<span class="c003">I</span><em>th</em> integer (from 1) of <span class="c003">List</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">I</span> is neither a variable nor an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, I)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is neither a variable nor an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">List</span> list is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec328">9.8.3&#XA0;&#XA0;<a id="hevea_default994"></a><span class="c003">fd_element_var/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_element_var(?fd_variable, +fd_variable_list, ?fd_variable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_element_var(I, List, X)</span> constraints <span class="c003">X</span> to be equal to
+the <span class="c003">I</span><em>th</em> variable (from 1) of <span class="c003">List</span>. This
+constraint is similar to <span class="c003">fd_element/3</span> (section&#XA0;<a href="#fd-element%2F3">9.8.2</a>) but
+<span class="c003">List</span> can also contain FD variables (rather than just integers).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">I</span> is neither a variable nor an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, I)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">X</span> is neither a variable nor an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, X)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">List</span> list is neither a
+variable nor an integer nor an FD variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec329">9.8.4&#XA0;&#XA0;<a id="hevea_default995"></a><span class="c003">fd_atmost/3</span>,
+<a id="hevea_default996"></a><span class="c003">fd_atleast/3</span>,
+<a id="hevea_default997"></a><span class="c003">fd_exactly/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_atmost(+integer, +fd_variable_list, +integer)<br>
+fd_atleast(+integer, +fd_variable_list, +integer)<br>
+fd_exactly(+integer, +fd_variable_list, +integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_atmost(N, List, V)</span> posts the constraint that at most <span class="c003">N</span>
+variables of <span class="c003">List</span> are equal to the value <span class="c003">V</span>.</p><p><span class="c003">fd_atleast(N, List, V)</span> posts the constraint that at least
+<span class="c003">N</span> variables of <span class="c003">List</span> are equal to the value <span class="c003">V</span>.</p><p><span class="c003">fd_exactly(N, List, V)</span> posts the constraint that at exactly
+<span class="c003">N</span> variables of <span class="c003">List</span> are equal to the value <span class="c003">V</span>.</p><p>These constraints are special cases of <a id="hevea_default998"></a><span class="c003">fd_cardinality/2</span>
+(section&#XA0;<a href="gprolog061.html#fd-cardinality%2F2">9.7.4</a>) but their implementation is more efficient.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">N</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, N)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">V</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">V</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, V)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">List</span> list is neither a
+variable nor an FD variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec330">9.8.5&#XA0;&#XA0;<a id="hevea_default999"></a><span class="c003">fd_relation/2</span>,
+<a id="hevea_default1000"></a><span class="c003">fd_relationc/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+fd_relation(+integer_list_list, ?fd_variable_list)<br>
+fd_relationc(+integer_list_list, ?fd_variable_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">fd_relation(Relation, Vars)</span> constraints the tuple of variables
+<span class="c003">Vars</span> to be equal to one tuple of the list <span class="c003">Relation</span>. A
+tuple is represented by a list.</p><p>Example: definition of the boolean AND relation so that X AND Y
+&#X21D4; Z:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">and(X,Y,Z):-
+        fd_relation([[0,0,0],[0,1,0],[1,0,0],[1,1,1]], [X,Y,Z]).
+</pre>
+</dd></dl><p><span class="c003">fd_relationc(Columns, Vars)</span> is similar to <span class="c003">fd_relation/2</span>
+except that the relation is not given as the list of tuples but as the list
+of the columns of the relation. A column is represented by a list.</p><p>Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">and(X,Y,Z):-
+        fd_relationc([[0,0,1,1],[0,1,0,1],[0,0,0,1]], [X,Y,Z]).
+</pre>
+</dd></dl><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Relation</span> is a partial list or a list with a sub-term
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Relation</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Relation)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Relation</span> list is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Vars</span> is a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Vars</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Vars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Vars</span> list is neither a
+variable nor an integer nor an FD variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(fd_variable, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog061.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog054.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog063.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

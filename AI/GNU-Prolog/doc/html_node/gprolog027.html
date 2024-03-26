@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Term comparison</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog026.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog028.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec77">8.3&#XA0;&#XA0;Term comparison</h3>
+<ul>
+<li><a href="gprolog027.html#sec78">Standard total ordering of terms</a>
+</li><li><a href="gprolog027.html#%28%3D%3D%29%2F2"><span class="c003">(==)/2</span> - term identical, 
+<span class="c003">(</span><span class="c003">\</span><span class="c003">==)/2</span> - term not identical, <br>
+  
+
+
+<span class="c003">(@</span><span class="c003">&lt;</span><span class="c003">)/2</span> - term less than,
+<span class="c003">(@=</span><span class="c003">&lt;</span><span class="c003">)/2</span> - term less than or equal to, <br>
+ <span class="c003">(@</span><span class="c003">&gt;</span><span class="c003">)/2</span> - term greater than,
+<span class="c003">(@</span><span class="c003">&gt;</span><span class="c003">=)/2</span> - term greater than or equal to</a>
+</li><li><a href="gprolog027.html#compare%2F3"><span class="c003">compare/3</span> </a>
+</li></ul>
+<h4 class="subsubsection" id="sec78">8.3.1&#XA0;&#XA0;Standard total ordering of terms</h4>
+<p>
+<a id="Standard-total-ordering-of-terms"></a>
+The built-in predicates described in this section allows the user to compare
+Prolog terms. Prolog terms are totally ordered according to the standard
+total ordering of terms which is as follows (from the smallest term to the
+greatest):</p><ul class="itemize"><li class="li-itemize">variables, oldest first.</li><li class="li-itemize">finite domain variables (section&#XA0;<a href="gprolog055.html#Finite-Domain-variables">9.1.1</a>), oldest
+first.</li><li class="li-itemize">floating point numbers, in numeric order.</li><li class="li-itemize">integers, in numeric order.</li><li class="li-itemize">atoms, in alphabetical (i.e. character code) order.</li><li class="li-itemize">compound terms, ordered first by arity, then by the name of the
+principal functor and by the arguments in left-to-right order.</li></ul><p>A list is treated as a compound term (whose principal functor is
+<span class="c003">&#X2019;.&#X2019;/2</span>).</p><p>The portability of the order of variables is not guaranteed (in the ISO
+reference the order of variables is system dependent).</p>
+<h4 class="subsubsection" id="(==)/2">8.3.2&#XA0;&#XA0;<a id="hevea_default248"></a><span class="c003">(==)/2</span> - term identical, 
+<a id="hevea_default249"></a><span class="c003">(\==)/2</span> - term not identical, <br>
+ <a id="hevea_default250"></a> <a id="hevea_default251"></a>
+<a id="hevea_default252"></a>
+<a id="hevea_default253"></a>
+<span class="c003">(@&lt;)/2</span> - term less than,
+<span class="c003">(@=&lt;)/2</span> - term less than or equal to, <br>
+ <span class="c003">(@&gt;)/2</span> - term greater than,
+<span class="c003">(@&gt;=)/2</span> - term greater than or equal to</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+==(?term, ?term)<br>
+\==(?term, ?term) <br>
+@&lt;(?term, ?term) <br>
+@=&lt;(?term, ?term)<br>
+@&gt;(?term, ?term)<br>
+@&gt;=(?term, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p>These predicates compare two terms according to the standard total ordering
+of terms (section&#XA0;<a href="#Standard-total-ordering-of-terms">8.3.1</a>).</p><p><span class="c003">Term1 == Term2</span> succeeds if <span class="c003">Term1</span> and <span class="c003">Term2</span> are
+equal.</p><p><span class="c003">Term1 \== Term2</span> succeeds if <span class="c003">Term1</span> and
+<span class="c003">Term2</span> are different.</p><p><span class="c003">Term1 @&lt; Term2</span> succeeds if <span class="c003">Term1</span> is less than
+<span class="c003">Term2</span>.</p><p><span class="c003">Term1 @=&lt; Term2</span> succeeds if <span class="c003">Term1</span> is less than or
+equal to <span class="c003">Term2</span>.</p><p><span class="c003">Term1 @&gt; Term2</span> succeeds if <span class="c003">Term1</span> is greater than
+<span class="c003">Term2</span>.</p><p><span class="c003">Term1 @&gt;= Term2</span> succeeds if <span class="c003">Term1</span> is greater than
+or equal to <span class="c003">Term2</span>.</p><p><span class="c003">==</span>, <span class="c003">\==</span>, <span class="c003">@&lt;</span>, <span class="c003">@=&lt;</span>,
+<span class="c003">@&gt;</span> and <span class="c003">@&gt;=</span> are predefined infix operators (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+<h4 class="subsubsection" id="compare/3">8.3.3&#XA0;&#XA0;<a id="hevea_default254"></a><span class="c003">compare/3</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+compare(?atom, +term, +term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">compare(Order, Term1, Term2)</span> compares <span class="c003">Term1</span> and
+<span class="c003">Term2</span> according to the standard (section&#XA0;<a href="#Standard-total-ordering-of-terms">8.3.1</a>) and unifies <span class="c003">Order</span> with:</p><ul class="itemize"><li class="li-itemize">the atom <span class="c003">&lt;</span> if <span class="c003">Term1</span> is less than <span class="c003">Term2</span>.</li><li class="li-itemize">the atom <span class="c003">=</span> if <span class="c003">Term1</span> and <span class="c003">Term2</span> are equal.</li><li class="li-itemize">the atom <span class="c003">&gt;</span> if <span class="c003">Term1</span> is greater than
+<span class="c003">Term2</span>.</li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Order</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Order)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Order</span> is an atom but not <span class="c003">&lt;</span>, <span class="c003">=</span> or <span class="c003">&gt;</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(order, Order)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog026.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog028.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

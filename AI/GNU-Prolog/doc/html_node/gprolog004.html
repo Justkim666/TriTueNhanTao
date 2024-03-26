@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Introduction</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog003.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="index.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog005.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h2 class="section" id="sec4">3&#XA0;&#XA0;Introduction</h2>
+<p>GNU Prolog [<a href="gprolog073.html#gnu-prolog">5</a>] is a free Prolog compiler with constraint
+solving over finite domains. For recent information about GNU Prolog
+please consult <a href="http://www.gprolog.org">the GNU Prolog page</a>.</p><p><a id="hevea_default0"></a> GNU Prolog is a Prolog compiler
+based on the Warren Abstract Machine (<a id="hevea_default1"></a>WAM) [<a href="gprolog073.html#Warren83">9</a>, <a href="gprolog073.html#Ait-Kaci91">1</a>].
+It first compiles a Prolog program to a WAM file which is then translated to
+a low-level machine independent language called <a id="hevea_default2"></a>mini-assembly
+specifically designed for GNU Prolog. The resulting file is then translated
+to the assembly language of the target machine (from which an object is
+obtained). This allows GNU Prolog to produce a native stand alone executable
+from a Prolog source (similarly to what does a C compiler from a C program).
+The main advantage of this compilation scheme is to produce native code and
+to be fast. Another interesting feature is that executables are small.
+Indeed, the code of most unused built-in predicates is not included in the
+executables at link-time.</p><p>A lot of work has been devoted to the ISO compatibility. Indeed, GNU Prolog
+is very close to the ISO standard for Prolog&#XA0;[<a href="gprolog073.html#iso-part1">6</a>].</p><p>GNU Prolog also offers various extensions very useful in practice (global
+variables, OS interface, sockets,...). In particular, GNU Prolog contains an
+efficient constraint solver over Finite Domains (FD). This opens constraint
+logic programming to the user combining the power of constraint programming to
+the declarativity of logic programming. The key feature of the GNU Prolog
+solver is the use of a single (low-level) primitive to define all
+(high-level) FD constraints. There are many advantages of this approach:
+constraints can be compiled, the user can define his own constraints (in
+terms of the primitive), the solver is open and extensible (as opposed to
+black-box solvers like CHIP),&#X2026;Moreover, the GNU Prolog solver is rather
+efficient, often more than commercial solvers.</p><p>GNU Prolog is inspired from two systems:</p><ul class="itemize"><li class="li-itemize"><span class="c003">wamcc</span>: a Prolog to C compiler [<a href="gprolog073.html#wamcc">3</a>]. the key point of <span class="c003">wamcc</span> was its
+ability to produce stand alone executables using an original compilation
+scheme: the translation of Prolog to C via the WAM. Its drawback was the time
+needed by <span class="c003">gcc</span> to compile the produced sources. GNU Prolog can also
+produce stand alone executables but using a faster compilation scheme.</li><li class="li-itemize"><span class="c003">clp(FD)</span>: a constraint programming language over FD
+[<a href="gprolog073.html#long-clp-fd">4</a>]. Its key feature was the use of a
+single primitive to define FD constraints. GNU Prolog is based on the same
+idea but offers an extended constraint definition language. In comparison to
+<span class="c003">clp(FD)</span>, GNU Prolog offers new predefined constraints, new
+predefined heuristics, reified constraints,&#X2026;</li></ul><p>Here are some features of GNU Prolog:</p><ul class="itemize"><li class="li-itemize">Prolog system:<ul class="itemize"><li class="li-itemize">conforms to the ISO standard for Prolog (floating point numbers,
+streams, dynamic code,&#X2026;).</li><li class="li-itemize">a lot of extensions: global variables, definite clause grammars (DCG),
+sockets interface, operating system interface,&#X2026;</li><li class="li-itemize">more than 300 Prolog built-in predicates.</li><li class="li-itemize">Prolog debugger and a low-level WAM debugger.</li><li class="li-itemize">line editing facility under the interactive interpreter with
+completion on atoms.</li><li class="li-itemize">powerful bidirectional interface between Prolog and C.</li></ul></li><li class="li-itemize">Compiler:<ul class="itemize"><li class="li-itemize">native-code compiler producing stand alone executables.</li><li class="li-itemize">simple command-line compiler accepting a wide variety of files:
+Prolog files, C files, WAM files,&#X2026;</li><li class="li-itemize">direct generation of assembly code 15 times faster than
+<span class="c003">wamcc</span> + <span class="c003">gcc</span>.</li><li class="li-itemize">most of unused built-in predicates are not linked (to reduce the size
+of the executables).</li><li class="li-itemize">compiled predicates (native-code) as fast as <span class="c003">wamcc</span> on average.</li><li class="li-itemize">consulted predicates (byte-code) 5 times faster than <span class="c003">wamcc</span>.</li></ul></li><li class="li-itemize">Constraint solver:<ul class="itemize"><li class="li-itemize">FD variables well integrated into the Prolog environment (full
+compatibility with Prolog variables and integers). No need for
+explicit FD declarations.</li><li class="li-itemize">very efficient FD solver (comparable to commercial solvers).</li><li class="li-itemize">high-level constraints can be described in terms of simple primitives.</li><li class="li-itemize">a lot of predefined constraints: arithmetic constraints, boolean
+constraints, symbolic constraints, reified constraints,&#X2026;</li><li class="li-itemize">several predefined enumeration heuristics.</li><li class="li-itemize">the user can define his own new constraints.</li><li class="li-itemize">more than 50 FD built-in constraints/predicates.</li></ul></li></ul>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog003.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="index.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog005.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

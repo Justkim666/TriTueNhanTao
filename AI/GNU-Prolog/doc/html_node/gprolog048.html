@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>System statistics</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog047.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog049.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec243">8.24&#XA0;&#XA0;System statistics</h3>
+<ul>
+<li><a href="gprolog048.html#statistics%2F2"><span class="c003">statistics/0</span>,
+<span class="c003">statistics/2</span></a>
+</li><li><a href="gprolog048.html#user-time%2F1"><span class="c003">user_time/1</span>,
+<span class="c003">system_time/1</span>,
+<span class="c003">cpu_time/1</span>,
+<span class="c003">real_time/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="statistics/2">8.24.1&#XA0;&#XA0;<a id="hevea_default819"></a><span class="c003">statistics/0</span>,
+<a id="hevea_default820"></a><span class="c003">statistics/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+statistics<br>
+statistics(?atom, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">statistics</span> displays statistics about memory usage and run times.</p><p><span class="c003">statistics(Key, Value)</span> unifies <span class="c003">Value</span> with the current
+value of the statistics key <span class="c003">Key</span>. <span class="c003">Value</span> a list of two
+elements. Times are in milliseconds, sizes of areas in bytes.</p><table class="c000 cellpadding1" border=1><tr><td class="c014">
+Key</td><td class="c014">Description</td><td class="c014">Value </td></tr>
+<tr><td class="c014">
+<span class="c003">user_time</span></td><td class="c014">user CPU time</td><td class="c014"><span class="c003">[SinceStart, SinceLast]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">system_time</span></td><td class="c014">system CPU time</td><td class="c014"><span class="c003">[SinceStart, SinceLast]</span>
+</td></tr>
+<tr><td class="c014">
+<span class="c003">cpu_time</span></td><td class="c014">total CPU time (user + system)</td><td class="c014"><span class="c003">[SinceStart,
+SinceLast]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">real_time</span></td><td class="c014">absolute time</td><td class="c014"><span class="c003">[SinceStart, SinceLast]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">local_stack</span></td><td class="c014">local stack sizes (control, environments, choices)</td><td class="c014"><span class="c003">[UsedSize, FreeSize]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">global_stack</span></td><td class="c014">global stack sizes (compound terms)</td><td class="c014"><span class="c003">[UsedSize, FreeSize]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">trail_stack</span></td><td class="c014">trail stack sizes (variable bindings to undo)</td><td class="c014"><span class="c003">[UsedSize, FreeSize]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">cstr_stack</span></td><td class="c014">constraint trail sizes (finite domain constraints)</td><td class="c014"><span class="c003">[UsedSize, FreeSize]</span> </td></tr>
+<tr><td class="c014">
+<span class="c003">atoms</span></td><td class="c014">atom table</td><td class="c014"><span class="c003">[NumberOfAtoms, FreeNumberOfAtoms]</span> </td></tr>
+</table><p>Note that the key <span class="c003">runtime</span> is recognized as <span class="c003">user_time</span> for
+compatibility purpose.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Key</span> is neither a variable nor a valid key</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(statistics_key, Key)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Value</span> is neither a variable nor a list of two elements</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(statistics_value, Value)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Value</span> is a list of two elements and an element <span class="c003">E</span>
+is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="user-time/1">8.24.2&#XA0;&#XA0;<a id="hevea_default821"></a><span class="c003">user_time/1</span>,
+<a id="hevea_default822"></a><span class="c003">system_time/1</span>,
+<a id="hevea_default823"></a><span class="c003">cpu_time/1</span>,
+<a id="hevea_default824"></a><span class="c003">real_time/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+user_time(?integer)<br>
+system_time(?integer)<br>
+cpu_time(?integer)<br>
+real_time(?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">user_time(Time)</span> unifies <span class="c003">Time</span> with the user
+CPU time elapsed since the start of Prolog.</p><p><span class="c003">system_time(Time)</span> unifies <span class="c003">Time</span> with the
+system CPU time elapsed since the start of Prolog.</p><p><span class="c003">cpu_time(Time)</span> unifies <span class="c003">Time</span> with the CPU
+time (user + system) elapsed since the start of Prolog.</p><p><span class="c003">real_time(Time)</span> unifies <span class="c003">Time</span> with the
+absolute time elapsed since the start of Prolog.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Time</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Time)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog047.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog049.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

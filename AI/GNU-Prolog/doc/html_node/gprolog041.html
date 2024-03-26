@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Term expansion</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog040.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog042.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec188">8.17&#XA0;&#XA0;Term expansion</h3>
+<ul>
+<li><a href="gprolog041.html#sec189">Definite clause grammars</a>
+</li><li><a href="gprolog041.html#expand-term%2F2"><span class="c003">expand_term/2</span>,
+<span class="c003">term_expansion/2</span></a>
+</li><li><a href="gprolog041.html#sec191"><span class="c003">phrase/3</span>,
+<span class="c003">phrase/2</span></a>
+</li></ul>
+<p>
+<a id="Term-expansion"></a></p>
+<h4 class="subsubsection" id="sec189">8.17.1&#XA0;&#XA0;Definite clause grammars</h4>
+<p>
+<a id="DCG"></a>
+<a id="hevea_default650"></a></p><p>Definite clause grammars are a useful notation to express grammar rules.
+However the ISO reference does not include them, so they should be considered
+as a system dependent feature. Definite clause grammars are an extension of
+context-free grammars. A grammar rule is of the form:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">head<span class="c003"> </span><a id="hevea_default651"></a><span class="c003">--&gt; </span>body<span class="c003">.</span></dd></dl><p><span class="c003">--&gt;</span> is a predefined infix operator (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p>Here are some features of definite clause grammars:</p><ul class="itemize"><li class="li-itemize">a non-terminal symbol may be any callable term.</li><li class="li-itemize">a terminal symbol may be any Prolog term and is written as a list. The
+empty list represents an empty sequence of terminals.</li><li class="li-itemize">a sequence is expressed using the Prolog conjunction operator
+<span class="c003">(</span>(&#X2019;,&#X2019;)/2).</li><li class="li-itemize">the head of a grammar rule consists of a non-terminal optionally
+followed by a sequence of terminals (i.e. a Prolog list).</li><li class="li-itemize">the body of a grammar rule consists of a sequence of non-terminals,
+terminals, predicate call, disjunction (using <span class="c003">;/2</span>), if-then (using
+<span class="c003">(-&gt;)/2</span>) or cut (using <span class="c003">!</span>).</li><li class="li-itemize">a predicate call must be enclosed in curly brackets (using
+<span class="c003">{}/1</span>). This makes it possible to express an extra
+condition.</li></ul><p>A grammar rule is nothing but a &#X201C;syntactic sugar&#X201D; for a Prolog clause. Each
+grammar rule accepts as input a list of terminals (tokens), parses a prefix
+of this list and gives as output the rest of this list (possibly enlarged).
+This rest is generally parsed later. So, each a grammar rule is translated
+into a Prolog clause that explicitly the manages the list. Two arguments
+are then added: the input list (<span class="c003">Start</span>) and the output list
+(<span class="c003">End</span>). For instance:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">p --&gt; q.</span></dd></dl><p>is translated into:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">p(Start, End) :- q(Start, End).</span></dd></dl><p>Extra arguments can be provided and the body of the rule can contain several
+non-terminals. Example:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">p(X, Y) --&gt;
+        q(X),
+        r(X, Y),
+        s(Y).
+</pre>
+</dd></dl><p>is translated into:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">p(X, Y, Start, End) :-
+        q(X, Start, A),
+        r(X, Y, A, B),
+        s(Y, B, End).
+</pre>
+</dd></dl><p>Terminals are translated using unification:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">assign(X,Y) --&gt; left(X), [:=], right(Y), [;].</span></dd></dl><p>is translated into:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">assign(X,Y,Start,End) :-
+        left(X, Start, A),
+        A=[:=|B],
+        right(Y, B, C),
+        C=[;|End].
+</pre>
+</dd></dl><p>Terminals appearing on the left-hand side of a rule are connected to the
+output argument of the head.</p><p>It is possible to include a call to a prolog predicate enclosing it in curly
+brackets (to distinguish them from non-terminals):</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">assign(X,Y) --&gt; left(X), [:=], right(Y0), {Y is Y0 },
+[;].</span></dd></dl><p>is translated into:</p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list">
+<pre class="verbatim">assign(X,Y,Start,End) :-
+        left(X, Start, A),
+        A=[:=|B],
+        right(Y0, B, C),
+        Y is Y0,
+        C=[;|End].
+</pre>
+</dd></dl><p>Cut, disjunction and if-then(-else) are translated literally (and do not need
+to be enclosed in curly brackets).</p>
+<h4 class="subsubsection" id="expand-term/2">8.17.2&#XA0;&#XA0;<a id="hevea_default652"></a><span class="c003">expand_term/2</span>,
+<a id="hevea_default653"></a><span class="c003">term_expansion/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+expand_term(?term, ?term)<br>
+term_expansion(?term, ?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">expand_term(Term1, Term2)</span> succeeds if
+<span class="c003">Term2</span> is a transformation of <span class="c003">Term1</span>. The transformation
+steps are as follows:</p><ul class="itemize"><li class="li-itemize">if <span class="c003">Term1</span> is a variable, it is unified with <span class="c003">Term2</span></li><li class="li-itemize">if <span class="c003">term_expansion(Term1, Term2)</span> succeeds <span class="c003">Term2</span> is
+assumed to be the transformation of <span class="c003">Term1</span>.</li><li class="li-itemize">if <span class="c003">Term1</span> is a DCG then <span class="c003">Term2</span> is its translation
+(section&#XA0;<a href="#DCG">8.17.1</a>).</li><li class="li-itemize">otherwise <span class="c003">Term2</span> is unified with <span class="c003">Term1</span>.</li></ul><p><span class="c003">term_expansion(Term1, Term2)</span> is a hook predicate allowing the user
+to define a specific transformation.</p><p>The GNU Prolog compiler (section&#XA0;<a href="gprolog009.html#The-GNU-Prolog-compiler">4.4</a>) automatically calls
+<span class="c003">expand_term/2</span> on each <span class="c003">Term1</span> read in. However, in the
+current release, only DCG transformation are done by the compiler (i.e.
+<span class="c003">term_expansion/2</span> cannot be used). To use
+<span class="c003">term_expansion/2</span>, it is necessary to call <span class="c003">expand_term/2</span>
+explicitly.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec191">8.17.3&#XA0;&#XA0;<a id="hevea_default654"></a><span class="c003">phrase/3</span>,
+<a id="hevea_default655"></a><span class="c003">phrase/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+phrase(?term, ?list, ?list)<br>
+phrase(?term, ?list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">phrase(Phrase, List, Remainder)</span> succeeds if the list
+<span class="c003">List</span> is in the language defined by the grammar rule body
+<span class="c003">Phrase</span>. <span class="c003">Remainder</span> is what remains of the list after a
+phrase has been found.</p><p><span class="c003">phrase(Phrase, List)</span> is equivalent to
+<span class="c003">phrase(Phrase, List, [])</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Phrase</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Phrase</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Phrase)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">List</span> is neither a list nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, List)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Remainder</span> is neither a list nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Remainder)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog040.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog042.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

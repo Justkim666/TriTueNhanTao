@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Dynamic clause management</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog030.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog032.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec101">8.7&#XA0;&#XA0;Dynamic clause management</h3>
+<ul>
+<li><a href="gprolog031.html#sec102">Introduction</a>
+</li><li><a href="gprolog031.html#sec103"><span class="c003">asserta/1</span>,
+<span class="c003">assertz/1</span></a>
+</li><li><a href="gprolog031.html#sec104"><span class="c003">retract/1</span></a>
+</li><li><a href="gprolog031.html#sec105"><span class="c003">retractall/1</span></a>
+</li><li><a href="gprolog031.html#sec106"><span class="c003">clause/2</span></a>
+</li><li><a href="gprolog031.html#abolish%2F1"><span class="c003">abolish/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec102">8.7.1&#XA0;&#XA0;Introduction</h4>
+<p>
+<a id="Introduction:(Dynamic-clause-management)"></a>
+<span class="c009">Static and dynamic procedures</span>: a procedure is either dynamic or
+static. All built-in predicates are static. A user-defined procedure is
+static by default unless a <a id="hevea_default294"></a><span class="c003">dynamic/1</span> directive precedes its
+definition (section&#XA0;<a href="gprolog022.html#dynamic%2F1">7.1.2</a>). Adding a clause to a non-existent procedure
+creates a dynamic procedure. The clauses of a dynamic procedure can be
+altered (e.g. using <span class="c003">asserta/1</span>), the clauses of a static procedure
+cannot be altered.</p><p><span class="c009">Private and public procedures</span>: each procedure is either public or
+private. A dynamic procedure is always public. Each built-in predicate is
+private, and a static user-defined procedure is private by default unless a
+<a id="hevea_default295"></a><span class="c003">public/1</span> directive precedes its definition (section&#XA0;<a href="gprolog022.html#public%2F1">7.1.3</a>). If a
+dynamic declaration exists it is unnecessary to add a public declaration
+since a dynamic procedure is also public. A clause of a public procedure can
+be inspected (e.g. using <span class="c003">clause/2</span>), a clause of a private procedure
+cannot be inspected.</p><p><span class="c009">A logical database update view</span>: any change in the database that
+occurs as the result of executing a goal (e.g. when a sub-goal is a call of
+<span class="c003">assertz/1</span> or <span class="c003">retract/1</span>) only affects subsequent
+activations. The change does not affect any activation that is currently
+being executed. Thus the database is frozen during the execution of a goal,
+and the list of clauses defining a predication is fixed at the moment of its
+execution.</p>
+<h4 class="subsubsection" id="sec103">8.7.2&#XA0;&#XA0;<a id="hevea_default296"></a><span class="c003">asserta/1</span>,
+<a id="hevea_default297"></a><span class="c003">assertz/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+asserta(+clause)<br>
+assertz(+clause)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">asserta(Clause)</span> first converts the term <span class="c003">Clause</span> to a clause
+and then adds it to the current internal database. The predicate concerned
+must be dynamic (section&#XA0;<a href="#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>) or
+undefined and the clause is inserted before the first clause of the
+predicate. If the predicated is undefined it is created as a dynamic
+procedure.</p><p><span class="c003">assertz(Clause)</span> acts like <span class="c003">asserta/1</span> except that the clause
+is added at the end of all existing clauses of the concerned predicate.</p><p><span class="c009">Converting a term <span class="c003">Clause</span> to a clause <span class="c003">Clause1</span>:</span></p><ul class="itemize"><li class="li-itemize">extract the head and the body of <span class="c003">Clause</span>: either
+<span class="c003">Clause</span> = <span class="c003">(Head :- Body)</span> or <span class="c003">Clause</span> = <span class="c003">Head</span>
+and <span class="c003">Body</span> = <span class="c003">true</span>.</li><li class="li-itemize"><span class="c003">Head</span> must be a callable term (or else the conversion fails).</li><li class="li-itemize">convert <span class="c003">Body</span> to a body clause (i.e. a goal) <span class="c003">Body1</span>.</li><li class="li-itemize">the converted clause <span class="c003">Clause1</span> = <span class="c003">(Head :- Body1)</span>.</li></ul><p><span class="c009">Converting a term <span class="c003">T</span> to a goal:</span></p><ul class="itemize"><li class="li-itemize">if <span class="c003">T</span> is a variable it is replaced by the term
+<span class="c003">call(T)</span>.</li><li class="li-itemize">if <span class="c003">T</span> is a control construct <span class="c003">(&#X2019;,&#X2019;)/2</span>, <span class="c003">(;)/2</span>
+or <span class="c003">(-&gt;)/2</span> each argument of the control construct is recursively
+converted to a goal.</li><li class="li-itemize">if <span class="c003">T</span> is a callable term it remains unchanged.</li><li class="li-itemize">otherwise the conversion fails (<span class="c003">T</span> is neither a variable nor a
+callable term).</li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Head)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Body</span> cannot be converted to a goal</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Body)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Head</span> is that of a
+static procedure</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, static_procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+<h4 class="subsubsection" id="sec104">8.7.3&#XA0;&#XA0;<a id="hevea_default298"></a><span class="c003">retract/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+retract(+clause)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">retract(Clause)</span> erases the first clause of the database
+that unifies with <span class="c003">Clause</span>. The concerned predicate must be a
+dynamic procedure
+(section&#XA0;<a href="#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>). Removing all clauses
+of a procedure does not erase the procedure definition. To achieve
+this use <span class="c003">abolish/1</span> (section&#XA0;<a href="#abolish%2F1">8.7.6</a>). <span class="c003">retract/1</span> is
+re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Head)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Head</span> is that of a
+static procedure</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, static_procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate. In the ISO reference, the operation associated with the
+<span class="c003">permission_error</span> is <span class="c003">access</span> while it is <span class="c003">modify</span> in
+GNU Prolog. This seems to be an error of the ISO reference since for
+<span class="c003">asserta/1</span> (which is similar in spirit to <span class="c003">retract/1</span>) the
+operation is also <span class="c003">modify</span>.</p>
+<h4 class="subsubsection" id="sec105">8.7.4&#XA0;&#XA0;<a id="hevea_default299"></a><span class="c003">retractall/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+retractall(+head)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">retractall(Head)</span> erases all clauses whose head unifies with
+<span class="c003">Head</span>. The concerned predicate must be a dynamic procedure
+(section&#XA0;<a href="#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>). The procedure definition
+is not removed so that it is found by <a id="hevea_default300"></a><span class="c003">current_predicate/1</span>
+(section&#XA0;<a href="gprolog032.html#current-predicate%2F1">8.8.1</a>). <span class="c003">abolish/1</span> should be used to remove the
+procedure (section&#XA0;<a href="#abolish%2F1">8.7.6</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is not a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Head)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Head</span> is that of a
+static procedure</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, static_procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec106">8.7.5&#XA0;&#XA0;<a id="hevea_default301"></a><span class="c003">clause/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+clause(+head, ?callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">clause(Head, Body)</span> succeeds if there exists a clause in the
+database that unifies with <span class="c003">Head :- Body</span>. The predicate in question
+must be a public procedure (section&#XA0;<a href="#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>). Clauses are delivered from the first to the last. This
+predicate is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Head</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Head)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Head</span> is that of a
+private procedure</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(access, private_procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Body</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Body)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="abolish/1">8.7.6&#XA0;&#XA0;<a id="hevea_default302"></a><span class="c003">abolish/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+abolish(+predicate_indicator)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">abolish(Pred)</span> removes from the database the procedure whose
+predicate indicator is <span class="c003">Pred</span>. The concerned predicate must be a
+dynamic procedure (section&#XA0;<a href="#Introduction%3A%28Dynamic-clause-management%29">8.7.1</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and either
+<span class="c003">Name</span> or <span class="c003">Arity</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is neither a variable nor a predicate indicator</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(predicate_indicator, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Arity</span> is
+neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Name</span> is
+neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Name)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Arity</span> is
+an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Pred</span> is a term <span class="c003">Name/Arity</span> and <span class="c003">Arity</span> is
+an integer &gt; <span class="c003">max_arity</span> flag (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(max_arity)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> is that of a static
+procedure</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, static_procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog030.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog032.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

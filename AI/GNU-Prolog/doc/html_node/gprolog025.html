@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Type testing</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog026.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec71">8.1&#XA0;&#XA0;Type testing</h3>
+<ul>
+<li><a href="gprolog025.html#var%2F1"><span class="c003">var/1</span>, 
+<span class="c003">nonvar/1</span>,
+<span class="c003">atom/1</span>,
+<span class="c003">integer/1</span>,
+<span class="c003">float/1</span>,
+<span class="c003">number/1</span>,
+<span class="c003">atomic/1</span>, <br>
+ <span class="c003">compound/1</span>,
+<span class="c003">callable/1</span>,
+<span class="c003">ground/1</span>,
+<span class="c003">is_list/1</span>,
+<span class="c003">list/1</span>, <br>
+ <span class="c003">partial_list/1</span>,
+<span class="c003">list_or_partial_list/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="var/1">8.1.1&#XA0;&#XA0;<a id="hevea_default231"></a><span class="c003">var/1</span>, 
+<a id="hevea_default232"></a><span class="c003">nonvar/1</span>,
+<a id="hevea_default233"></a><span class="c003">atom/1</span>,
+<a id="hevea_default234"></a><span class="c003">integer/1</span>,
+<a id="hevea_default235"></a><span class="c003">float/1</span>,
+<a id="hevea_default236"></a><span class="c003">number/1</span>,
+<a id="hevea_default237"></a><span class="c003">atomic/1</span>, <br>
+ <a id="hevea_default238"></a><span class="c003">compound/1</span>,
+<a id="hevea_default239"></a><span class="c003">callable/1</span>,
+<a id="hevea_default240"></a><span class="c003">ground/1</span>,
+<a id="hevea_default241"></a><span class="c003">is_list/1</span>,
+<a id="hevea_default242"></a><span class="c003">list/1</span>, <br>
+ <a id="hevea_default243"></a><span class="c003">partial_list/1</span>,
+<a id="hevea_default244"></a><span class="c003">list_or_partial_list/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+var(?term)<br>
+nonvar(?term)<br>
+atom(?term)<br>
+integer(?term)<br>
+float(?term)<br>
+number(?term)<br>
+atomic(?term)<br>
+compound(?term)<br>
+callable(?term)<br>
+ground(?term)<br>
+is_list(?term)<br>
+list(?term)<br>
+partial_list(?term)<br>
+list_or_partial_list(?term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">var(Term)</span> succeeds if <span class="c003">Term</span> is currently
+uninstantiated (which therefore has not been bound to anything, except
+possibly another uninstantiated variable).</p><p><span class="c003">nonvar(Term)</span> succeeds if <span class="c003">Term</span> is currently instantiated
+(opposite of <span class="c003">var/1</span>).</p><p><span class="c003">atom(Term)</span> succeeds if <span class="c003">Term</span> is currently instantiated
+to an atom.</p><p><span class="c003">integer(Term)</span> succeeds if <span class="c003">Term</span> is currently
+instantiated to an integer.</p><p><span class="c003">float(Term)</span> succeeds if <span class="c003">Term</span> is currently instantiated
+to a floating point number.</p><p><span class="c003">number(Term)</span> succeeds if <span class="c003">Term</span> is currently instantiated
+to an integer or a floating point number.</p><p><span class="c003">atomic(Term)</span> succeeds if <span class="c003">Term</span> is currently instantiated
+to an atom, an integer or a floating point number.</p><p><span class="c003">compound(Term)</span> succeeds if <span class="c003">Term</span> is currently
+instantiated to a compound term, i.e. a term of arity &gt; 0 (a list or a
+structure).</p><p><span class="c003">callable(Term)</span> succeeds if <span class="c003">Term</span> is currently
+instantiated to a callable term, i.e. an atom or a compound term.</p><p><span class="c003">ground(Term)</span> succeeds if <span class="c003">Term</span> is a ground term.</p><p><span class="c003">list(Term)</span> succeeds if <span class="c003">Term</span> is currently instantiated
+to a list, i.e. the atom <span class="c003">[]</span> (empty list) or a term with principal
+functor <span class="c003">&#X2019;.&#X2019;/2</span> and with second argument (the tail) a list.</p><p><span class="c003">is_list(Term)</span> behaves like <span class="c003">list(Term)</span> (for compatibility
+purpose).</p><p><span class="c003">partial_list(Term)</span> succeeds if <span class="c003">Term</span> is currently
+instantiated to a partial list, i.e. a variable or a term whose the main
+functor is <span class="c003">&#X2019;.&#X2019;/2</span> and the second argument (the tail) is a partial
+list.</p><p><span class="c003">list_or_partial_list(Term)</span> succeeds if <span class="c003">Term</span> is
+currently instantiated to a list or a partial list.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p><span class="c003">var/1</span>, <span class="c003">nonvar/1</span>, <span class="c003">atom/1</span>, <span class="c003">integer/1</span>,
+<span class="c003">float/1</span>, <span class="c003">number/1</span>, <span class="c003">atomic/1</span>, <span class="c003">compound/1</span>
+<span class="c003">callable/1</span> and <span class="c003">ground/1</span> are ISO predicates.</p><p><span class="c003">list/1</span>, <span class="c003">partial_list/1</span> and
+<span class="c003">list_or_partial_list/1</span> are GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog026.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Streams</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog033.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog035.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec115">8.10&#XA0;&#XA0;Streams</h3>
+<ul>
+<li><a href="gprolog034.html#sec116">Introduction</a>
+</li><li><a href="gprolog034.html#sec117"><span class="c003">current_input/1</span></a>
+</li><li><a href="gprolog034.html#sec118"><span class="c003">current_output/1</span></a>
+</li><li><a href="gprolog034.html#set-input%2F1"><span class="c003">set_input/1</span></a>
+</li><li><a href="gprolog034.html#set-output%2F1"><span class="c003">set_output/1</span></a>
+</li><li><a href="gprolog034.html#open%2F4"><span class="c003">open/4</span>,
+<span class="c003">open/3</span></a>
+</li><li><a href="gprolog034.html#close%2F2"><span class="c003">close/2</span>,
+<span class="c003">close/1</span></a>
+</li><li><a href="gprolog034.html#flush-output%2F1"><span class="c003">flush_output/1</span>,
+<span class="c003">flush_output/0</span></a>
+</li><li><a href="gprolog034.html#current-stream%2F1"><span class="c003">current_stream/1</span></a>
+</li><li><a href="gprolog034.html#stream-property%2F2"><span class="c003">stream_property/2</span></a>
+</li><li><a href="gprolog034.html#sec126"><span class="c003">at_end_of_stream/1</span>,
+<span class="c003">at_end_of_stream/0</span></a>
+</li><li><a href="gprolog034.html#stream-position%2F2"><span class="c003">stream_position/2</span></a>
+</li><li><a href="gprolog034.html#set-stream-position%2F2"><span class="c003">set_stream_position/2</span></a>
+</li><li><a href="gprolog034.html#sec129"><span class="c003">seek/4</span></a>
+</li><li><a href="gprolog034.html#sec130"><span class="c003">character_count/2</span></a>
+</li><li><a href="gprolog034.html#line-count%2F2"><span class="c003">line_count/2</span></a>
+</li><li><a href="gprolog034.html#line-position%2F2"><span class="c003">line_position/2</span></a>
+</li><li><a href="gprolog034.html#sec133"><span class="c003">stream_line_column/3</span></a>
+</li><li><a href="gprolog034.html#sec134"><span class="c003">set_stream_line_column/3</span></a>
+</li><li><a href="gprolog034.html#add-stream-alias%2F2"><span class="c003">add_stream_alias/2</span></a>
+</li><li><a href="gprolog034.html#sec136"><span class="c003">current_alias/2</span></a>
+</li><li><a href="gprolog034.html#add-stream-mirror%2F2"><span class="c003">add_stream_mirror/2</span></a>
+</li><li><a href="gprolog034.html#remove-stream-mirror%2F2"><span class="c003">remove_stream_mirror/2</span></a>
+</li><li><a href="gprolog034.html#sec139"><span class="c003">current_mirror/2</span></a>
+</li><li><a href="gprolog034.html#set-stream-type%2F2"><span class="c003">set_stream_type/2</span></a>
+</li><li><a href="gprolog034.html#sec141"><span class="c003">set_stream_eof_action/2</span></a>
+</li><li><a href="gprolog034.html#set-stream-buffering%2F2"><span class="c003">set_stream_buffering/2</span></a>
+</li></ul>
+<p>
+<a id="Streams"></a></p>
+<h4 class="subsubsection" id="sec116">8.10.1&#XA0;&#XA0;Introduction</h4>
+<p>
+<a id="Introduction:(Streams)"></a>
+A stream provides a logical view of a source/sink.</p><p><span class="c009">Sources and sinks</span>: a program can output results to a sink or input
+data from a source. A source/sink may be a file (regular file, terminal,
+device,&#X2026;), a constant term, a pipe, a socket,&#X2026;</p><p><span class="c009">Associating a stream to a source/sink</span>: to manipulate a source/sink
+it must be associated with a stream. This provides a logical and uniform view
+of the source/sink whatever its type. Once this association has been
+established, i.e. a stream has been created, all subsequent references to
+the source/sink are made by referring the stream. A stream is
+unidirectional: it is either an input stream or an output stream. For a
+classical file, the association is done by opening the file (whose name is
+specified as an atom) with the <a id="hevea_default325"></a><span class="c003">open/4</span> (section&#XA0;<a href="#open%2F4">8.10.6</a>). GNU Prolog
+makes it possible to treat a Prolog constant term as a source/sink and
+provides built-in predicates to associate a stream to such a term
+(section&#XA0;<a href="gprolog035.html#Constant-term-streams">8.11</a>). GNU Prolog provides operating system interface
+predicates defining pipes between GNU Prolog and child processes with streams
+associated with these pipes, e.g. <a id="hevea_default326"></a><span class="c003">popen/3</span> (section&#XA0;<a href="gprolog051.html#popen%2F3">8.27.21</a>).
+Similarly, socket interface predicates associate streams to a socket to
+allow the communication, e.g. <a id="hevea_default327"></a><span class="c003">socket_connect/4</span>
+(section&#XA0;<a href="gprolog052.html#socket-connect%2F4">8.28.5</a>).</p><p><span class="c009">Stream-term</span>: a stream-term identifies a stream during a call of an
+input/output built-in predicate. It is created as a result of associating a
+stream to a source/sink (section above). A stream-term is a compound term of
+the form <span class="c003">&#X2019;$stream&#X2019;(I)</span> where <span class="c003">I</span> is an integer.</p><p><span class="c009">Stream aliases</span>: any stream may be associated with a stream alias
+which is an atom which may be used to refer to that stream. The association
+can be done at open time or using <a id="hevea_default328"></a><span class="c003">add_stream_alias/2</span>
+(section&#XA0;<a href="#add-stream-alias%2F2">8.10.20</a>). Such an association automatically ends when the
+stream is closed. A particular alias only refers to at most one stream at any
+one time. However, more than one alias can be associated with a stream. Most
+built-in predicates which have a stream-term as an input argument also accept
+a stream alias as that argument. However, built-in predicates which return a
+stream-term do not accept a stream alias.</p><p><span class="c009">Standard streams</span>: three streams are predefined and open during the
+execution of every goal: the standard input stream which has the alias
+<a id="hevea_default329"></a><span class="c003">user_input</span>, the standard output stream which has the alias
+<a id="hevea_default330"></a><span class="c003">user_output</span> and the standard error stream which has the alias
+<a id="hevea_default331"></a><span class="c003">user_error</span>. A goal which attempts to close either standard stream
+succeeds, but does not close the stream.</p><p><span class="c009">Current streams</span>: during execution there is a current input stream
+and a current output stream. By default, the current input and output
+streams are the standard input and output streams, but the built-in
+predicates <a id="hevea_default332"></a><span class="c003">set_input/1</span> (section&#XA0;<a href="#set-input%2F1">8.10.4</a>) and
+<a id="hevea_default333"></a><span class="c003">set_output/1</span> (section&#XA0;<a href="#set-output%2F1">8.10.5</a>) can be used to change them.
+When the current input stream is closed, the standard input stream becomes
+the current input stream. When the current output stream is closed, the
+standard output stream becomes the current output stream.</p><p><span class="c009">Text streams and binary streams</span>: a text stream is a sequence of
+characters. A text stream is also regarded as a sequence of lines where each
+line is a possibly empty sequence of characters followed by a new line
+character. GNU Prolog may add or remove space characters at the ends of lines
+in order to conform to the conventions for representing text streams in the
+operating system. A binary stream is a sequence of bytes. Only a few
+built-in predicates can deal with binary streams, e.g.
+<a id="hevea_default334"></a><span class="c003">get_byte/2</span> (section&#XA0;<a href="gprolog037.html#Byte-input%2Foutput">8.13</a>).</p><p><span class="c009">Stream positions</span>: the stream position of a stream identifies an
+absolute position of the source/sink to which the stream is connected and
+defines where in the source/sink the next input or output will take place. A
+stream position is a ground term of the form
+<span class="c003">&#X2019;$stream_position&#X2019;(I1, I2, I3, I4)</span> where <span class="c003">I1</span>,
+<span class="c003">I2</span>, <span class="c003">I3</span> and <span class="c003">I4</span> are integers. Stream positions are
+used to reposition a stream (when possible) using for instance
+<a id="hevea_default335"></a><span class="c003">set_stream_position/2</span> (section&#XA0;<a href="#set-stream-position%2F2">8.10.13</a>).</p><p><span class="c009">The position end of stream</span>: when all data of a stream
+<span class="c004">S</span> has been input <span class="c004">S</span> has a stream position
+end-of-stream. At this stream position a goal to input more data will return
+a specific value to indicate that end of stream has been reached (e.g.
+<span class="c003">-1</span> for <span class="c003">get_code/2</span> or <span class="c003">end_of_file</span> for
+<span class="c003">get_char/2</span>,&#X2026;). When this terminating value has been input, the
+stream has a stream position past-end-of-stream.</p><p><span class="c009">Buffering mode</span>: input/output on a stream can be buffered
+(line-buffered or block-buffered) or not buffered at all. The buffering mode
+can be specified at open time or using <a id="hevea_default336"></a><span class="c003">set_stream_buffering/2</span>
+(section&#XA0;<a href="#set-stream-buffering%2F2">8.10.27</a>). Line buffering is used on output streams,
+output data are only written to the sink when a new-line character is output
+(or at the close time). Block buffering is used on input or output. On input
+streams, when an input is requested on the source, if the buffer is empty,
+all available characters are read (within the limits of the size of the
+buffer), subsequent reads will first use the characters in the buffer. On
+output streams, output data are stored in the buffer and only when the
+buffer is full is it physically written on the sink. Thus, an output to a
+buffered stream may not be sent immediately to the sink connected to that
+stream. When it is necessary to be certain that output has been delivered,
+the built-in predicate <a id="hevea_default337"></a><span class="c003">flush_output/1</span> (section&#XA0;<a href="#flush-output%2F1">8.10.8</a>)
+should be used. Finally, it is also possible to use non-buffered streams, in
+that case input/output are directly done on the connected source/sink. This
+can be useful for communication purposes (e.g. sockets) or when a precise
+control is needed, e.g. <a id="hevea_default338"></a><span class="c003">select/5</span> (section&#XA0;<a href="gprolog051.html#wait%2F2">8.27.25</a>).</p><p><span class="c009">Stream mirrors</span>: any stream may be associated with mirror streams
+specified at open time or using <a id="hevea_default339"></a><span class="c003">add_stream_mirror/2</span>
+(section&#XA0;<a href="#add-stream-mirror%2F2">8.10.22</a>). Then, all characters/bytes read from/written to
+the stream are also written on each mirror stream. The association
+automatically ends when either the stream or the mirror stream is closed. It
+is also possible to explicitly remove a mirror stream using
+<a id="hevea_default340"></a><span class="c003">remove_stream_mirror/2</span>
+(section&#XA0;<a href="#remove-stream-mirror%2F2">8.10.23</a>).</p>
+<h4 class="subsubsection" id="sec117">8.10.2&#XA0;&#XA0;<a id="hevea_default341"></a><span class="c003">current_input/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_input(?stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_input(Stream)</span> unifies <span class="c003">Stream</span> with the stream-term
+identifying the current input stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec118">8.10.3&#XA0;&#XA0;<a id="hevea_default342"></a><span class="c003">current_output/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_output(?stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_output(Stream)</span> unifies <span class="c003">Stream</span> with the
+stream-term identifying the current output stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="set-input/1">8.10.4&#XA0;&#XA0;<a id="hevea_default343"></a><span class="c003">set_input/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_input(+stream_or_alias)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_input(SorA)</span> sets the current input stream to be the stream
+associated with the stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="set-output/1">8.10.5&#XA0;&#XA0;<a id="hevea_default344"></a><span class="c003">set_output/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_output(+stream_or_alias)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_output(SorA)</span> sets the current output stream to be the stream
+associated with the stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="open/4">8.10.6&#XA0;&#XA0;<a id="hevea_default345"></a><span class="c003">open/4</span>,
+<a id="hevea_default346"></a><span class="c003">open/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+open(+source_sink, +io_mode, -stream, +stream_option_list)<br>
+open(+source_sink, +io_mode, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">open(SourceSink, Mode, Stream, Options)</span> opens the source/sink
+<span class="c003">SourceSink</span> for input or output as indicated by <span class="c003">Mode</span> and
+the list of stream-options <span class="c003">Options</span> and unifies <span class="c003">Stream</span> with
+the stream-term which is associated with this stream. See
+<a id="hevea_default347"></a><span class="c003">absolute_file_name/2</span> for information about the syntax of
+<span class="c003">SourceSink</span> (section&#XA0;<a href="gprolog050.html#absolute-file-name%2F2">8.26.1</a>).</p><p><span class="c009">Input/output modes</span>: <span class="c003">Mode</span> is an atom which defines the
+input/output operations that may be performed the stream. Possible modes
+are:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default348"></a><span class="c003">read</span>: the source/sink is a source and must already exist.
+Input starts at the beginning of the source.</li><li class="li-itemize"><a id="hevea_default349"></a><span class="c003">write</span>: the source/sink is a sink. If the sink already exists
+then it is emptied else an empty sink is created. Output starts at the
+beginning of that sink.</li><li class="li-itemize"><a id="hevea_default350"></a><span class="c003">append</span>: the source/sink is a sink. If the sink does not exist
+it is created. Output starts at the end of that sink.</li></ul><p><span class="c009">Stream options</span>: <span class="c003">Options</span> is a list of stream options. If
+this list contains contradictory options, the rightmost option is the one
+which applies. Possible options are:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default351"></a><span class="c003">type(</span><a id="hevea_default352"></a><span class="c003">text</span>/<a id="hevea_default353"></a><span class="c003">binary)</span>: specifies whether the
+stream is a text stream or a binary stream. The default value is
+<span class="c003">text</span>.</li><li class="li-itemize"><a id="hevea_default354"></a><span class="c003">reposition(true</span>/<span class="c003">false)</span>: specifies
+whether it is possible to reposition the stream. The default value is
+<span class="c003">true</span> except if the stream cannot be repositioned (e.g. a terminal).</li><li class="li-itemize"><a id="hevea_default355"></a><span class="c003">eof_action(error</span>/<span class="c003">eof_code</span>/<span class="c003">reset)</span>:
+specifies the effect of attempting to input from a stream whose stream
+position is past-end-of-stream:<ul class="itemize"><li class="li-itemize"><a id="hevea_default356"></a><span class="c003">error</span>: a <span class="c003">permission_error</span> is raised signifying that
+no more input exists in this stream.</li><li class="li-itemize"><a id="hevea_default357"></a><span class="c003">eof_code</span>: the result of input is as if the stream position
+is end-of-stream.</li><li class="li-itemize"><a id="hevea_default358"></a><span class="c003">reset</span>: the stream position is reset so that it is not
+past-end-of-stream, and another attempt is made to input from it (this is
+useful when inputting from a terminal).</li></ul><p>The default value is <span class="c003">eof_code</span>.</p></li><li class="li-itemize"><a id="hevea_default359"></a><span class="c003">alias(Alias)</span>: specifies that the atom <span class="c003">Alias</span>
+is to be an alias for the stream. By default no alias is attached to the
+stream. Several aliases can be defined for a same stream.</li><li class="li-itemize"><a id="hevea_default360"></a><span class="c003">mirror(Mirror)</span>: specifies the stream associated with
+the stream-term or alias <span class="c003">Mirror</span> is a mirror for the stream. By
+default no mirror is attached to the stream. Several mirrors can be defined
+for a same stream.</li><li class="li-itemize"><a id="hevea_default361"></a><span class="c003">buffering(none</span>/<span class="c003">line</span>/<span class="c003">block)</span>:
+specifies which type of buffering is used by input/output operations on
+this stream:<ul class="itemize"><li class="li-itemize"><a id="hevea_default362"></a><span class="c003">none</span>: no buffering.</li><li class="li-itemize"><a id="hevea_default363"></a><span class="c003">line</span>: output operations buffer data emitted until a new-line
+occurs</li><li class="li-itemize"><a id="hevea_default364"></a><span class="c003">block</span>: input/output operations buffer data until a given
+number (implementation dependant) of characters/bytes have been treated.</li></ul><p>The default value is <span class="c003">line</span> for a terminal (TTY), <span class="c003">block</span>
+otherwise.</p></li></ul><p><span class="c003">open(SourceSink, Mode, Stream)</span> is equivalent to
+<span class="c003">open(SourceSink, Mode, Stream, [])</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SourceSink</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mode</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mode</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Mode)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Options)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SourceSink</span> is neither a variable nor a source/sink</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(source_sink, SourceSink)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mode</span> is an atom but not an input/output mode</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(io_mode, Mode)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is neither a
+variable nor a stream-option</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_option, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+the source/sink specified by <span class="c003">SourceSink</span> does not exist</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(source_sink, SourceSink)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+the source/sink specified by <span class="c003">SourceSink</span> cannot be opened</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(open, source_sink, SourceSink)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is
+<span class="c003">alias(A)</span> and <span class="c003">A</span> is already associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(open, source_sink, alias(A))</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is
+<span class="c003">mirror(M)</span> and <span class="c003">M</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, M)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is
+<span class="c003">mirror(M)</span> and <span class="c003">M</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, M)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is
+<span class="c003">reposition(true)</span> and it is not possible to reposition this stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(open, source_sink, reposition(true))</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates. The <span class="c003">mirror</span> and <span class="c003">buffering</span> stream options
+are GNU Prolog extensions.</p>
+<h4 class="subsubsection" id="close/2">8.10.7&#XA0;&#XA0;<a id="hevea_default365"></a><span class="c003">close/2</span>,
+<a id="hevea_default366"></a><span class="c003">close/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+close(+stream_or_alias, +close_option_list)<br>
+close(+stream_or_alias)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">close(SorA, Options)</span> closes the stream associated with the stream-term
+or alias <span class="c003">SorA</span>. If <span class="c003">SorA</span> is the standard input stream or the
+standard output stream <span class="c003">close/2</span> simply succeeds else the associated
+source/sink is physically closed. If <span class="c003">SorA</span> is the current input
+stream the current input stream becomes the standard input stream
+<a id="hevea_default367"></a><span class="c003">user_input</span>. If <span class="c003">SorA</span> is the current output stream the
+current output stream becomes the standard output stream
+<a id="hevea_default368"></a><span class="c003">user_output</span>.</p><p><span class="c009">Close options</span>: <span class="c003">Options</span> is a list of close options. For the
+moment only one option is available:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default369"></a><span class="c003">force(true</span>/<span class="c003">false)</span>: with <span class="c003">false</span>, if
+an error occurs when trying to close the source/sink, the stream is not
+closed and an error (<span class="c003">system_error</span> or <span class="c003">resource_error</span>) is
+raised (but <span class="c003">close/2</span> succeeds). With <span class="c003">true</span>, if an error
+occurs it is ignored and the stream is closed. The purpose of
+<span class="c003">force/1</span> option is to allow an error handling routine to do its best
+to reclaim resources. The default value is <span class="c003">false</span>.</li></ul><p><span class="c003">close(SorA)</span> is equivalent to <span class="c003">close(SorA, [])</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Options</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Options)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Options</span> list is neither a
+variable nor a close-option</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(close_option, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> needs a special close (section&#XA0;<a href="gprolog035.html#Constant-term-streams">8.11</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">system_error(needs_special_close)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates. The <span class="c003">system_error(needs_special_close)</span> is a
+GNU Prolog extension.</p>
+<h4 class="subsubsection" id="flush-output/1">8.10.8&#XA0;&#XA0;<a id="hevea_default370"></a><span class="c003">flush_output/1</span>,
+<a id="hevea_default371"></a><span class="c003">flush_output/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+flush_output(+stream_or_alias)<br>
+flush_output</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">flush_output(SorA)</span> sends any buffered output characters/bytes to
+the stream.</p><p><span class="c003">flush_output/0</span> applies to the current output stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates.</p>
+<h4 class="subsubsection" id="current-stream/1">8.10.9&#XA0;&#XA0;<a id="hevea_default372"></a><span class="c003">current_stream/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_stream(?stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_stream(Stream)</span> succeeds if there exists
+a stream-term that unifies with <span class="c003">Stream</span>. This predicate is
+re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream-term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="stream-property/2">8.10.10&#XA0;&#XA0;<a id="hevea_default373"></a><span class="c003">stream_property/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+stream_property(?stream, ?stream_property)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">stream_property(Stream, Property)</span> succeeds if
+<span class="c003">current_stream(Stream)</span> succeeds (section&#XA0;<a href="#current-stream%2F1">8.10.9</a>) and if
+<span class="c003">Property</span> unifies with one of the properties of the stream. This
+predicate is re-executable on backtracking.</p><p><span class="c009">Stream properties</span>:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default374"></a><span class="c003">file_name(F)</span>: the name of the connected
+source/sink.</li><li class="li-itemize"><a id="hevea_default375"></a><span class="c003">mode(M)</span>: <span class="c003">M</span> is the open mode (<span class="c003">read</span>,
+<span class="c003">write</span>, <span class="c003">append</span>).</li><li class="li-itemize"><a id="hevea_default376"></a><span class="c003">input</span>: if it is an input stream.</li><li class="li-itemize"><a id="hevea_default377"></a><span class="c003">output</span>: if it is an output stream.</li><li class="li-itemize"><a id="hevea_default378"></a><span class="c003">alias(A)</span>: <span class="c003">A</span> is an alias of the stream.</li><li class="li-itemize"><a id="hevea_default379"></a><span class="c003">mirror(M)</span>: <span class="c003">M</span> is a mirror stream of the
+stream.</li><li class="li-itemize"><a id="hevea_default380"></a><span class="c003">type(T)</span>: <span class="c003">T</span> is the type of the stream
+(<span class="c003">text</span>, <span class="c003">binary</span>).</li><li class="li-itemize"><a id="hevea_default381"></a><span class="c003">reposition(R)</span>: <span class="c003">R</span> is the reposition
+boolean (<span class="c003">true</span>, <span class="c003">false</span>).</li><li class="li-itemize"><a id="hevea_default382"></a><span class="c003">eof_action(A)</span>: <span class="c003">A</span> is the end-of-file
+action (<span class="c003">error</span>, <span class="c003">eof_code</span>, <span class="c003">reset</span>).</li><li class="li-itemize"><a id="hevea_default383"></a><span class="c003">buffering(B)</span>: <span class="c003">B</span> is the buffering mode
+(<span class="c003">none</span>, <span class="c003">line</span>, <span class="c003">block</span>).</li><li class="li-itemize"><a id="hevea_default384"></a><span class="c003">end_of_stream(E)</span>: <span class="c003">E</span> is the
+current end-of-stream status (<span class="c003">not</span>, <span class="c003">at</span>, <span class="c003">past</span>). If
+the stream position is end-of-stream then <span class="c003">E</span> is unified with
+<span class="c003">at</span> else if the stream position is past-end-of-stream then <span class="c003">E</span>
+is unified with <span class="c003">past</span> else <span class="c003">E</span> is unified with <span class="c003">not</span>.</li><li class="li-itemize"><a id="hevea_default385"></a><span class="c003">position(P)</span>: <span class="c003">P</span> is the stream-position
+term associated with the current position.</li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream-term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> is neither a variable nor a stream property</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_property, Property)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">file_name(E)</span>,<span class="c003"> mode(E)</span>,
+<span class="c003">alias(E)</span>, <span class="c003">end_of_stream(E)</span>, <span class="c003">eof_action(E)</span>,
+<span class="c003">reposition(E)</span>, <span class="c003">type(E)</span> or <span class="c003">buffering(E)</span> and
+<span class="c003">E</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate. The <span class="c003">buffering/1</span> property is a GNU Prolog extension.</p>
+<h4 class="subsubsection" id="sec126">8.10.11&#XA0;&#XA0;<a id="hevea_default386"></a><span class="c003">at_end_of_stream/1</span>,
+<a id="hevea_default387"></a><span class="c003">at_end_of_stream/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+at_end_of_stream(+stream_or_alias)<br>
+at_end_of_stream</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">at_end_of_stream(SorA)</span> succeeds if the stream associated with
+stream-term or alias <span class="c003">SorA</span> has a stream position end-of-stream or
+past-end-of-stream. This predicate can be defined using
+<a id="hevea_default388"></a><span class="c003">stream_property/2</span> (section&#XA0;<a href="#stream-property%2F2">8.10.10</a>).</p><p><span class="c003">at_end_of_stream/0</span> applies to the current input stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(input, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates. The <span class="c003">permission_error(input, stream, SorA)</span> is a
+GNU Prolog extension.</p>
+<h4 class="subsubsection" id="stream-position/2">8.10.12&#XA0;&#XA0;<a id="hevea_default389"></a><span class="c003">stream_position/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+stream_position(+stream_or_alias, ?stream_position)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">stream_position(SorA, Position)</span> succeeds unifying
+<span class="c003">Position</span> with the stream-position term associated with the current
+position of the stream-term or alias <span class="c003">SorA</span>. This predicate can be
+defined using <a id="hevea_default390"></a><span class="c003">stream_property/2</span> (section&#XA0;<a href="#stream-property%2F2">8.10.10</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Position</span> is neither a variable nor a stream-position term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_position, Position)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="set-stream-position/2">8.10.13&#XA0;&#XA0;<a id="hevea_default391"></a><span class="c003">set_stream_position/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_stream_position(+stream_or_alias, +stream_position)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_stream_position(SorA, Position)</span> sets the position of
+the stream associated with the stream-term or alias <span class="c003">SorA</span> to
+<span class="c003">Position</span>. <span class="c003">Position</span> should have previously been returned by
+<a id="hevea_default392"></a><span class="c003">stream_property/2</span> (section&#XA0;<a href="#stream-property%2F2">8.10.10</a>) or by
+<a id="hevea_default393"></a><span class="c003">stream_position/2</span> (section&#XA0;<a href="#stream-position%2F2">8.10.12</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Position</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Position</span> is neither a variable nor a stream-position term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_position, Position)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream property <span class="c003">reposition(false)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(reposition, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec129">8.10.14&#XA0;&#XA0;<a id="hevea_default394"></a><span class="c003">seek/4</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+seek(+stream_or_alias, +stream_seek_method, +integer, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">seek(SorA, Whence, Offset, NewOffset)</span> sets the position of
+the stream associated with the stream-term or alias <span class="c003">SorA</span> to
+<span class="c003">Offset</span> according to <span class="c003">Whence</span> and unifies <span class="c003">NewOffset</span>
+with the new offset from the beginning of the file. <span class="c003">seek/4</span> can only
+be used on binary streams. <span class="c003">Whence</span> is an atom from:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default395"></a><span class="c003">bof</span>: the position is set relatively to the begin of the file
+(<span class="c003">Offset</span> should be &#X2265; 0).</li><li class="li-itemize"><a id="hevea_default396"></a><span class="c003">current</span>: the position is set relatively to the current
+position (<span class="c003">Offset</span> can be &#X2265; 0 or &#X2264; 0).</li><li class="li-itemize"><a id="hevea_default397"></a><span class="c003">eof</span>: the position is set relatively to the end of the file
+(<span class="c003">Offset</span> should be &#X2264; 0).</li></ul><p>This predicate is an interface to the C Unix function <span class="c003">lseek(2)</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Whence</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Offset</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Whence</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Whence)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Whence</span> is an atom but not a valid stream seek method</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_seek_method, Whence)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Offset</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Offset)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">NewOffset</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, NewOffset)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream property <span class="c003">reposition(false)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(reposition, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a text stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(reposition, text_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec130">8.10.15&#XA0;&#XA0;<a id="hevea_default398"></a><span class="c003">character_count/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+character_count(+stream_or_alias, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">character_count(SorA, Count)</span> unifies <span class="c003">Count</span> with the
+number of characters/bytes read/written on the stream associated with
+stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Count</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Count)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="line-count/2">8.10.16&#XA0;&#XA0;<a id="hevea_default399"></a><span class="c003">line_count/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+line_count(+stream_or_alias, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">line_count(SorA, Count)</span> unifies <span class="c003">Count</span> with the number of
+lines read/written on the stream associated with the stream-term or alias
+<span class="c003">SorA</span>. This predicate can only be used on text streams.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Count</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Count)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(access, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="line-position/2">8.10.17&#XA0;&#XA0;<a id="hevea_default400"></a><span class="c003">line_position/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+line_position(+stream_or_alias, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">line_position(SorA, Count)</span> unifies
+<span class="c003">Count</span> with the number of characters read/written on the current
+line of the stream associated with the stream-term or alias
+<span class="c003">SorA</span>. This predicate can only be used on text streams.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Count</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Count)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(access, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec133">8.10.18&#XA0;&#XA0;<a id="hevea_default401"></a><span class="c003">stream_line_column/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+stream_line_column(+stream_or_alias, ?integer, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">stream_line_column(SorA, Line, Column)</span> unifies <span class="c003">Line</span>
+(resp. <span class="c003">Column</span>) with the current line number (resp. column number)
+of the stream associated with the stream-term or alias <span class="c003">SorA</span>. This
+predicate can only be used on text streams. Note that <span class="c003">Line</span>
+corresponds to the value returned by <a id="hevea_default402"></a><span class="c003">line_count/2</span> + 1
+(section&#XA0;<a href="#line-count%2F2">8.10.16</a>) and <span class="c003">Column</span> to the value returned
+by <span class="c003">line_position/2</span> + 1 (section&#XA0;<a href="#line-position%2F2">8.10.17</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Line</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Line)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Column</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Column)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(access, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec134">8.10.19&#XA0;&#XA0;<a id="hevea_default403"></a><span class="c003">set_stream_line_column/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_stream_line_column(+stream_or_alias, +integer, +integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_stream_line_column(SorA, Line, Column)</span> sets the stream
+position of the stream associated with the stream-term or alias <span class="c003">SorA</span>
+according to the line number <span class="c003">Line</span> and the column number
+<span class="c003">Column</span>. This predicate can only be used on text streams. It first
+repositions the stream to the beginning of the file and then reads character
+by character until the required position is reached.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Line</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Column</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Line</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Line)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Column</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Column)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is associated with a binary stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(reposition, binary_stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> has stream property <span class="c003">reposition(false)</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(reposition, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="add-stream-alias/2">8.10.20&#XA0;&#XA0;<a id="hevea_default404"></a><span class="c003">add_stream_alias/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+add_stream_alias(+stream_or_alias, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">add_stream_alias(SorA, Alias)</span> adds <span class="c003">Alias</span> as a new alias
+to the stream associated with the stream-term or alias <span class="c003">SorA</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Alias</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Alias</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Alias)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Alias</span> is already associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(add_alias, source_sink, alias(Alias))</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec136">8.10.21&#XA0;&#XA0;<a id="hevea_default405"></a><span class="c003">current_alias/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_alias(?stream, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_alias(Stream, Alias)</span> succeeds if
+<span class="c003">current_stream(Stream)</span> succeeds (section&#XA0;<a href="#current-stream%2F1">8.10.9</a>) and if
+<span class="c003">Alias</span> unifies with one of the aliases of the stream. It can be
+defined using <a id="hevea_default406"></a><span class="c003">stream_property/2</span> (section&#XA0;<a href="#stream-property%2F2">8.10.10</a>). This
+predicate is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream-term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Alias</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Alias)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="add-stream-mirror/2">8.10.22&#XA0;&#XA0;<a id="hevea_default407"></a><span class="c003">add_stream_mirror/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+add_stream_mirror(+stream_or_alias, +stream_or_alias)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">add_stream_mirror(SorA, Mirror)</span> adds the stream associated with
+the stream-term or alias <span class="c003">Mirror</span> as a new mirror to the stream
+associated with the stream-term or alias <span class="c003">SorA</span>. After this, all
+characters (or bytes) read from (or written to) <span class="c003">SorA</span> are also
+written to <span class="c003">Mirror</span>. This mirroring occurs until <span class="c003">Mirror</span> is
+explicitly removed using <a id="hevea_default408"></a><span class="c003">remove_stream_mirror/2</span>
+(section&#XA0;<a href="#remove-stream-mirror%2F2">8.10.23</a>) or implicitly when <span class="c003">Mirror</span> is closed.
+Several mirror streams can be associated with a same stream. If <span class="c003">Mirror</span>
+represents the same stream as <span class="c003">SorA</span> or if <span class="c003">Mirror</span> is already
+a mirror for <span class="c003">SorA</span>, no mirror is added.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, Mirror)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, Mirror)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(output, stream, Mirror)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="remove-stream-mirror/2">8.10.23&#XA0;&#XA0;<a id="hevea_default409"></a><span class="c003">remove_stream_mirror/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+remove_stream_mirror(+stream_or_alias, +stream_or_alias)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">remove_stream_mirror(SorA, Mirror)</span> removes the stream associated
+with the stream-term or alias <span class="c003">Mirror</span> from the list of mirrors of the
+stream associated with the stream-term or alias <span class="c003">SorA</span>. This predicate
+fails if <span class="c003">Mirror</span> is not a mirror stream for <span class="c003">SorA</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, Mirror)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Mirror</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, Mirror)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec139">8.10.24&#XA0;&#XA0;<a id="hevea_default410"></a><span class="c003">current_mirror/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_mirror(?stream, ?stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_mirror(Stream, M)</span> succeeds if
+<span class="c003">current_stream(Stream)</span> succeeds (section&#XA0;<a href="#current-stream%2F1">8.10.9</a>) and if
+<span class="c003">M</span> unifies with one of the mirrors of the stream. It can be
+defined using <a id="hevea_default411"></a><span class="c003">stream_property/2</span> (section&#XA0;<a href="#stream-property%2F2">8.10.10</a>). This
+predicate is re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is neither a variable nor a stream-term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">M</span> is neither a variable nor a stream-term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream, M)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="set-stream-type/2">8.10.25&#XA0;&#XA0;<a id="hevea_default412"></a><span class="c003">set_stream_type/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_stream_type(+stream_or_alias, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_stream_type(SorA, Type)</span> updates the type associated with
+stream-term or alias <span class="c003">SorA</span>. The value of <span class="c003">Type</span> is an atom in
+<a id="hevea_default413"></a><span class="c003">text</span> or <a id="hevea_default414"></a><span class="c003">binary</span> as for <a id="hevea_default415"></a><span class="c003">open/4</span> (section&#XA0;<a href="#open%2F4">8.10.6</a>).
+The type of a stream can only be changed before any input/output operation
+is executed.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Type</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Type</span> is neither a variable nor a valid type</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_type, Type)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An I/O operation has already been executed on <span class="c003">SorA</span></td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec141">8.10.26&#XA0;&#XA0;<a id="hevea_default416"></a><span class="c003">set_stream_eof_action/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_stream_eof_action(+stream_or_alias, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_stream_eof_action(SorA, Action)</span>
+updates the <span class="c003">eof_action</span> option associated with the stream-term or
+alias <span class="c003">SorA</span>. The value of <span class="c003">Action</span> is one of the atoms
+<a id="hevea_default417"></a><span class="c003">error</span>, <a id="hevea_default418"></a><span class="c003">eof_code</span>, <a id="hevea_default419"></a><span class="c003">reset</span> as for <a id="hevea_default420"></a><span class="c003">open/4</span> (section&#XA0;<a href="#open%2F4">8.10.6</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Action</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Action</span> is neither a variable nor a valid eof action</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(eof_action, Action)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(modify, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="set-stream-buffering/2">8.10.27&#XA0;&#XA0;<a id="hevea_default421"></a><span class="c003">set_stream_buffering/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+set_stream_buffering(+stream_or_alias, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">set_stream_buffering(SorA, Buffering)</span>
+updates the buffering mode associated with the stream-term or alias
+<span class="c003">SorA</span>. The value of <span class="c003">Buffering</span> is one of the atoms
+<a id="hevea_default422"></a><span class="c003">none</span>, <a id="hevea_default423"></a><span class="c003">line</span> or <a id="hevea_default424"></a><span class="c003">block</span> as for <a id="hevea_default425"></a><span class="c003">open/4</span>
+(section&#XA0;<a href="#open%2F4">8.10.6</a>). This predicate may only be used after opening a stream
+and before any other operations have been performed on it.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Buffering</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Buffering</span> is neither a variable nor a valid buffering
+mode</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(buffering_mode, Buffering)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog033.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog035.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

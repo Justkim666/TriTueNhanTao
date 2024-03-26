@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Prolog control constructs</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog022.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog021.html"><img src="contents_motif.svg" alt="Up"></a>
+<hr>
+<h3 class="subsection" id="sec65">7.2&#XA0;&#XA0;Prolog control constructs</h3>
+<ul>
+<li><a href="gprolog023.html#true%2F0"><span class="c003">true/0</span>,
+<span class="c003">fail/0</span>,
+<span class="c003">!/0</span> </a>
+</li><li><a href="gprolog023.html#sec67"><span class="c003">(&#X2019;,&#X2019;)/2</span> - conjunction,
+<span class="c003">(;)/2</span> - disjunction,
+<span class="c003">(-</span><span class="c003">&gt;</span><span class="c003">)/2</span> - if-then, 
+<span class="c003">(*-</span><span class="c003">&gt;</span><span class="c003">)/2</span> - soft-cut (soft if-then)</a>
+</li><li><a href="gprolog023.html#call%2F1"><span class="c003">call/1</span> </a>
+</li><li><a href="gprolog023.html#catch%2F3"><span class="c003">catch/3</span>,
+<span class="c003">throw/1</span> </a>
+</li></ul>
+<p>
+<a id="control-construct"></a></p><p>GNU Prolog follows the ISO notion of <a id="hevea_default218"></a>control constructs. </p>
+<h4 class="subsubsection" id="true/0">7.2.1&#XA0;&#XA0;<a id="hevea_default219"></a><span class="c003">true/0</span>,
+<a id="hevea_default220"></a><span class="c003">fail/0</span>,
+<a id="hevea_default221"></a><span class="c003">!/0</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+true<br>
+fail<br>
+!</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">true</span> always succeeds.</p><p><span class="c003">fail</span> always fails (enforces backtracking).</p><p><span class="c003">!</span> always succeeds and the for side-effect of removing all
+choice-points created since the invocation of the predicate activating it.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>ISO control constructs.</p>
+<h4 class="subsubsection" id="sec67">7.2.2&#XA0;&#XA0;<a id="hevea_default222"></a><span class="c003">(&#X2019;,&#X2019;)/2</span> - conjunction,
+<a id="hevea_default223"></a><span class="c003">(;)/2</span> - disjunction,
+<a id="hevea_default224"></a><span class="c003">(-&gt;)/2</span> - if-then, 
+<a id="hevea_default225"></a><span class="c003">(*-&gt;)/2</span> - soft-cut (soft if-then)</h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+&#X2019;,&#X2019;(+callable_term, +callable_term)<br>
+;(+callable_term, +callable_term)<br>
+-&gt;(+callable_term, +callable_term)<br>
+*-&gt;(+callable_term, +callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">Goal1 , Goal2</span> executes <span class="c003">Goal1</span> and, in case of
+success, executes <span class="c003">Goal2</span>.</p><p><span class="c003">Goal1 ; Goal2</span> first creates a choice-point and executes
+<span class="c003">Goal1</span>. On backtracking <span class="c003">Goal2</span> is executed.</p><p><span class="c003">Goal1 -&gt; Goal2</span> first executes <span class="c003">Goal1</span> and,
+in case of success, removes all choice-points created by <span class="c003">Goal1</span> and
+executes <span class="c003">Goal2</span>. This control construct acts like an if-then
+(<span class="c003">Goal1</span> is the test part and <span class="c003">Goal2</span> the then part). Note that
+if <span class="c003">Goal1</span> fails <span class="c003">-&gt;/2</span> fails also. <span class="c003">-&gt;/2</span> is
+often combined with <span class="c003">;/2</span> to define an if-then-else as follows:
+<span class="c003">Goal1 -&gt; Goal2 ; Goal3</span>. Note that <span class="c003">Goal1 -&gt; Goal2</span>
+is the first argument of the <span class="c003">(;)/2</span> and <span class="c003">Goal3</span> (the else
+part) is the second argument. Such an if-then-else control construct first
+creates a choice-point for the else-part (intuitively associated with
+<span class="c003">;/2</span>) and then executes <span class="c003">Goal1</span>. In case of success, all
+choice-points created by <span class="c003">Goal1</span> together with the choice-point for
+the else-part are removed and <span class="c003">Goal2</span> is executed. If <span class="c003">Goal1</span>
+fails then <span class="c003">Goal3</span> is executed.</p><p><span class="c003">Goal1 *-&gt; Goal2 ; Goal3</span> implements the so-called
+<a id="hevea_default226"></a>soft-cut. It acts as the above if-then-else except that if
+<span class="c003">Goal1</span> succeeds only <span class="c003">Goal3</span> is cut (the alternative solutions
+of <span class="c003">Goal1</span> are preserved and can be found by backtracking). Note that
+<span class="c003">Goal1 *-&gt; Goal2</span> alone (i.e. without an else branch
+<span class="c003">Goal3</span>) is equivalent to <span class="c003">(Goal1 , Goal2)</span>.</p><p><span class="c003">&#X2019;,&#X2019;</span>, <span class="c003">;</span>, <span class="c003">-&gt;</span> and <span class="c003">*-&gt;</span> are predefined
+infix operators (section&#XA0;<a href="gprolog038.html#op%2F3%3A%28Term-input%2Foutput%29">8.14.10</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal1</span> or <span class="c003">Goal2</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal1</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal1)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal2</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal2)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Goal1</span> or
+<span class="c003">Goal2</span> does not correspond to an existing procedure and the value of
+the <span class="c003">unknown</span> Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO control constructs except <span class="c003">(*-&gt;)/2</span> which is GNU Prolog specific.</p>
+<h4 class="subsubsection" id="call/1">7.2.3&#XA0;&#XA0;<a id="hevea_default227"></a><span class="c003">call/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+call(+callable_term)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">call(Goal)</span> executes <span class="c003">Goal</span>. <span class="c003">call/1</span> succeeds if
+<span class="c003">Goal</span> represents a goal which is true. When <span class="c003">Goal</span> contains a
+cut symbol <a id="hevea_default228"></a><span class="c003">!</span> (section&#XA0;<a href="#true%2F0">7.2.1</a>) as a subgoal, the effect of
+<span class="c003">!</span> does not extend outside <span class="c003">Goal</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Goal</span> is neither a variable nor a callable term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(callable, Goal)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+The predicate indicator <span class="c003">Pred</span> of <span class="c003">Goal</span> does not
+correspond to an existing procedure and the value of the <span class="c003">unknown</span>
+Prolog flag is <span class="c003">error</span> (section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(procedure, Pred)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO control construct.</p>
+<h4 class="subsubsection" id="catch/3">7.2.4&#XA0;&#XA0;<a id="hevea_default229"></a><span class="c003">catch/3</span>,
+<a id="hevea_default230"></a><span class="c003">throw/1</span> </h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+catch(?callable_term, ?term, ?term)<br>
+throw(+nonvar)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">catch(Goal, Catcher, Recovery)</span> is similar to <span class="c003">call(Goal)</span>
+(section&#XA0;<a href="#call%2F1">7.2.3</a>). If this succeeds or fails, so does the call to
+<span class="c003">catch/3</span>. If however, during the execution of <span class="c003">Goal</span>, there
+is a call to <span class="c003">throw(Ball)</span>, the current flow of control is
+interrupted, and control returns to a call of <span class="c003">catch/3</span> that is being
+executed. This can happen in one of two ways:</p><ul class="itemize"><li class="li-itemize">implicitly, when an error condition for a built-in predicate is
+satisfied.</li><li class="li-itemize">explicitly, when the program executes a call of <span class="c003">throw/1</span>
+because the program wishes to abandon the current processing, and instead to
+take an alternative action.</li></ul><p><span class="c003">throw(Ball)</span> causes the normal flow of control to be transferred
+back to an existing call of <span class="c003">catch/3</span>. When a call to
+<span class="c003">throw(Ball)</span> happens, <span class="c003">Ball</span> is copied and the stack is
+unwound back to the call to <span class="c003">catch/3</span>, whereupon the copy of
+<span class="c003">Ball</span> is unified with <span class="c003">Catcher</span>. If this unification
+succeeds, then <span class="c003">catch/3</span> executes the goal <span class="c003">Recovery</span> using
+<span class="c003">call/1</span> (section&#XA0;<a href="#call%2F1">7.2.3</a>) in order to determine the success or
+failure of <span class="c003">catch/3</span>. Otherwise, in case the unification fails,
+the stack keeps unwinding, looking for an earlier invocation of
+<span class="c003">catch/3</span>. <span class="c003">Ball</span> may be any non-variable term.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Ball</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p>If <span class="c003">Ball</span> does not unify with the <span class="c003">Catcher</span> argument of
+any call of <span class="c003">catch/3</span>, a system error message is displayed and
+<span class="c003">throw/1</span> fails.</p><p>When <span class="c003">catch/3</span> calls <span class="c003">Goal</span> or <span class="c003">Recovery</span> it uses <span class="c003">call/1</span>
+(section&#XA0;<a href="#call%2F1">7.2.3</a>), an <span class="c003">instantiation_error</span>, a <span class="c003">type_error</span>
+or an <span class="c003">existence_error</span> can then occur depending on
+<span class="c003">Goal</span> or <span class="c003">Recovery</span>.</p><p><span class="c009">Portability</span></p><p>ISO control constructs.</p>
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog022.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog021.html"><img src="contents_motif.svg" alt="Up"></a>
+</body>
+</html>

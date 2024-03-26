@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>DEC-10 compatibility input/output</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog039.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog041.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec181">8.16&#XA0;&#XA0;DEC-10 compatibility input/output</h3>
+<ul>
+<li><a href="gprolog040.html#sec182">Introduction</a>
+</li><li><a href="gprolog040.html#sec183"><span class="c003">see/1</span>,
+<span class="c003">tell/1</span>,
+<span class="c003">append/1</span></a>
+</li><li><a href="gprolog040.html#sec184"><span class="c003">seeing/1</span>,
+<span class="c003">telling/1</span></a>
+</li><li><a href="gprolog040.html#sec185"><span class="c003">seen/0</span>,
+<span class="c003">told/0</span></a>
+</li><li><a href="gprolog040.html#sec186"><span class="c003">get0/1</span>,
+<span class="c003">get/1</span>,
+<span class="c003">skip/1</span></a>
+</li><li><a href="gprolog040.html#sec187"><span class="c003">put/1</span>,
+<span class="c003">tab/1</span></a>
+</li></ul>
+<h4 class="subsubsection" id="sec182">8.16.1&#XA0;&#XA0;Introduction</h4>
+<p>
+The DEC-10 Prolog I/O predicates manipulate streams implicitly since they
+only refer to current input/output streams (section&#XA0;<a href="gprolog034.html#Introduction%3A%28Streams%29">8.10.1</a>).
+The current input and output streams are initially set to
+<a id="hevea_default627"></a><span class="c003">user_input</span> and <a id="hevea_default628"></a><span class="c003">user_output</span> respectively. The predicate
+<span class="c003">see/1</span>
+(resp. <span class="c003">tell/1</span>, <span class="c003">append/1</span>) can be used for setting the
+current input (resp. output) stream to newly opened streams for
+particular files. The predicate <span class="c003">seen/0</span>
+(resp. <span class="c003">told/0</span>) close the current input (resp. output) stream,
+and resets it to the standard input (resp. output). The predicate
+<span class="c003">seeing/1</span> (resp. <span class="c003">telling/1</span>) is used for retrieving
+the file name associated with the current input (resp. output)
+stream. The file name <a id="hevea_default629"></a><span class="c003">user</span> stands for the standard input or
+output, depending on context (<a id="hevea_default630"></a><span class="c003">user_input</span> and
+<a id="hevea_default631"></a><span class="c003">user_output</span> can also be used). The DEC-10 Prolog I/O predicates
+are only provided for compatibility, they are now obsolete and
+their use is discouraged. The predicates for explicit stream manipulation
+should be used instead (section&#XA0;<a href="gprolog034.html#Streams">8.10</a>).</p>
+<h4 class="subsubsection" id="sec183">8.16.2&#XA0;&#XA0;<a id="hevea_default632"></a><span class="c003">see/1</span>,
+<a id="hevea_default633"></a><span class="c003">tell/1</span>,
+<a id="hevea_default634"></a><span class="c003">append/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+see(+source_sink)<br>
+see(+stream)<br>
+tell(+source_sink)<br>
+tell(+stream)<br>
+append(+source_sink)<br>
+append(+stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">see(FileName)</span> sets the current input stream to <span class="c003">FileName</span>.
+If there is a stream opened by <span class="c003">see/1</span> associated with the same
+<span class="c003">FileName</span> already, then it becomes the current input stream.
+Otherwise, <span class="c003">FileName</span> is opened for reading and becomes the current
+input stream.</p><p><span class="c003">tell(FileName)</span> sets the current output stream to <span class="c003">FileName</span>.
+If there is a stream opened by <span class="c003">tell/1</span> associated with the same
+<span class="c003">FileName</span> already, then it becomes the current output stream.
+Otherwise, <span class="c003">FileName</span> is opened for writing and becomes the current
+output stream.</p><p><span class="c003">append(FileName)</span> like <span class="c003">tell/1</span> but
+<span class="c003">FileName</span> is opened for writing + append.</p><p>A stream-term (obtained with any other built-in predicate) can also be
+provided as <span class="c003">FileName</span> to these predicates.</p><p><span class="c009">Errors</span></p><p>See errors associated with <span class="c003">open/4</span> (section&#XA0;<a href="gprolog034.html#open%2F4">8.10.6</a>).</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicates. Deprecated.</p>
+<h4 class="subsubsection" id="sec184">8.16.3&#XA0;&#XA0;<a id="hevea_default635"></a><span class="c003">seeing/1</span>,
+<a id="hevea_default636"></a><span class="c003">telling/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+seeing(?source_sink)<br>
+telling(?source_sink)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">seeing(FileName)</span> succeeds if <span class="c003">FileName</span> unifies
+with the name of the current input file, if it was opened by
+<span class="c003">see/1</span>; else with the current input stream-term, if this is not
+<a id="hevea_default637"></a><span class="c003">user_input</span>, otherwise with
+<a id="hevea_default638"></a><span class="c003">user</span>.</p><p><span class="c003">telling(FileName)</span> succeeds if <span class="c003">FileName</span> unifies with the
+name of the current output file, if it was opened by <span class="c003">tell/1</span> or
+<span class="c003">append/1</span>; else with the current output stream-term, if this is not
+<a id="hevea_default639"></a><span class="c003">user_output</span>, otherwise with <a id="hevea_default640"></a><span class="c003">user</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicates. Deprecated.</p>
+<h4 class="subsubsection" id="sec185">8.16.4&#XA0;&#XA0;<a id="hevea_default641"></a><span class="c003">seen/0</span>,
+<a id="hevea_default642"></a><span class="c003">told/0</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+seen<br>
+told</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">seen</span> closes the current input, and resets it to
+<a id="hevea_default643"></a><span class="c003">user_input</span>.</p><p><span class="c003">told</span> closes the current output, and resets it to
+<a id="hevea_default644"></a><span class="c003">user_output</span>.</p><p><span class="c009">Errors</span></p><p>None.</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicates. Deprecated.</p>
+<h4 class="subsubsection" id="sec186">8.16.5&#XA0;&#XA0;<a id="hevea_default645"></a><span class="c003">get0/1</span>,
+<a id="hevea_default646"></a><span class="c003">get/1</span>,
+<a id="hevea_default647"></a><span class="c003">skip/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+get0(?in_character_code)<br>
+get(?in_character_code)<br>
+skip(+character_code)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">get0(Code)</span> succeeds if <span class="c003">Code</span> unifies with the next
+character code read from the current input stream. Thus it is equivalent to
+<span class="c003">get_code(Code)</span> (section&#XA0;<a href="gprolog036.html#get-char%2F2">8.12.1</a>).</p><p><span class="c003">get(Code)</span> succeeds if <span class="c003">Code</span> unifies with the next character
+code read from the current input stream that is not a layout character.</p><p><span class="c003">skip(Code)</span> skips just past the next character code <span class="c003">Code</span>
+from the current input stream.</p><p><span class="c009">Errors</span></p><p>See errors for <span class="c003">get_code/2</span> (section&#XA0;<a href="gprolog036.html#get-char%2F2">8.12.1</a>).</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicates. Deprecated.</p>
+<h4 class="subsubsection" id="sec187">8.16.6&#XA0;&#XA0;<a id="hevea_default648"></a><span class="c003">put/1</span>,
+<a id="hevea_default649"></a><span class="c003">tab/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+put(+character_code)<br>
+tab(+evaluable)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">put(Code)</span> writes the character whose code is <span class="c003">Code</span> onto the
+current output stream. It is equivalent to <span class="c003">put_code(Code)</span>
+(section&#XA0;<a href="gprolog036.html#put-char%2F2">8.12.5</a>).</p><p><span class="c003">tab(N)</span> writes <span class="c003">N</span> spaces onto the current output
+stream. <span class="c003">N</span> may be an arithmetic expression.</p><p><span class="c009">Errors</span></p><p>See errors for <span class="c003">put_code/2</span> (section&#XA0;<a href="gprolog036.html#put-char%2F2">8.12.5</a>) and for arithmetic
+expressions (section&#XA0;<a href="gprolog030.html#Evaluation-of-an-arithmetic-expression">8.6.1</a>).</p><p><span class="c009">Portability</span></p><p>GNU Prolog predicates. Deprecated.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog039.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog041.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

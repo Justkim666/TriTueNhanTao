@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Atomic term processing</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog042.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog044.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec197">8.19&#XA0;&#XA0;Atomic term processing</h3>
+<ul>
+<li><a href="gprolog043.html#sec198"><span class="c003">atom_length/2</span></a>
+</li><li><a href="gprolog043.html#sec199"><span class="c003">atom_concat/3</span></a>
+</li><li><a href="gprolog043.html#sec200"><span class="c003">sub_atom/5</span></a>
+</li><li><a href="gprolog043.html#char-code%2F2"><span class="c003">char_code/2</span></a>
+</li><li><a href="gprolog043.html#sec202"><span class="c003">lower_upper/2</span></a>
+</li><li><a href="gprolog043.html#atom-chars%2F2"><span class="c003">atom_chars/2</span>,
+<span class="c003">atom_codes/2</span></a>
+</li><li><a href="gprolog043.html#number-atom%2F2"><span class="c003">number_atom/2</span>,
+<span class="c003">number_chars/2</span>,
+<span class="c003">number_codes/2</span></a>
+</li><li><a href="gprolog043.html#sec205"><span class="c003">name/2</span></a>
+</li><li><a href="gprolog043.html#sec206"><span class="c003">new_atom/2</span>,
+<span class="c003">new_atom/1</span></a>
+</li><li><a href="gprolog043.html#current-atom%2F2"><span class="c003">current_atom/1</span></a>
+</li><li><a href="gprolog043.html#atom-property%2F2"><span class="c003">atom_property/2</span></a>
+</li></ul>
+<p>
+These built-in predicates enable atomic terms to be processed as a sequence
+of characters and character codes. Facilities exist to split and join atoms,
+to convert a single character to and from the corresponding character code,
+and to convert a number to and from a list of characters and character
+codes.</p>
+<h4 class="subsubsection" id="sec198">8.19.1&#XA0;&#XA0;<a id="hevea_default677"></a><span class="c003">atom_length/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+atom_length(+atom, ?integer)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">atom_length(Atom, Length)</span> succeeds if <span class="c003">Length</span> unifies with
+the number of characters of the name of <span class="c003">Atom</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Length)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Length)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec199">8.19.2&#XA0;&#XA0;<a id="hevea_default678"></a><span class="c003">atom_concat/3</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+atom_concat(+atom, +atom, ?atom)<br>
+atom_concat(?atom, ?atom, +atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">atom_concat(Atom1, Atom2, Atom12)</span> succeeds if the name of
+<span class="c003">Atom12</span> is the concatenation of the name of <span class="c003">Atom1</span> with the
+name of <span class="c003">Atom1</span>. This predicate is re-executable on backtracking
+(e.g. if <span class="c003">Atom12</span> is instantiated and both <span class="c003">Atom1</span> and
+<span class="c003">Atom2</span> are variables).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom1</span> and <span class="c003">Atom12</span> are variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom2</span> and <span class="c003">Atom12</span> are variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom1</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom1)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom2</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom2)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom12</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom12)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec200">8.19.3&#XA0;&#XA0;<a id="hevea_default679"></a><span class="c003">sub_atom/5</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+sub_atom(+atom, ?integer, ?integer, ?integer, ?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">sub_atom(Atom, Before, Length, After, SubAtom)</span> succeeds if atom
+<span class="c003">Atom</span> can be split into three atoms, <span class="c003">AtomL</span>,
+<span class="c003">SubAtom</span> and <span class="c003">AtomR</span> such that <span class="c003">Before</span> is the number
+of characters of the name of <span class="c003">AtomL</span>, <span class="c003">Length</span> is the number
+of characters of the name of <span class="c003">SubAtom</span> and <span class="c003">After</span> is the
+number of characters of the name of <span class="c003">AtomR</span>. This predicate is
+re-executable on backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SubAtom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, SubAtom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Before</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Before)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Length)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">After</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, After)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Before</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Before)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Length</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, Length)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">After</span> is an integer &lt; 0</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(not_less_than_zero, After)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="char-code/2">8.19.4&#XA0;&#XA0;<a id="hevea_default680"></a><span class="c003">char_code/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+char_code(+character, ?character_code)<br>
+char_code(-character, +character_code)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">char_code(Char, Code)</span> succeeds if the character code for the
+one-char atom <span class="c003">Char</span> is <span class="c003">Code</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> and <span class="c003">Code</span> are variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char</span> is neither a variable nor a one-char atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, Char)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, Code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Code</span> is an integer but not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicate.</p>
+<h4 class="subsubsection" id="sec202">8.19.5&#XA0;&#XA0;<a id="hevea_default681"></a><span class="c003">lower_upper/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+lower_upper(+character, ?character)<br>
+lower_upper(-character, +character)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">lower_upper(Char1, Char2)</span> succeeds if <span class="c003">Char1</span> and
+<span class="c003">Char2</span> are one-char atoms and if <span class="c003">Char2</span> is the upper
+conversion of <span class="c003">Char1</span>. If <span class="c003">Char1</span> (resp. <span class="c003">Char2</span>) is a
+character that is not a lower (resp. upper) letter then <span class="c003">Char2</span> is
+equal to <span class="c003">Char1</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char1</span> and <span class="c003">Char2</span> are variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char1</span> is neither a variable nor a one-char atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, Char1)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Char2</span> is neither a variable nor a one-char atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, Char2)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="atom-chars/2">8.19.6&#XA0;&#XA0;<a id="hevea_default682"></a><span class="c003">atom_chars/2</span>,
+<a id="hevea_default683"></a><span class="c003">atom_codes/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+atom_chars(+atom, ?character_list)<br>
+atom_chars(-atom, +character_list)<br>
+atom_codes(+atom, ?character_code_list)<br>
+atom_codes(-atom, +character_code_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">atom_chars(Atom, Chars)</span> succeeds if <span class="c003">Chars</span>
+is the list of one-char atoms whose names are the successive characters of
+the name of <span class="c003">Atom</span>.</p><p><span class="c003">atom_codes(Atom, Codes)</span> is similar to
+<span class="c003">atom_chars/2</span> but deals with a list of character codes.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is a variable and <span class="c003">Chars</span> (or <span class="c003">Codes</span>)
+is a partial list or a list with an element which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is neither a list nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Chars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is neither a list nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Chars</span> is neither a
+variable nor a one-char atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Codes</span> is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Codes</span> is an integer but
+not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>ISO predicates. The ISO reference only causes a <span class="c003">type_error(list,
+Chars)</span> if <span class="c003">Atom</span> is a variable and <span class="c003">Chars</span> is neither a list
+nor a partial list. GNU Prolog always checks if <span class="c003">Chars</span> is a list.
+Similarly for <span class="c003">Codes</span>. The <span class="c003">type_error(integer, E)</span> when an
+element <span class="c003">E</span> of the <span class="c003">Codes</span> is not an integer is a GNU Prolog
+extension. This seems to be an omission in the ISO reference since this
+error is detected for many other built-in predicates accepting a character
+code (e.g. <span class="c003">char_code/2</span>, <span class="c003">put_code/2</span>).</p>
+<h4 class="subsubsection" id="number-atom/2">8.19.7&#XA0;&#XA0;<a id="hevea_default684"></a><span class="c003">number_atom/2</span>,
+<a id="hevea_default685"></a><span class="c003">number_chars/2</span>,
+<a id="hevea_default686"></a><span class="c003">number_codes/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+number_atom(+number, ?atom)<br>
+number_atom(-number, +atom)<br>
+number_chars(+number, ?character_list)<br>
+number_chars(-number, +character_list)<br>
+number_codes(+number, ?character_code_list)<br>
+number_codes(-number, +character_code_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">number_atom(Number, Atom)</span> succeeds if
+<span class="c003">Atom</span> is an atom whose name corresponds to the characters of
+<span class="c003">Number</span>.</p><p><span class="c003">number_chars(Number, Chars)</span> is similar to
+<span class="c003">number_atom/2</span> but deals with a list of characters.</p><p><span class="c003">number_codes(Number, Codes)</span> is similar to
+<span class="c003">number_atom/2</span> but deals with a list of character codes.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Number</span> and <span class="c003">Atom</span> are variables</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Number</span> is a variable and <span class="c003">Chars</span> (or
+<span class="c003">Codes</span>) is a partial list or a list with an element which is a
+variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Number</span> is neither a variable nor an number</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(number, Number)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is neither a list nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Chars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is neither a list nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Chars</span> is neither a
+variable nor a one-char atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Codes</span> is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+An element <span class="c003">E</span> of the list <span class="c003">Codes</span> is an integer but
+not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Number</span> is a variable, <span class="c003">Atom</span> (or <span class="c003">Chars</span> or
+<span class="c003">Codes</span>) cannot be parsed as a number and the value of the
+<span class="c003">syntax_error</span> Prolog flag is <span class="c003">error</span>
+(section&#XA0;<a href="gprolog046.html#set-prolog-flag%2F2">8.22.1</a>)</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">syntax_error(<span class="c008">atom explaining the error</span>)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p><span class="c003">number_atom/2</span> is a GNU Prolog predicate. <span class="c003">number_chars/2</span>
+and <span class="c003">number_codes/2</span> are ISO predicates.</p><p>GNU Prolog only raises an error about an element <span class="c003">E</span> of the
+<span class="c003">Chars</span> (or <span class="c003">Codes</span>) list when <span class="c003">Number</span> is a variable
+while the ISO reference always check this. This seems an error since
+the list itself is only checked if <span class="c003">Number</span> is a variable.</p><p>The <span class="c003">type_error(integer, E)</span> when an element <span class="c003">E</span> of the
+<span class="c003">Codes</span> is not an integer is a GNU Prolog extension. This seems to be
+an omission in the ISO reference since this error is detected for many other
+built-in predicates accepting a character code (e.g. <span class="c003">char_code/2</span>,
+<span class="c003">put_code/2</span>).</p>
+<h4 class="subsubsection" id="sec205">8.19.8&#XA0;&#XA0;<a id="hevea_default687"></a><span class="c003">name/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+name(+atomic, ?character_code_list)<br>
+name(-atomic, +character_code_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">name(Constant, Codes)</span> succeeds if <span class="c003">Codes</span> is a list whose
+elements are the character codes corresponding to the successive characters
+of <span class="c003">Constant</span> (a number or an atom). However, there atoms are for
+which <span class="c003">name(Constant, Codes)</span> is true, but which will not be
+constructed if <span class="c003">name/2</span> is called with <span class="c003">Constant</span>
+uninstantiated, e.g. the atom <span class="c003">&#X2019;1024&#X2019;</span>. For this reason the use of
+<span class="c003">name/2</span> is discouraged and should be limited to compatibility
+purposes. It is preferable to use atom_codes/2 (section&#XA0;<a href="#atom-chars%2F2">8.19.6</a>)
+or number_chars/2 (section&#XA0;<a href="#number-atom%2F2">8.19.7</a>).</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Constant</span> is a variable and <span class="c003">Codes</span> is a partial
+list or a list with an element which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Constant</span> is neither a variable nor an atomic term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atomic, Constant)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Constant</span> is a variable and <span class="c003">Codes</span> is neither a list
+nor a partial list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Constant</span> is a variable and an element <span class="c003">E</span> of the
+list <span class="c003">Codes</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Constant</span> is a variable and an element <span class="c003">E</span> of the
+list <span class="c003">Codes</span> is an integer but not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="sec206">8.19.9&#XA0;&#XA0;<a id="hevea_default688"></a><span class="c003">new_atom/2</span>,
+<a id="hevea_default689"></a><span class="c003">new_atom/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+new_atom(+atom, -atom)<br>
+new_atom(-atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">new_atom(Prefix, Atom)</span> unifies <span class="c003">Atom</span> with a new atom
+whose name begins with the characters of the name of <span class="c003">Prefix</span>. 
+This predicate is then a symbol generator. It is guaranteed that <span class="c003">Atom</span> does not exist
+before the invocation of <span class="c003">new_atom/3</span>. The characters appended to
+<span class="c003">Prefix</span> to form <span class="c003">Atom</span> are in: <span class="c003">A</span>-<span class="c003">Z</span> (capital
+letter), <span class="c003">a</span>-<span class="c003">z</span> (small letter) and <span class="c003">0</span>-<span class="c003">9</span>
+(digit).</p><p><span class="c003">new_atom/1</span> is similar to <span class="c003">new_atom(term_, Atom)</span>, i.e.
+the generated atom begins with <span class="c003">term_</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prefix</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Prefix</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Prefix)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="current-atom/2">8.19.10&#XA0;&#XA0;<a id="hevea_default690"></a><span class="c003">current_atom/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+current_atom(?atom)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">current_atom(Atom)</span> succeeds if there exists an atom that unifies
+with <span class="c003">Atom</span>. All atoms are found except those beginning with a
+<span class="c003">&#X2019;$&#X2019;</span> (system atoms). This predicate is re-executable on
+backtracking.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+<h4 class="subsubsection" id="atom-property/2">8.19.11&#XA0;&#XA0;<a id="hevea_default691"></a><span class="c003">atom_property/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+atom_property(?atom, ?atom_property)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">atom_property(Atom, Property)</span> succeeds if
+<span class="c003">current_atom(Atom)</span> succeeds (section&#XA0;<a href="#current-atom%2F2">8.19.10</a>) and if
+<span class="c003">Property</span> unifies with one of the properties of the atom. This
+predicate is re-executable on backtracking.</p><p><span class="c009">Atom properties</span>:</p><ul class="itemize"><li class="li-itemize"><a id="hevea_default692"></a><span class="c003">length(Length)</span>: <span class="c003">Length</span> is the length of the
+name of the atom.</li><li class="li-itemize"><a id="hevea_default693"></a><span class="c003">hash(Hash)</span>: <span class="c003">Hash</span> is the <a id="hevea_default694"></a>hash code of the
+atom, see also <span class="c003">term_hash/2</span> (section&#XA0;<a href="gprolog028.html#term-hash%2F4">8.4.8</a>).</li><li class="li-itemize"><a id="hevea_default695"></a><span class="c003">prefix_op</span>: if there is a prefix operator currently defined
+with this name.</li><li class="li-itemize"><a id="hevea_default696"></a><span class="c003">infix_op</span>: if there is an infix operator currently defined
+with this name.</li><li class="li-itemize"><a id="hevea_default697"></a><span class="c003">postfix_op</span>: if there is a postfix operator currently defined
+with this name.</li><li class="li-itemize"><a id="hevea_default698"></a><span class="c003">needs_quotes</span>: if the atom must be quoted to be read later.</li><li class="li-itemize"><a id="hevea_default699"></a><span class="c003">needs_scan</span>: if the atom must be scanned when output to be
+read later (e.g. contains special characters that must be output with a
+<span class="c003">\</span> <a id="hevea_default700"></a>escape sequence).</li></ul><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> is neither a variable nor a n atom property term</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(atom_property, Property)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Property</span> = <span class="c003">length(E)</span> or <span class="c003">hash(E)</span> and
+<span class="c003">E</span> is neither a variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicate.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog042.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog044.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>

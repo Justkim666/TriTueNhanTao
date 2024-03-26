@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="generator" content="hevea 2.32">
+
+<meta name="Author" content="Daniel Diaz">
+<meta name="Keywords" content="GNU Prolog, manual, Prolog, compiler, constraints, finite domains">
+<link rel="icon" type="image/x-icon" href="/gprolog.ico"><link rel="stylesheet" type="text/css" href="gprolog.css">
+<title>Constant term streams</title>
+</head>
+<body TEXT=black BGCOLOR=white>
+<a href="gprolog034.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog036.html"><img src="next_motif.svg" alt="Next"></a>
+<hr>
+<h3 class="subsection" id="sec143">8.11&#XA0;&#XA0;Constant term streams</h3>
+<ul>
+<li><a href="gprolog035.html#sec144">Introduction</a>
+</li><li><a href="gprolog035.html#sec145"><span class="c003">open_input_atom_stream/2</span>,
+<span class="c003">open_input_chars_stream/2</span>, <br>
+ <span class="c003">open_input_codes_stream/2</span></a>
+</li><li><a href="gprolog035.html#sec146"><span class="c003">close_input_atom_stream/1</span>,
+<span class="c003">close_input_chars_stream/1</span>, <br>
+ <span class="c003">close_input_codes_stream/1</span></a>
+</li><li><a href="gprolog035.html#open-output-atom-stream%2F1"><span class="c003">open_output_atom_stream/1</span>,
+<span class="c003">open_output_chars_stream/1</span>, <br>
+ <span class="c003">open_output_codes_stream/1</span></a>
+</li><li><a href="gprolog035.html#close-output-atom-stream%2F2"><span class="c003">close_output_atom_stream/2</span>,
+<span class="c003">close_output_chars_stream/2</span>, <br>
+ <span class="c003">close_output_codes_stream/2</span></a>
+</li></ul>
+<p>
+<a id="Constant-term-streams"></a></p>
+<h4 class="subsubsection" id="sec144">8.11.1&#XA0;&#XA0;Introduction</h4>
+<p>
+<a id="Introduction:(Constant-term-streams)"></a>
+Constant term streams allow the user to consider a constant term (atom,
+character list or character code list) as a source/sink by associating to
+them a stream. Reading from a constant term stream will deliver the
+characters of the constant term as if they had been read from a standard
+file. Characters written on a constant term stream are stored to form the
+final constant term when the stream is closed. The built-in predicates
+described in this section allow the user to open and close a constant term
+stream for input or output. However, very often, a constant term stream is
+created to be only read or written once and then closed. To avoid the
+creation and the destruction of such a stream, GNU Prolog offers several
+built-in predicates to perform single input/output from/to constant terms
+(section&#XA0;<a href="gprolog039.html#Input%2Foutput-from%2Fto-constant-terms">8.15</a>).</p>
+<h4 class="subsubsection" id="sec145">8.11.2&#XA0;&#XA0;<a id="hevea_default426"></a><span class="c003">open_input_atom_stream/2</span>,
+<a id="hevea_default427"></a><span class="c003">open_input_chars_stream/2</span>, <br>
+ <a id="hevea_default428"></a><span class="c003">open_input_codes_stream/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+open_input_atom_stream(+atom, -stream)<br>
+open_input_chars_stream(+character_list, -stream)<br>
+open_input_codes_stream(+character_code_list, -stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">open_input_atom_stream(Atom, Stream)</span> unifies <span class="c003">Stream</span>
+with the stream-term which is associated with a new input text-stream whose
+data are the characters of <span class="c003">Atom</span>.</p><p><span class="c003">open_input_chars_stream(Chars, Stream)</span> is similar to
+<span class="c003">open_input_atom_stream/2</span> except that data are the content of the
+character list <span class="c003">Chars</span>.</p><p><span class="c003">open_input_codes_stream(Codes, Stream)</span> is similar to
+<span class="c003">open_input_atom_stream/2</span> except that data are the content of the
+character code list <span class="c003">Codes</span>.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is a partial list or a list with an element
+<span class="c003">E</span> which is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor a an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Chars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Chars</span> list is neither a
+variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Codes</span> list is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Codes</span> list is an integer but
+not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="sec146">8.11.3&#XA0;&#XA0;<a id="hevea_default429"></a><span class="c003">close_input_atom_stream/1</span>,
+<a id="hevea_default430"></a><span class="c003">close_input_chars_stream/1</span>, <br>
+ <a id="hevea_default431"></a><span class="c003">close_input_codes_stream/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+close_input_atom_stream(+stream_or_alias)<br>
+close_input_chars_stream(+stream_or_alias)<br>
+close_input_codes_stream(+stream_or_alias)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">close_input_atom_stream(SorA)</span> closes the constant term stream
+associated with the stream-term or alias <span class="c003">SorA</span>. <span class="c003">SorA</span> must a
+stream open with <span class="c003">open_input_atom_stream/2</span>
+(section&#XA0;<a href="#Introduction%3A%28Constant-term-streams%29">8.11.1</a>).</p><p><span class="c003">close_input_chars_stream(SorA)</span> acts similarly for a character
+list stream.</p><p><span class="c003">close_input_codes_stream(SorA)</span> acts similarly for a character
+code list stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an output stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(close, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a stream-term or alias but does not refer to a
+constant term stream.</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(term_stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="open-output-atom-stream/1">8.11.4&#XA0;&#XA0;<a id="hevea_default432"></a><span class="c003">open_output_atom_stream/1</span>,
+<a id="hevea_default433"></a><span class="c003">open_output_chars_stream/1</span>, <br>
+ <a id="hevea_default434"></a><span class="c003">open_output_codes_stream/1</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+open_output_atom_stream(-stream)<br>
+open_output_chars_stream(-stream)<br>
+open_output_codes_stream(-stream)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">open_output_atom_stream(Stream)</span> unifies <span class="c003">Stream</span> with the
+stream-term which is associated with a new output text-stream. All characters
+written to this stream are collected and will be returned as an atom when
+the stream is closed by <span class="c003">close_output_atom_stream/2</span>
+(section&#XA0;<a href="#close-output-atom-stream%2F2">8.11.5</a>).</p><p><span class="c003">open_output_chars_stream(Stream)</span> is similar to
+<span class="c003">open_output_atom_stream/1</span> except that the result will be a
+character list.</p><p><span class="c003">open_output_codes_stream(Stream)</span> is similar to
+<span class="c003">open_output_atom_stream/1</span> except that the result will be a
+character code list.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Stream</span> is not a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">uninstantiation_error(Stream)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+<h4 class="subsubsection" id="close-output-atom-stream/2">8.11.5&#XA0;&#XA0;<a id="hevea_default435"></a><span class="c003">close_output_atom_stream/2</span>,
+<a id="hevea_default436"></a><span class="c003">close_output_chars_stream/2</span>, <br>
+ <a id="hevea_default437"></a><span class="c003">close_output_codes_stream/2</span></h4>
+<p><span class="c009">Templates</span></p><dl class="list"><dt class="dt-list">
+</dt><dd class="dd-list"><span class="c003">
+close_output_atom_stream(+stream_or_alias, ?atom)<br>
+close_output_chars_stream(+stream_or_alias, ?character_list)<br>
+close_output_codes_stream(+stream_or_alias, ?character_code_list)</span></dd></dl><p><span class="c009">Description</span></p><p><span class="c003">close_output_atom_stream(SorA, Atom)</span> closes the constant term
+stream associated with the stream-term or alias <span class="c003">SorA</span>. <span class="c003">SorA</span> must
+be associated with a stream open with <span class="c003">open_output_atom_stream/1</span>
+(section&#XA0;<a href="#open-output-atom-stream%2F1">8.11.4</a>). <span class="c003">Atom</span> is unified with an atom
+formed with all characters written on the stream.</p><p><span class="c003">close_output_chars_stream(SorA, Chars)</span> acts similarly for a
+character list stream.</p><p><span class="c003">close_output_codes_stream(SorA, Codes)</span> acts similarly for a
+character code list stream.</p><p><span class="c009">Errors</span></p><table class="c001 cellpading0"><tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a variable</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">instantiation_error</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Atom</span> is neither a variable nor an atom</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(atom, Atom)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Chars</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Chars)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">Codes</span> is neither a partial list nor a list</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(list, Codes)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Chars</span> list is neither a
+variable nor a character</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(character, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Codes</span> list is neither a
+variable nor an integer</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">type_error(integer, E)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+an element <span class="c003">E</span> of the <span class="c003">Codes</span> list is an integer but
+not a character code</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">representation_error(character_code)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is neither a variable nor a stream-term or alias</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is not associated with an open stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">existence_error(stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is an input stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">permission_error(close, stream, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+<tr><td class="c019">
+<span class="c003">SorA</span> is a stream-term or alias but does not refer to a
+constant term stream</td><td class="c013">&#XA0;&#XA0;</td><td class="c019"><span class="c003">domain_error(term_stream_or_alias, SorA)</span> </td></tr>
+<tr><td class="hbar" colspan=3></td></tr>
+</table><p><span class="c009">Portability</span></p><p>GNU Prolog predicates.</p>
+
+<hr class="c011">
+Copyright (C) 1999-2021 Daniel Diaz
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved. <a href="index.html#copyright">More about the copyright</a>
+<hr>
+<a href="gprolog034.html"><img src="previous_motif.svg" alt="Previous"></a>
+<a href="gprolog024.html"><img src="contents_motif.svg" alt="Up"></a>
+<a href="gprolog036.html"><img src="next_motif.svg" alt="Next"></a>
+</body>
+</html>
